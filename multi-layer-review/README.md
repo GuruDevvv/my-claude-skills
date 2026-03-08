@@ -25,7 +25,7 @@ All findings are merged, deduplicated, and sorted by priority: Critical / Import
 |---|------|--------------------|
 | 1 | **Requirements Traceability** — analyst | Are we solving the right problem? Does the solution match the business goal? Are there success criteria? |
 | 2 | **Plan Agent** — architect | Structural gaps, API design quality, edge cases, contradictions between sections |
-| 3 | **Codex CLI** — developer *(requires [Codex CLI](https://github.com/openai/codex) installed)* | Implementation risks, unsafe patterns, dependency issues, missing error handling |
+| 3 | **Codex CLI** — developer *(requires [Codex CLI](https://github.com/openai/codex) installed; works on Windows, Mac, Linux)* | Implementation risks, unsafe patterns, dependency issues, missing error handling |
 | 4 | **Devil's Advocate** — skeptical user | "What if..." — UX failures, unexpected behavior, what breaks on day one |
 | 5 | **Robustness Checklist** — systems engineer | Scores 0–3 across 8 criteria: error handling, concurrency, security, testability, etc. |
 
@@ -53,7 +53,7 @@ The skill asks which reviewers to run, asks for your spec (file or text), runs i
 
 ## Installation
 
-Check [what you're installing](multi-layer-review/SKILL.md) before running the command.
+Check [what you're installing](SKILL.md) before running the command.
 
 **macOS / Linux:**
 ```bash
