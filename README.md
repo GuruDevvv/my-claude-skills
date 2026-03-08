@@ -2,7 +2,7 @@
 
 [🇷🇺 Читать на русском](README.ru.md)
 
-A Claude Code skill that runs your spec or technical design through a chain of up to 5 reviewers before you start coding. Each reviewer passes their findings to the next — so later reviewers confirm, refute, or add to what was already found.
+A Claude Code skill that runs your spec or technical design through a chain of up to 5 reviewers before you start coding. Each reviewer passes their findings to the next — so later reviewers can confirm, refute, or expand on them, in any combination.
 
 ---
 
@@ -12,7 +12,7 @@ A Claude Code skill that runs your spec or technical design through a chain of u
 Before any reviewer runs, the skill scans the spec for ambiguities: vague requirements ("fast", "convenient"), contradictions between sections, missing constraints. If found — it asks you to clarify or proceed anyway.
 
 **Steps 1–5 — Reviewers.**
-Each reviewer examines the spec from their own angle. From the second reviewer onwards, each sees what the previous ones found — and either confirms, refutes, or adds new findings. This eliminates duplication and sharpens the critique.
+Each reviewer examines the spec from their own angle. From the second reviewer onwards, each sees what the previous ones found — and can confirm, refute, or expand on them in any combination. This eliminates duplication and sharpens the critique.
 
 **Final — Synthesis.**
 All findings are merged, deduplicated, and sorted by priority: Critical / Important / Minor.
@@ -23,11 +23,11 @@ All findings are merged, deduplicated, and sorted by priority: Critical / Import
 
 | # | Role | What they look for |
 |---|------|--------------------|
-| 1 | **Plan Agent** — architect | Structural gaps, API design quality, edge cases, contradictions between sections |
-| 2 | **Code Reviewer** — developer | Implementation risks, unsafe patterns, dependency issues, missing error handling |
-| 3 | **Devil's Advocate** — skeptical user | "What if..." — UX failures, unexpected behavior, what breaks on day one |
-| 4 | **Robustness Checklist** — systems engineer | Scores 0–3 across 8 criteria: error handling, concurrency, security, testability, etc. |
-| 5 | **Requirements Traceability** — analyst | Are we solving the right problem? Does the solution match the business goal? Are there success criteria? |
+| 1 | **Requirements Traceability** — analyst | Are we solving the right problem? Does the solution match the business goal? Are there success criteria? |
+| 2 | **Plan Agent** — architect | Structural gaps, API design quality, edge cases, contradictions between sections |
+| 3 | **Codex CLI** — developer *(requires [Codex CLI](https://github.com/openai/codex) installed)* | Implementation risks, unsafe patterns, dependency issues, missing error handling |
+| 4 | **Devil's Advocate** — skeptical user | "What if..." — UX failures, unexpected behavior, what breaks on day one |
+| 5 | **Robustness Checklist** — systems engineer | Scores 0–3 across 8 criteria: error handling, concurrency, security, testability, etc. |
 
 You can choose which reviewers to run — all five is the default, but not required.
 
