@@ -86,6 +86,8 @@ AskUserQuestion(questions=[{
 
 Run selected reviewers in order. From Reviewer 2 onwards, each receives prior findings with instruction to **confirm, refute, or add new** — not just repeat.
 
+**Tell the user which reviewer is running** before each Agent call, e.g. "Запускаю Reviewer 2 — Plan Agent (архитектура)...". Long sequential runs feel like a hang without progress feedback.
+
 ```dot
 digraph review {
     "Step 0:\nAsk which reviewers" -> "Step 0.5:\nGet & verify spec";
@@ -157,19 +159,31 @@ You are a technical architect. Review the following spec for:
 
 **Role:** Code-level critique — what breaks in real implementation.
 
-**Call via (safe — use heredoc to avoid quoting issues with apostrophes and special chars):**
+**Call via (safe — cross-platform, UTF-8-safe, auto-cleanup on crash):**
 ```bash
-cat > /tmp/spec-for-codex.txt << 'SPECEOF'
+# Cross-platform temp file (works on Windows/Mac/Linux)
+SPEC_TMPFILE="$(python3 -c "import tempfile; f=tempfile.NamedTemporaryFile(delete=False,suffix='.txt',prefix='spec-review-'); print(f.name); f.close()")"
+trap "rm -f \"$SPEC_TMPFILE\"" EXIT
+
+cat > "$SPEC_TMPFILE" << 'SPECEOF'
 [paste spec content here]
 SPECEOF
 
-codex exec --skip-git-repo-check "$(head -c 8000 /tmp/spec-for-codex.txt)
+# UTF-8-safe size check and truncation (characters, not bytes)
+SPEC_CHARS=$(python3 -c "print(len(open('$SPEC_TMPFILE',encoding='utf-8').read()))")
+if [ "$SPEC_CHARS" -gt 4000 ]; then
+    echo "⚠️ Спек $SPEC_CHARS символов — усечён до 4000 для Codex (без разрыва символов)"
+fi
+SPEC_FOR_CODEX=$(python3 -c "print(open('$SPEC_TMPFILE',encoding='utf-8').read()[:4000])")
+
+codex exec --skip-git-repo-check "$SPEC_FOR_CODEX
 
 Ты технический рецензент. Найди: риски реализации, противоречия, небезопасные паттерны. Будь краток."
-rm /tmp/spec-for-codex.txt
 ```
 
 ⚠️ Do NOT use `echo "$SPEC_CONTENT" > file` — apostrophes (e.g. "Devil's") and backticks in the spec will break single-quoted strings or be evaluated by the shell.
+
+Why Python for temp/truncation: `python3` is available everywhere this skill runs (Windows/Mac/Linux), avoids `/tmp` path issues on Windows, and truncates at character boundaries instead of bytes — which prevents Cyrillic characters from being sliced mid-byte.
 
 Use default model (no `--model` flag — avoids incompatibility with ChatGPT accounts).
 
@@ -401,9 +415,9 @@ fi
 
 | Situation | Skip |
 |-----------|------|
-| Codex not installed / auth error | Reviewer 2 — note the skip in output |
+| Codex not installed / auth error | Reviewer 3 — note the skip in output |
 | Codex not in git repo | Try `--skip-git-repo-check` first, then skip if still fails |
-| Spec is purely UX/design, no code | Reviewer 2 |
+| Spec is purely UX/design, no code | Reviewer 3 |
 | Spec is a quick 1-page outline | Reviewers 3+4 can be combined into one agent call |
 | User explicitly says "skip review" | All reviewers — but warn once |
 
@@ -417,3 +431,4 @@ fi
 - **Running reviewers in parallel** — Reviewer 3 and 4 should see Reviewer 1+2 output to avoid duplication
 - **Not deduplicating findings** — the list looks bigger but has less value
 - **Overwriting original spec** — always create `-revised.md` instead
+- **Reviewer fatigue compression** — by Reviewer 4-5, the model has seen the spec 3-4 times and is tempted to echo prior findings rather than add truly independent analysis. If you notice Reviewer N saying mostly "I agree with previous reviewers", treat its output with lower weight.
