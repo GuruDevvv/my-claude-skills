@@ -23,11 +23,11 @@ AskUserQuestion(questions=[{
     "header": "Рецензенты",
     "multiSelect": true,
     "options": [
+        {"label": "Requirements Traceability (цель)", "description": "Правильную задачу решаем? Спек → бизнес-цель, метрики успеха, альтернативы"},
         {"label": "Plan Agent (архитектура)", "description": "Структура, полнота, API design, граничные случаи"},
-        {"label": "Codex CLI (код)", "description": "Риски реализации, противоречия, небезопасные паттерны"},
+        {"label": "Codex CLI (код)", "description": "Риски реализации, противоречия, небезопасные паттерны. Требует установленного Codex CLI"},
         {"label": "Devil's Advocate (пользователь)", "description": "'А что если...' от лица конечного пользователя"},
-        {"label": "Robustness Checklist (системный)", "description": "Error handling, concurrency, cleanup, security, testability"},
-        {"label": "Requirements Traceability (цель)", "description": "Правильную задачу решаем? Спек → бизнес-цель, метрики успеха, альтернативы"}
+        {"label": "Robustness Checklist (системный)", "description": "Error handling, concurrency, cleanup, security, testability"}
     ]
 }])
 ```
@@ -90,19 +90,48 @@ Run selected reviewers in order. From Reviewer 2 onwards, each receives prior fi
 digraph review {
     "Step 0:\nAsk which reviewers" -> "Step 0.5:\nGet & verify spec";
     "Step 0.5:\nGet & verify spec" -> "Step 0.7:\nSpec Ambiguity Gate\n(auto)";
-    "Step 0.7:\nSpec Ambiguity Gate\n(auto)" -> "Step 1: Plan Agent\n(Architecture)";
-    "Step 1: Plan Agent\n(Architecture)" -> "Step 2: Codex CLI\n(Code-level)";
-    "Step 2: Codex CLI\n(Code-level)" -> "Step 3: Devil's Advocate\n(User POV)";
-    "Step 3: Devil's Advocate\n(User POV)" -> "Step 4: Robustness Checklist\n(Systematic)";
-    "Step 4: Robustness Checklist\n(Systematic)" -> "Step 5: Requirements Traceability\n(if selected)";
-    "Step 5: Requirements Traceability\n(if selected)" -> "Step 6: Synthesis";
+    "Step 0.7:\nSpec Ambiguity Gate\n(auto)" -> "Step 1: Requirements Traceability\n(Goal)";
+    "Step 1: Requirements Traceability\n(Goal)" -> "Step 2: Plan Agent\n(Architecture)";
+    "Step 2: Plan Agent\n(Architecture)" -> "Step 3: Codex CLI\n(Code-level)";
+    "Step 3: Codex CLI\n(Code-level)" -> "Step 4: Devil's Advocate\n(User POV)";
+    "Step 4: Devil's Advocate\n(User POV)" -> "Step 5: Robustness Checklist\n(Systematic)";
+    "Step 5: Robustness Checklist\n(Systematic)" -> "Step 6: Synthesis";
     "Step 6: Synthesis" -> "Step 7: Save to disk";
 }
 ```
 
 ---
 
-### Reviewer 1 — Plan Agent (Architectural)
+### Reviewer 1 — Requirements Traceability
+
+**Role:** Проверяет что спек решает правильную задачу, а не просто правильно написан.
+
+**Call via:**
+```
+Agent(subagent_type="general-purpose", prompt="""
+You are a requirements analyst. Your job is NOT to find bugs in the design —
+it's to verify the design solves the actual problem.
+
+For this spec, answer:
+1. What is the stated business/user goal? Is it explicitly defined?
+2. Does the proposed solution actually achieve that goal? Or does it solve a related but different problem?
+3. What does success look like? Are there measurable criteria?
+4. What simpler solution was NOT considered? Why is this complexity justified?
+5. Who is the user? Is the spec written for the right audience?
+
+Be direct. If the spec doesn't answer these questions, say so.
+
+[SPEC CONTENT]
+""")
+```
+
+**What it finds:** Solution solving wrong problem, missing success criteria, unjustified complexity, undefined target user.
+
+**Когда использовать:** всегда — особенно когда ты сам формулируешь задачу на ходу, или когда не уверен что правильно понял что нужно сделать.
+
+---
+
+### Reviewer 2 — Plan Agent (Architectural)
 
 **Role:** Structure, completeness, API design, trade-offs, edge cases.
 
@@ -124,7 +153,7 @@ You are a technical architect. Review the following spec for:
 
 ---
 
-### Reviewer 2 — Codex CLI
+### Reviewer 3 — Codex CLI
 
 **Role:** Code-level critique — what breaks in real implementation.
 
@@ -148,7 +177,7 @@ Use default model (no `--model` flag — avoids incompatibility with ChatGPT acc
 
 ---
 
-### Reviewer 3 — Devil's Advocate Agent
+### Reviewer 4 — Devil's Advocate Agent
 
 **Role:** End-user perspective. Tries to break it.
 
@@ -172,7 +201,7 @@ For each section of this spec, ask:
 
 ---
 
-### Reviewer 4 — Robustness Checklist
+### Reviewer 5 — Robustness Checklist
 
 **Role:** Systematic scan against known failure modes.
 
@@ -203,35 +232,6 @@ Reference table for what each area checks:
 | **Security** | User input sanitized? No path traversal? No shell injection? |
 | **Observability** | Logging? Progress feedback? Error messages actionable? |
 | **Testability** | Logic separated from I/O? Pure functions identifiable? |
-
----
-
-### Reviewer 5 — Requirements Traceability *(если выбран)*
-
-**Role:** Проверяет что спек решает правильную задачу, а не просто правильно написан.
-
-**Call via:**
-```
-Agent(subagent_type="general-purpose", prompt="""
-You are a requirements analyst. Your job is NOT to find bugs in the design —
-it's to verify the design solves the actual problem.
-
-For this spec, answer:
-1. What is the stated business/user goal? Is it explicitly defined?
-2. Does the proposed solution actually achieve that goal? Or does it solve a related but different problem?
-3. What does success look like? Are there measurable criteria?
-4. What simpler solution was NOT considered? Why is this complexity justified?
-5. Who is the user? Is the spec written for the right audience?
-
-Be direct. If the spec doesn't answer these questions, say so.
-
-[SPEC CONTENT]
-""")
-```
-
-**What it finds:** Solution solving wrong problem, missing success criteria, unjustified complexity, undefined target user.
-
-**Когда использовать:** когда ты сам формулируешь задачу на ходу, или когда не уверен что правильно понял что нужно сделать.
 
 ---
 
