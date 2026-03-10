@@ -1,6 +1,12 @@
 ---
 name: multi-layer-review
-description: Multi-reviewer skill that runs up to five independent reviewers — Plan Agent (architecture), Codex CLI (code-level), Devil's Advocate (user POV), Robustness Checklist (security/error handling), and optional Requirements Traceability (solves the right problem?). Includes automatic Spec Ambiguity Gate before reviewers run. Use when reviewing specs, ТЗ, technical designs, or implementation plans before coding. Also triggers when user mentions "multi-layer review", "four reviewers", "несколько ревьюеров", "devil's advocate", "codex reviewer", "отдай на проверку", "проверь ТЗ", "review the spec", "review this design", or when the user asks to review a document before implementation.
+description: >
+  Multi-layer technical review for specs, ТЗ, and implementation plans using up to five
+  independent reviewer perspectives (architecture, code-level, user POV, robustness, goals).
+  Use when reviewing specs or technical designs before coding, or when user mentions
+  "multi-layer review", "four reviewers", "несколько ревьюеров", "devil's advocate",
+  "codex reviewer", "отдай на проверку", "проверь ТЗ", "review the spec", "review this design".
+  Do NOT use for reviewing finished code or general Q&A.
 ---
 
 # Multi-Layer Technical Review
@@ -316,9 +322,10 @@ After presenting the synthesis, ALWAYS save results to disk. Do not skip this st
    - Result path: `<HOME>/.claude/projects/<project-slug>/memory/reviews/`
 
 2. Determine active project slug:
-   - Check if current working directory maps to a known project (e.g. `e--VibeCoding`, `e--VibeCoding-TGmanager`)
+   - Derive from current working directory: convert path to slug (replace `/`, `\`, `:`, spaces with `-`, lowercase)
+     - Example: `E:\VibeCoding\MyProject` → `e--VibeCoding-MyProject`
    - If unsure which project — ask the user: "Сохранить в memory какого проекта?"
-   - Default fallback slug: `e--VibeCoding`
+   - Default fallback: derive slug from `$PWD` automatically
 
 3. Create the folder if it doesn't exist:
    ```bash
