@@ -13,7 +13,7 @@ description: >
 
 ## Overview
 
-Run a spec or ТЗ through up to five independent reviewers in sequence. Each reviewer has a distinct role and blind spots — together they cover what one reviewer misses.
+Run a spec or ТЗ through up to five **independent blind reviewers** in parallel. Each reviewer has a distinct role, works independently (no shared findings), and grounds analysis in actual project files. Together they cover what one reviewer misses — and independent convergence on the same issue is a strong signal.
 
 **The session that produced this skill:** User asked to review a PDF→MD converter spec. Without the skill, Claude used only an internal Plan agent. After adding Codex CLI, 9 new issues were found. Four-layer review is the correct default.
 
@@ -65,6 +65,32 @@ AskUserQuestion(questions=[{
 
 ---
 
+## Step 0.6 — Review Brief (автоматический)
+
+**Формируется автоматически** после получения спека. Цель — дать ревьюерам полную картину, а не голый текст.
+
+**Что собрать:**
+
+1. **Что за проект** — название, стек, стадия (из структуры проекта, манифестов)
+2. **Что за документ** — определить тип (спек, ТЗ, план, RFC, дизайн-док) по содержимому и заголовкам. Указать заголовок и размер
+3. **Стадия по теме спека** — `Grep` по ключевым сущностям спека (модули, классы, API endpoints). Есть ли уже код по этой теме, или это с нуля?
+4. **Связанные файлы** — какие файлы в проекте уже относятся к теме спека (результат Grep из п.3)
+
+**Формат:** свободный текст, 3-5 предложений. Как если бы ты объяснял коллеге контекст перед ревью.
+
+**Пример:**
+```
+REVIEW_BRIEF:
+Проект TGmanager — Python CLI для работы с Telegram через Telethon. Проект в продакшне,
+основной код в tg.py. Спек описывает новый модуль рассылки (broadcast). Кода рассылки
+пока нет — это новый функционал. Связанные файлы: tg.py (точка входа, 200 строк),
+config.py (конфиг сессии Telethon).
+```
+
+**Этот блок подставляется в `[REVIEW BRIEF]`** в каждом промпте ревьюера вместе с `[PROJECT CONTEXT]` и `[SPEC CONTENT]`.
+
+---
+
 ## Step 0.7 — Spec Ambiguity Gate (автоматический)
 
 **Запускается всегда** после получения спека, перед ревьюерами.
@@ -88,24 +114,84 @@ AskUserQuestion(questions=[{
 
 ---
 
+## Step 0.8 — Project Context Snapshot (одноразовый)
+
+**Запускается один раз** после Ambiguity Gate, перед ревьюерами. Цель — собрать контекст проекта, чтобы ревьюеры работали с реальными данными, а не рассуждали в вакууме.
+
+**Сбор контекста:**
+
+1. **Структура проекта** — `Glob("**/*", depth=2)` для верхнеуровневой карты
+2. **Манифесты** — `Read` package.json / pyproject.toml / Cargo.toml / go.mod (что есть)
+3. **Entry points** — `Read` main/index файлы, точки входа
+4. **Релевантный код** — `Grep` по ключевым сущностям из спека (имена модулей, API endpoints, классы). Читать найденные файлы через `Read`
+5. **Конфиги** — `.env.example`, docker-compose, CI configs (если упомянуты в спеке)
+
+**Результат:** компактный блок `PROJECT_CONTEXT` (до ~2000 символов):
+
+```
+PROJECT_CONTEXT:
+- Structure: [top-level dirs and key files]
+- Stack: [language, framework, dependencies relevant to spec]
+- Existing code: [summaries of files related to spec topics]
+- Patterns: [architecture patterns found — e.g. "MVC", "event-driven", "monorepo"]
+```
+
+**Если проект пустой** (спек до начала разработки) — собрать только то что есть (может быть только README или ничего). Указать: "Project is empty — no existing code to reference."
+
+**Этот блок подставляется в `[PROJECT CONTEXT]`** в каждом промпте ревьюера.
+
+---
+
 ## Steps 1–5 — Run Selected Reviewers
 
-Run selected reviewers in order. From Reviewer 2 onwards, each receives prior findings with instruction to **confirm, refute, or add new** — not just repeat.
+**BLIND REVIEW: каждый ревьюер работает независимо.** Никакой передачи findings между ревьюерами. Каждый видит только спек + контекст проекта. Это устраняет confirmation bias и эскалацию паники.
+
+**Параллельный запуск:** Reviewers 1, 2, 4, 5 (Agent-based) можно запускать параллельно. Reviewer 3 (Codex CLI) запускается отдельно через Bash. Запускай максимум ревьюеров параллельно для скорости.
 
 **Tell the user which reviewer is running** before each Agent call, e.g. "Запускаю Reviewer 2 — Plan Agent (архитектура)...". Long sequential runs feel like a hang without progress feedback.
 
 ```dot
 digraph review {
     "Step 0:\nAsk which reviewers" -> "Step 0.5:\nGet & verify spec";
-    "Step 0.5:\nGet & verify spec" -> "Step 0.7:\nSpec Ambiguity Gate\n(auto)";
-    "Step 0.7:\nSpec Ambiguity Gate\n(auto)" -> "Step 1: Requirements Traceability\n(Goal)";
-    "Step 1: Requirements Traceability\n(Goal)" -> "Step 2: Plan Agent\n(Architecture)";
-    "Step 2: Plan Agent\n(Architecture)" -> "Step 3: Codex CLI\n(Code-level)";
-    "Step 3: Codex CLI\n(Code-level)" -> "Step 4: Devil's Advocate\n(User POV)";
-    "Step 4: Devil's Advocate\n(User POV)" -> "Step 5: Robustness Checklist\n(Systematic)";
-    "Step 5: Robustness Checklist\n(Systematic)" -> "Step 6: Synthesis";
+    "Step 0.5:\nGet & verify spec" -> "Step 0.6:\nReview Brief\n(auto)";
+    "Step 0.6:\nReview Brief\n(auto)" -> "Step 0.7:\nSpec Ambiguity Gate\n(auto)";
+    "Step 0.7:\nSpec Ambiguity Gate\n(auto)" -> "Step 0.8:\nProject Context\nSnapshot";
+    "Step 0.8:\nProject Context\nSnapshot" -> "Reviewers 1,2,4,5\n(parallel, blind)";
+    "Step 0.8:\nProject Context\nSnapshot" -> "Reviewer 3: Codex CLI\n(parallel, blind)";
+    "Reviewers 1,2,4,5\n(parallel, blind)" -> "Step 6: Synthesis";
+    "Reviewer 3: Codex CLI\n(parallel, blind)" -> "Step 6: Synthesis";
     "Step 6: Synthesis" -> "Step 7: Save to disk";
 }
+```
+
+---
+
+### Common prompt block (подставляется в каждый промпт ревьюера)
+
+```
+Context:
+[REVIEW BRIEF]
+
+Project context:
+[PROJECT CONTEXT]
+
+You have access to Read, Glob, and Grep tools. If the spec references existing
+modules, APIs, or files — look them up in the project to verify claims.
+Do NOT just reason abstractly — ground your review in actual project state.
+
+OUTPUT FORMAT — for each finding, output EXACTLY:
+- **[Critical/Important/Minor]** Section: "<spec section name>" — <finding in 1-2 sentences>
+
+OUTPUT RULES:
+- Maximum 10 findings, sorted by severity (Critical first)
+- Every finding MUST reference a specific section of the spec
+- Do NOT invent problems that don't exist in the spec
+- Do NOT give generic advice ("add logging", "consider edge cases", "add tests")
+- Only flag concrete, specific problems you can point to in the spec text
+- If you find no issues in your area — say "No issues found" (this is a valid outcome)
+
+Spec:
+[SPEC CONTENT]
 ```
 
 ---
@@ -120,16 +206,16 @@ Agent(subagent_type="general-purpose", prompt="""
 You are a requirements analyst. Your job is NOT to find bugs in the design —
 it's to verify the design solves the actual problem.
 
-For this spec, answer:
+[COMMON PROMPT BLOCK]
+
+Additionally, for this spec answer:
 1. What is the stated business/user goal? Is it explicitly defined?
 2. Does the proposed solution actually achieve that goal? Or does it solve a related but different problem?
 3. What does success look like? Are there measurable criteria?
 4. What simpler solution was NOT considered? Why is this complexity justified?
 5. Who is the user? Is the spec written for the right audience?
 
-Be direct. If the spec doesn't answer these questions, say so.
-
-[SPEC CONTENT]
+Be direct and proportional. Report facts, not fears.
 """)
 ```
 
@@ -146,14 +232,23 @@ Be direct. If the spec doesn't answer these questions, say so.
 **Call via:**
 ```
 Agent(subagent_type="Plan", prompt="""
-You are a technical architect. Review the following spec for:
+You are a technical architect.
+
+[COMMON PROMPT BLOCK]
+
+MANDATORY: Before reviewing, examine the project structure and existing code.
+Check how existing modules are organized, what patterns are used, what dependencies
+are already in place.
+
+Review the spec for:
 - Structural gaps and missing components
 - API/interface design quality
 - Trade-offs not considered
 - Edge cases not covered
 - Contradictions between sections
+- Compatibility with existing project architecture (check actual files!)
 
-[SPEC CONTENT]
+Be proportional — distinguish real architectural problems from stylistic preferences.
 """)
 ```
 
@@ -204,16 +299,22 @@ Use default model (no `--model` flag — avoids incompatibility with ChatGPT acc
 **Call via:**
 ```
 Agent(subagent_type="general-purpose", prompt="""
-You are a skeptical end user and QA engineer. Your job is to find problems.
-Ask "what if..." questions. Find UX failures. Find runtime surprises.
-Be adversarial. Don't accept assumptions.
+You are a skeptical end user and QA engineer.
 
-For each section of this spec, ask:
+[COMMON PROMPT BLOCK]
+
+Before reviewing: check the project for existing UX patterns, error messages,
+user-facing flows. If there's existing UI code or CLI — read it to understand
+the current user experience.
+
+For each section of the spec, ask:
 1. What happens when this fails?
 2. What did the user NOT ask for but will expect?
 3. What edge case will hit on day 1?
 
-[SPEC CONTENT]
+Be adversarial but proportional. Flag real user-facing problems.
+Do NOT inflate hypothetical edge cases into critical issues — mark unlikely
+scenarios as Minor unless they cause data loss or security problems.
 """)
 ```
 
@@ -228,15 +329,24 @@ For each section of this spec, ask:
 **Call via:**
 ```
 Agent(subagent_type="general-purpose", prompt="""
-You are a reliability engineer. Score each area 0-3 for the following spec.
-Flag areas scoring 0 or 1 as required fixes.
+You are a reliability engineer.
+
+[COMMON PROMPT BLOCK]
+
+Before scoring: check the project for existing error handling patterns,
+test infrastructure, logging setup, security measures. Score based on what
+the spec ADDS or CHANGES relative to what already exists in the project.
+
+Score each area 0-3. Flag areas scoring 0 or 1 as required fixes.
 
 Areas: Error handling / Concurrency / Resource cleanup / Data integrity /
 Performance / Security / Observability / Testability
 
 For each area: score (0-3) + 1-line explanation of what's missing or present.
+Base scores on evidence from the spec and project, not worst-case imagination.
+A score of 0-1 means you found a concrete gap, not a theoretical one.
 
-[SPEC CONTENT]
+Additionally, output findings in the standard format (see OUTPUT FORMAT above).
 """)
 ```
 
@@ -255,22 +365,15 @@ Reference table for what each area checks:
 
 ---
 
-### Passing context between reviewers
+### Independence Rule (BLIND REVIEW)
 
-From Reviewer 2 onwards, append to the prompt:
-```
-Prior findings from previous reviewers:
-[findings list]
+**DO NOT pass findings from one reviewer to another.** Each reviewer works
+independently with only the spec + project context. This is by design:
 
-Your job: confirm or refute each finding, AND find issues not yet covered.
-Do NOT just repeat — add your independent judgment.
-```
-
-If Reviewer N was skipped, instead append:
-```
-Note: Reviewer [N] was skipped. No prior findings from that reviewer.
-Base your review on the spec directly.
-```
+- Eliminates confirmation bias and panic escalation
+- Independent findings that converge = strong signal
+- Independent findings that conflict = valuable for user to decide
+- Deduplication happens in Synthesis (Step 6), not during review
 
 ---
 
@@ -278,8 +381,13 @@ Base your review on the spec directly.
 
 1. Собрать все findings от запущенных ревьюеров в один список.
 
-2. **Дедупликация:** если 2+ ревьюера нашли одно и то же — оставить одну запись,
-   пометить "(confirmed by N reviewers)".
+2. **Дедупликация и валидация силой независимости:**
+   Ревьюеры работали слепо — совпадения значат больше, чем раньше.
+   - Если 2+ ревьюера **независимо** нашли одно и то же — это сильный сигнал.
+     Пометить "(independently confirmed by N reviewers)" и повысить severity на один уровень
+     (Minor→Important, Important→Critical). Но не выше Critical.
+   - Если только 1 ревьюер нашёл — оставить его severity как есть.
+   - **Не завышать severity при синтезе.** Задача синтеза — агрегировать, а не нагнетать.
 
 3. **Разрешение противоречий:** если два ревьюера противоречат друг другу —
    отметить как "CONFLICT: [позиция A] vs [позиция B]" и вынести на решение пользователя.
@@ -349,7 +457,7 @@ If a file with the same name already exists — append `-2`, `-3`, etc. Never si
 ```markdown
 # Review: <spec name>
 Date: YYYY-MM-DD
-Skill version: 2.0
+Skill version: 3.0
 Reviewers run: [список запущенных]
 Reviewers skipped: [список с причинами, или "none"]
 Spec source: <filename or "inline text">
@@ -435,7 +543,8 @@ fi
 - **Using only the Plan agent** — misses code-level and user-perspective issues
 - **Skipping Codex because it feels redundant** — it finds different things (dependency conflicts, unsafe string ops, missing exception types)
 - **Not synthesizing** — presenting four separate reviews without reconciling them confuses the user
-- **Running reviewers in parallel** — Reviewer 3 and 4 should see Reviewer 1+2 output to avoid duplication
+- **Passing findings between reviewers** — causes confirmation bias and panic escalation. Reviewers MUST work blind
 - **Not deduplicating findings** — the list looks bigger but has less value
 - **Overwriting original spec** — always create `-revised.md` instead
-- **Reviewer fatigue compression** — by Reviewer 4-5, the model has seen the spec 3-4 times and is tempted to echo prior findings rather than add truly independent analysis. If you notice Reviewer N saying mostly "I agree with previous reviewers", treat its output with lower weight.
+- **Reviewers reasoning without reading files** — every reviewer should use Read/Glob/Grep to ground analysis in actual project state
+- **Inflating severity** — hypothetical edge cases are Minor unless they cause data loss or security issues. Be proportional
