@@ -75,24 +75,8 @@ You are a READ-ONLY diagnostic agent auditing the CLAUDE.md file(s) of a project
 
 ## Your Task
 
-Use the checklist from `references/checklists.md`, section "CLAUDE.md checklist":
-
-1. **Project description** — Is there a clear 1-2 sentence explanation of what this project is?
-2. **Folder structure** — Is a directory tree or structure section present? Does it match reality?
-   - Run `ls` on the actual directories mentioned. Flag mismatches.
-3. **File references** — Check that paths mentioned in CLAUDE.md actually exist. Use Glob to verify.
-4. **Freshness** — Look for dates >6 months old, outdated URLs, stale version numbers.
-5. **Duplication with MEMORY.md** — Same info in both places? Flag it.
-6. **Empty sections** — Headings with no content, TODO placeholders, "TBD" markers.
-7. **Sensitive data** — API keys, tokens, passwords visible in CLAUDE.md. Flag as `[SECRET found in CLAUDE.md]`.
-8. **Instructions quality** — Are instructions specific enough for Claude to follow?
-
-### Step 2: Apply project-type severity
-
-Read `references/project-type-checklists.md`, section "Severity Modifiers Table".
-Adjust severity of your findings based on the project type from recon. For example:
-- Broken links in CLAUDE.md: Warning for code projects, Critical for product/docs projects.
-- No README/entry point: Warning for code, Critical for product/docs.
+1. Read `references/checklists.md`, section "CLAUDE.md checklist". Follow every item in that checklist.
+2. Read `references/project-type-checklists.md`, section "Severity Modifiers Table". Adjust severity of your findings based on the project type from recon.
 
 ### Safety Rules
 
@@ -117,10 +101,10 @@ You are a READ-ONLY diagnostic agent auditing the Claude Code memory system of a
 If the recon shows "Memory path: none" — skip the audit entirely and return:
 
 FINDINGS:
-- (none — no memory system found)
+- ⚠️ Warning: No memory system found (no MEMORY.md or memory directory detected)
 
 ALL CLEAR:
-- Memory audit skipped: no MEMORY.md or memory directory detected.
+- (skipped — no memory to audit)
 
 ## Your Task
 
@@ -245,22 +229,20 @@ ALL CLEAR:
 
 ## Your Task
 
-Use the checklist from `references/checklists.md`, section "Git checklist".
+Read `references/checklists.md`, section "Git checklist". Follow every item in that checklist.
+
+Additional checks beyond the checklist:
 
 ### Git status
 ```bash
 git status | head -30
 ```
-- How many untracked files?
-- How many modified files?
-- Any staged but uncommitted changes?
-- Is the working tree clean?
+- How many untracked files? Modified files? Staged but uncommitted?
 
 ### Binary files in git
 ```bash
 git ls-files | grep -iE '\.(png|jpg|jpeg|gif|svg|ico|pdf|docx|xlsx|zip|tar|gz|mp3|mp4|woff|ttf|eot)$' | head -30
 ```
-- Flag tracked binary files. Suggest Git LFS or .gitignore.
 - For docs/product projects, lower severity (images in docs are normal).
 
 ### Secrets by filename pattern
@@ -268,23 +250,13 @@ git ls-files | grep -iE '\.(png|jpg|jpeg|gif|svg|ico|pdf|docx|xlsx|zip|tar|gz|mp
 git ls-files | grep -iE '\.env|\.pem|\.key|secret|credential|\.pfx|\.p12' | head -30
 ```
 - IMPORTANT: search by filename only, NEVER read the file contents.
-- Flag any matches as 🔴 Critical.
-- Note: `.env.example` files are acceptable (they should not contain real values, but do NOT open to verify).
-
-### .gitignore coverage
-- Does `.gitignore` exist? If not → flag based on project type severity.
-- Read `.gitignore` and compare against expected patterns for the project type:
-  - JavaScript/TypeScript: node_modules/, dist/, .next/, .env*, *.log
-  - Python: __pycache__/, *.pyc, .env*, venv/, .venv/
-  - General: .DS_Store, Thumbs.db, *.log, .env
-- Flag missing patterns.
+- `.env.example` files are acceptable (do NOT open to verify).
 
 ### Recent commit history
 ```bash
 git log --oneline -10
 ```
-- Note any concerning patterns (e.g., "fix fix fix", secrets-related commits).
-- This is informational, not a finding unless something is clearly wrong.
+- Informational only, unless something is clearly wrong.
 
 ### Safety Rules
 
@@ -306,46 +278,21 @@ You are a READ-ONLY diagnostic agent auditing the Claude Code automations (hooks
 
 ## Your Task
 
-Use the checklist from `references/checklists.md`, section "Automations checklist".
+Read `references/checklists.md`, section "Automations checklist". Follow every item in that checklist.
 
-**Hooks:**
-```bash
-cat .claude/settings.local.json 2>/dev/null | head -30
-cat .claude/settings.json 2>/dev/null | head -30
+To read settings files, use the Read tool (not cat):
 ```
-- Are there pre/post commit hooks?
-- For code projects: is there a linting hook? formatting hook?
-- Are hook paths valid (no dead references)?
-
-**MCP servers:**
-- Check if any MCP servers are configured in settings.
-- For the project type, would any be useful? (Don't recommend if unclear benefit.)
-
-**Settings:**
-- Does `.claude/settings.local.json` exist?
-- Are there stale paths or dead references in it?
-- Are permissions appropriate?
+Read(".claude/settings.local.json")
+Read(".claude/settings.json")
+```
 
 ### Project-type-specific recommendations
 
 IMPORTANT: Tailor recommendations to the project type from recon.
 
-**Code projects** (has package.json / requirements.txt / etc.):
-- Pre-commit hooks for linting/formatting
-- Test runner integration
-- CI pipeline if deploying
-
-**Documentation projects** (mostly .md/.html/.txt):
-- Do NOT recommend linters, formatters, or test runners — they add noise for docs projects.
-- Focus on: link checking, structure validation, freshness monitoring.
-- Spell checking only if project is user-facing.
-
-**Product/Business projects:**
-- Same as documentation: no linters/CI.
-- Focus on: data validation, dashboard freshness, link integrity.
-
-**Mixed projects:**
-- Split recommendations: code tooling for code parts, structure tools for docs parts.
+**Code projects:** Pre-commit hooks for linting/formatting, test runner, CI.
+**Documentation/Product projects:** Do NOT recommend linters or test runners. Focus on link checking, structure validation, freshness.
+**Mixed projects:** Split — code tooling for code parts, structure tools for docs parts.
 
 ### Safety Rules
 

@@ -65,9 +65,9 @@ Before auditing, map the environment. Run all discovery commands in parallel whe
 > "Запустите аудит из папки конкретного проекта, не из корня диска."
 
 ### Git, CLAUDE.md, Memory discovery
-```bash
+```
 git rev-parse --is-inside-work-tree 2>/dev/null && echo "GIT: yes" || echo "GIT: no"
-find . -maxdepth 2 -name "CLAUDE.md" 2>/dev/null
+Glob("**/CLAUDE.md")          # find all CLAUDE.md files in project
 ls ~/.claude/projects/ 2>/dev/null | head -20
 ```
 
@@ -81,12 +81,12 @@ Read each found CLAUDE.md (first 100 lines) and store content for later analysis
 
 Check for code manifests and business folders. Use detection signals from `references/project-type-checklists.md` section "Project Type Detection".
 
-```bash
+```
 # Code signals — manifests AND src/ directory
 ls package.json requirements.txt go.mod Cargo.toml pyproject.toml *.sln 2>/dev/null
 ls -d src/ app/ lib/ 2>/dev/null
 # Business/product signals — also match numbered prefixes (e.g., 02-audience, 04-marketing)
-find . -maxdepth 2 -type d \( -name '*audience*' -o -name '*marketing*' -o -name '*analytics*' -o -name '*strategy*' -o -name '*operations*' -o -name '*products*' \) 2>/dev/null | head -10
+Glob("*{audience,marketing,analytics,strategy,operations,products}*", maxDepth=2, dirsOnly=true)
 ```
 
 Classification:
@@ -101,8 +101,10 @@ If none of the above match (very few files, no clear signals) → treat as **Doc
 
 ### File count
 ```bash
+# Count project files (exclude common noise directories)
 find . -type f -not -path '*/.git/*' -not -path '*/node_modules/*' -not -path '*/__pycache__/*' -not -path '*/.next/*' -not -path '*/dist/*' 2>/dev/null | wc -l
 ```
+*(Note: `find` is acceptable here — Glob doesn't support counting. Pipe through `wc -l` only.)*
 
 ### Previous audit check
 
@@ -164,10 +166,9 @@ Checks:
 ### Quick Step 3 — Architecture scan
 
 1. **Top-level scan:**
-   ```bash
-   tree -L 2 | head -30  # if tree available
-   # fallback:
-   find . -maxdepth 2 -type d 2>/dev/null | head -30
+   ```
+   Glob("**/", maxDepth=2)   # list directories up to 2 levels deep
+   ls -la                     # root contents
    ```
 
 2. **Load checklist** from `references/project-type-checklists.md` matching detected project type (Code/Product/Docs/Mixed). For Mixed projects, load both Code and Product checklists.
@@ -181,11 +182,13 @@ Checks:
      ```bash
      find . -type f -size +1M -not -path '*/.git/*' -not -path '*/node_modules/*' 2>/dev/null | head -20
      ```
+     *(Note: `find -size` has no Glob equivalent — bash is acceptable here.)*
    - IDE artifacts — `.idea/`, `.vscode/` with non-standard contents, `*.swp`, `Thumbs.db`, `.DS_Store`
    - Empty directories:
      ```bash
      find . -type d -empty -not -path '*/.git/*' 2>/dev/null | head -10
      ```
+     *(Note: empty dir detection has no Glob equivalent — bash is acceptable here.)*
 
 5. **Apply severity modifiers** from `references/project-type-checklists.md` section "Severity Modifiers Table"
 
@@ -216,12 +219,12 @@ After Step 0, dispatch 5 parallel agents using the Agent tool. Full mode covers 
    - `{COMMON_CONTEXT_BLOCK}` → filled RECON RESULTS from Step 0
    - `{COMMON_SAFETY_RULES}` → content from "Common Safety Rules" section
    - `{COMMON_OUTPUT_FORMAT}` → content from "Common Output Format" section
-4. Dispatch all 5 agents **in parallel** using the Agent tool:
-   - **Agent 1** (CLAUDE.md deep audit) — `subagent_type: "Explore"` — read-only
-   - **Agent 2** (Memory audit) — `subagent_type: "Explore"` — read-only
-   - **Agent 3** (File structure) — `subagent_type: "Explore"` — read-only
-   - **Agent 4** (Git hygiene) — `subagent_type: "Explore"` — read-only
-   - **Agent 5** (Automations) — `subagent_type: "Explore"` — read-only
+4. Dispatch all 5 agents **in parallel** using the Agent tool. Set `timeout: 300000` (5 min) on each to prevent hangs:
+   - **Agent 1** (CLAUDE.md deep audit) — `subagent_type: "Explore"`, `timeout: 300000`
+   - **Agent 2** (Memory audit) — `subagent_type: "Explore"`, `timeout: 300000`
+   - **Agent 3** (File structure) — `subagent_type: "Explore"`, `timeout: 300000`
+   - **Agent 4** (Git hygiene) — `subagent_type: "Explore"`, `timeout: 300000`
+   - **Agent 5** (Automations) — `subagent_type: "Explore"`, `timeout: 300000`
 
 **Important:** Agents do NOT invoke companion skills. All agents use fallback checklists from `references/checklists.md`. This keeps agent context small and prevents token explosion from nested skill invocations.
 
