@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мука и Время — Editorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Lora', serif;
+    background-color: #F5F0E8;
+    color: #2C2420;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    min-height: 100vh;
+    padding: 32px 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Top rule line */
+  .hero-rule {
+    width: 100%;
+    height: 2px;
+    background: #2C2420;
+    margin-bottom: 12px;
+  }
+
+  .hero-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 40px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #D0C8BA;
+  }
+
+  .hero-header-left {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #8C7E6E;
+  }
+
+  .hero-header-right {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #8C7E6E;
+  }
+
+  /* Asymmetric grid — content is left-heavy */
+  .hero-grid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .hero-main {
+    flex: 1;
+  }
+
+  .hero-aside {
+    flex: 0;
+  }
+
+  .hero-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 0.95;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    color: #2C2420;
+    margin-bottom: 24px;
+  }
+
+  .hero-title-light {
+    font-weight: 400;
+    color: #8C7E6E;
+  }
+
+  .hero-drop-cap {
+    float: left;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 0.8;
+    margin-right: 8px;
+    margin-top: 4px;
+    color: #A0755A;
+  }
+
+  .hero-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #4A3F36;
+    max-width: 520px;
+    margin-bottom: 32px;
+    columns: 1;
+  }
+
+  .hero-body p {
+    margin-bottom: 16px;
+  }
+
+  .hero-cta-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .hero-cta {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #F5F0E8;
+    background: #2C2420;
+    padding: 14px 32px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s;
+  }
+
+  .hero-cta:hover {
+    background: #4A3F36;
+  }
+
+  .hero-cta-note {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #8C7E6E;
+  }
+
+  /* Aside — pull quote */
+  .hero-pull-quote {
+    padding: 24px 0;
+    border-top: 2px solid #2C2420;
+    border-bottom: 1px solid #D0C8BA;
+  }
+
+  .hero-pull-quote blockquote {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #A0755A;
+  }
+
+  .hero-pull-quote cite {
+    display: block;
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: #8C7E6E;
+    margin-top: 8px;
+  }
+
+  /* Section marker */
+  .hero-section-marker {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #B0A594;
+    writing-mode: horizontal-tb;
+    margin-bottom: 12px;
+  }
+
+  /* Tablet — asymmetric 2-col */
+  @media (min-width: 768px) {
+    .hero { padding: 40px 48px; }
+    .hero-grid {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 48px;
+    }
+    .hero-main { flex: 7; }
+    .hero-aside { flex: 3; padding-top: 60px; }
+    .hero-title { font-size: 64px; }
+    .hero-body { columns: 1; max-width: 520px; }
+  }
+
+  /* Desktop */
+  @media (min-width: 1440px) {
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 60px;
+    }
+    .hero-grid { gap: 80px; }
+    .hero-title { font-size: 80px; letter-spacing: -2px; }
+    .hero-body { font-size: 16px; max-width: 540px; }
+    .hero-pull-quote blockquote { font-size: 26px; }
+    .hero-drop-cap { font-size: 96px; }
+  }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero-rule"></div>
+    <div class="hero-header">
+      <span class="hero-header-left">Мука и Время</span>
+      <span class="hero-header-right">Ремесленная пекарня, выпуск №1</span>
+    </div>
+
+    <div class="hero-grid">
+      <div class="hero-main">
+        <div class="hero-section-marker">Манифест</div>
+        <h1 class="hero-title">
+          Выпечка<br>
+          <span class="hero-title-light">с душой</span>
+        </h1>
+
+        <div class="hero-body">
+          <p>
+            <span class="hero-drop-cap">М</span>ы верим, что настоящий хлеб не терпит суеты.
+            Наша закваска зреет сутки, тесто поднимается в своём ритме,
+            а каждый торт собирается вручную — слой за слоем.
+          </p>
+          <p>
+            В «Муке и Времени» нет конвейера. Есть мастерство, терпение
+            и уважение к ингредиентам. Именно поэтому наш хлеб пахнет так,
+            как пёк бы его ваш дедушка — если бы он был французским пекарем.
+          </p>
+        </div>
+
+        <div class="hero-cta-row">
+          <a href="#order" class="hero-cta">Заказать торт</a>
+          <span class="hero-cta-note">Индивидуальный заказ от 3 дней</span>
+        </div>
+      </div>
+
+      <aside class="hero-aside">
+        <div class="hero-pull-quote">
+          <blockquote>
+            «Каждый торт —<br>это история,<br>рассказанная вкусом»
+          </blockquote>
+          <cite>— Мука и Время</cite>
+        </div>
+      </aside>
+    </div>
+  </section>
+</body>
+</html>

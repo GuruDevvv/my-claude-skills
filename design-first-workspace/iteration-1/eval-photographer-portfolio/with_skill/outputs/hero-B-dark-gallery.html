@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photographer Portfolio — Variant B: Dark Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #0c0c0c;
+      --color-text: #e8e6e1;
+      --color-muted: #8a8880;
+      --color-accent: #d4cfc4;
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Raleway', sans-serif;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+    }
+
+    .nav__logo {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--color-muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .nav__links a:hover {
+      color: var(--color-text);
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 80px 24px 40px;
+    }
+
+    /* Featured photo — large background block */
+    .hero__featured {
+      position: absolute;
+      inset: 0;
+      background: #2a2a25;
+      z-index: 0;
+    }
+
+    .hero__featured::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(12, 12, 12, 0.95) 0%,
+        rgba(12, 12, 12, 0.4) 50%,
+        rgba(12, 12, 12, 0.2) 100%
+      );
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero__tag {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 20px;
+    }
+
+    .hero__name {
+      font-family: var(--font-heading);
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--color-accent);
+      margin-bottom: 32px;
+    }
+
+    .hero__line {
+      width: 60px;
+      height: 1px;
+      background: var(--color-muted);
+      margin-bottom: 24px;
+    }
+
+    .hero__desc {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--color-muted);
+      max-width: 380px;
+      margin-bottom: 40px;
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .hero__cta {
+      display: inline-block;
+      padding: 14px 36px;
+      border: 1px solid var(--color-accent);
+      color: var(--color-accent);
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.4s;
+    }
+
+    .hero__cta:hover {
+      background: var(--color-accent);
+      color: var(--color-bg);
+    }
+
+    .hero__cta--ghost {
+      border-color: transparent;
+      color: var(--color-muted);
+    }
+
+    .hero__cta--ghost:hover {
+      background: transparent;
+      color: var(--color-text);
+      border-color: transparent;
+    }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scroll-hint__text {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      writing-mode: vertical-lr;
+    }
+
+    .scroll-hint__line {
+      width: 1px;
+      height: 40px;
+      background: var(--color-muted);
+      animation: scrollPulse 2s ease infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* DESKTOP */
+    @media (min-width: 768px) {
+      .nav {
+        padding: 32px 48px;
+      }
+
+      .hero {
+        padding: 0 48px 60px;
+      }
+
+      .hero__name {
+        font-size: 56px;
+      }
+
+      .hero__subtitle {
+        font-size: 24px;
+      }
+
+      .hero__desc {
+        max-width: 500px;
+        font-size: 15px;
+      }
+
+      .scroll-hint {
+        right: 48px;
+        bottom: 40px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .nav {
+        padding: 36px 80px;
+      }
+
+      .hero {
+        padding: 0 80px 80px;
+      }
+
+      .hero__tag {
+        font-size: 12px;
+        margin-bottom: 24px;
+      }
+
+      .hero__name {
+        font-size: 72px;
+        margin-bottom: 20px;
+      }
+
+      .hero__subtitle {
+        font-size: 28px;
+        margin-bottom: 40px;
+      }
+
+      .hero__line {
+        width: 80px;
+        margin-bottom: 28px;
+      }
+
+      .hero__desc {
+        max-width: 560px;
+        font-size: 16px;
+      }
+
+      .scroll-hint {
+        right: 80px;
+        bottom: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav__logo">Волков</div>
+    <ul class="nav__links">
+      <li><a href="#">Проекты</a></li>
+      <li><a href="#">Обо мне</a></li>
+      <li><a href="#">Связаться</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero__featured"></div>
+
+    <div class="hero__content">
+      <p class="hero__tag">Фотограф</p>
+      <h1 class="hero__name">Алексей Волков</h1>
+      <p class="hero__subtitle">Архитектура &middot; Город</p>
+      <div class="hero__line"></div>
+      <p class="hero__desc">Вижу геометрию там, где другие видят здания. Ловлю свет в бетоне, стекле и камне.</p>
+      <div class="hero__actions">
+        <a href="#" class="hero__cta">Портфолио</a>
+        <a href="#" class="hero__cta hero__cta--ghost">Контакт</a>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span class="scroll-hint__text">Scroll</span>
+      <div class="scroll-hint__line"></div>
+    </div>
+  </section>
+</body>
+</html>

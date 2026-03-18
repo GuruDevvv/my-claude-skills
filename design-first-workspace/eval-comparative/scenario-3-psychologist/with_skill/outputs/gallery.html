@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prototype Gallery — Anna Svetlova</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #111;
+  color: #E0E0E0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.gallery-header {
+  padding: 40px 32px 24px;
+  border-bottom: 1px solid #222;
+}
+
+.gallery-header h1 {
+  font-size: 24px;
+  font-weight: 500;
+  color: #FFF;
+  margin-bottom: 6px;
+}
+
+.gallery-header p {
+  font-size: 14px;
+  color: #666;
+  font-weight: 300;
+}
+
+.gallery-controls {
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #1A1A1A;
+  flex-wrap: wrap;
+}
+
+.gallery-controls label {
+  font-size: 12px;
+  color: #666;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.size-btn {
+  background: #1A1A1A;
+  border: 1px solid #2A2A2A;
+  color: #888;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  padding: 6px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.size-btn:hover {
+  border-color: #444;
+  color: #CCC;
+}
+
+.size-btn.active {
+  background: #2A2A2A;
+  border-color: #555;
+  color: #FFF;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  padding: 24px 32px 64px;
+}
+
+.card {
+  background: #1A1A1A;
+  border: 1px solid #252525;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+
+.card:hover {
+  border-color: #3A3A3A;
+}
+
+.card__header {
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #222;
+}
+
+.card__info {
+  flex: 1;
+}
+
+.card__id {
+  font-size: 11px;
+  font-weight: 600;
+  color: #555;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.card__name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #FFF;
+  margin-bottom: 6px;
+}
+
+.card__desc {
+  font-size: 13px;
+  color: #777;
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+.card__tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.card__tag {
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: #222;
+  color: #888;
+  letter-spacing: 0.5px;
+}
+
+.card__actions {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-left: 16px;
+}
+
+.card__open-link {
+  font-size: 12px;
+  color: #4A9EFF;
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 1px solid rgba(74, 158, 255, 0.2);
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.card__open-link:hover {
+  background: rgba(74, 158, 255, 0.1);
+  border-color: rgba(74, 158, 255, 0.4);
+}
+
+.card__preview {
+  width: 100%;
+  background: #111;
+  position: relative;
+}
+
+.card__preview iframe {
+  width: 100%;
+  border: none;
+  display: block;
+  transition: height 0.4s ease;
+}
+
+/* Size states */
+.card__preview.size-s iframe { height: 400px; }
+.card__preview.size-m iframe { height: 600px; }
+.card__preview.size-l iframe { height: 800px; }
+
+@media (min-width: 900px) {
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1600px) {
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="gallery-header">
+  <h1>Prototype Gallery: Anna Svetlova</h1>
+  <p>6 hero section variants — psychologist personal website</p>
+</div>
+
+<div class="gallery-controls">
+  <label>Preview size:</label>
+  <button class="size-btn" data-size="s" onclick="setSize('s')">S</button>
+  <button class="size-btn active" data-size="m" onclick="setSize('m')">M</button>
+  <button class="size-btn" data-size="l" onclick="setSize('l')">L</button>
+</div>
+
+<div class="gallery-grid">
+
+  <!-- A -->
+  <div class="card">
+    <div class="card__header">
+      <div class="card__info">
+        <p class="card__id">Variant A</p>
+        <p class="card__name">Soft Neutral</p>
+        <p class="card__desc">Cream/beige palette, elegant serif typography, centered layout, airy whitespace</p>
+        <div class="card__tags">
+          <span class="card__tag">centered</span>
+          <span class="card__tag">serif</span>
+          <span class="card__tag">cream</span>
+          <span class="card__tag">minimal</span>
+        </div>
+      </div>
+      <div class="card__actions">
+        <a href="hero-A-soft-neutral.html" target="_blank" class="card__open-link">Open</a>
+      </div>
+    </div>
+    <div class="card__preview size-m">
+      <iframe src="hero-A-soft-neutral.html" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <!-- B -->
+  <div class="card">
+    <div class="card__header">
+      <div class="card__info">
+        <p class="card__id">Variant B</p>
+        <p class="card__name">Modern Minimal</p>
+        <p class="card__desc">White background, thin sans-serif, accent line, editorial feel with structured blocks</p>
+        <div class="card__tags">
+          <span class="card__tag">left-aligned</span>
+          <span class="card__tag">sans-serif</span>
+          <span class="card__tag">editorial</span>
+          <span class="card__tag">white</span>
+        </div>
+      </div>
+      <div class="card__actions">
+        <a href="hero-B-modern-minimal.html" target="_blank" class="card__open-link">Open</a>
+      </div>
+    </div>
+    <div class="card__preview size-m">
+      <iframe src="hero-B-modern-minimal.html" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <!-- C -->
+  <div class="card">
+    <div class="card__header">
+      <div class="card__info">
+        <p class="card__id">Variant C</p>
+        <p class="card__name">Warm Sage</p>
+        <p class="card__desc">Sage green palette, split layout with rounded photo placeholder, nature-inspired warmth</p>
+        <div class="card__tags">
+          <span class="card__tag">split-layout</span>
+          <span class="card__tag">green</span>
+          <span class="card__tag">rounded</span>
+          <span class="card__tag">organic</span>
+        </div>
+      </div>
+      <div class="card__actions">
+        <a href="hero-C-warm-sage.html" target="_blank" class="card__open-link">Open</a>
+      </div>
+    </div>
+    <div class="card__preview size-m">
+      <iframe src="hero-C-warm-sage.html" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <!-- D -->
+  <div class="card">
+    <div class="card__header">
+      <div class="card__info">
+        <p class="card__id">Variant D</p>
+        <p class="card__name">Twilight Calm</p>
+        <p class="card__desc">Muted blue-purple gradient, glassmorphism card, ambient glow, dark atmosphere</p>
+        <div class="card__tags">
+          <span class="card__tag">centered</span>
+          <span class="card__tag">dark</span>
+          <span class="card__tag">glassmorphism</span>
+          <span class="card__tag">gradient</span>
+        </div>
+      </div>
+      <div class="card__actions">
+        <a href="hero-D-twilight-calm.html" target="_blank" class="card__open-link">Open</a>
+      </div>
+    </div>
+    <div class="card__preview size-m">
+      <iframe src="hero-D-twilight-calm.html" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <!-- E -->
+  <div class="card">
+    <div class="card__header">
+      <div class="card__info">
+        <p class="card__id">Variant E</p>
+        <p class="card__name">Earth & Paper</p>
+        <p class="card__desc">Paper texture feel, warm browns, serif typography, editorial two-column layout</p>
+        <div class="card__tags">
+          <span class="card__tag">columns</span>
+          <span class="card__tag">editorial</span>
+          <span class="card__tag">brown</span>
+          <span class="card__tag">textured</span>
+        </div>
+      </div>
+      <div class="card__actions">
+        <a href="hero-E-earth-paper.html" target="_blank" class="card__open-link">Open</a>
+      </div>
+    </div>
+    <div class="card__preview size-m">
+      <iframe src="hero-E-earth-paper.html" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <!-- F -->
+  <div class="card">
+    <div class="card__header">
+      <div class="card__info">
+        <p class="card__id">Variant F</p>
+        <p class="card__name">Clean Clinical-Warm</p>
+        <p class="card__desc">White background with warm coral accent, structured grid, card-based approach section</p>
+        <div class="card__tags">
+          <span class="card__tag">grid</span>
+          <span class="card__tag">coral</span>
+          <span class="card__tag">cards</span>
+          <span class="card__tag">professional</span>
+        </div>
+      </div>
+      <div class="card__actions">
+        <a href="hero-F-clean-clinical-warm.html" target="_blank" class="card__open-link">Open</a>
+      </div>
+    </div>
+    <div class="card__preview size-m">
+      <iframe src="hero-F-clean-clinical-warm.html" loading="lazy"></iframe>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function setSize(size) {
+  document.querySelectorAll('.card__preview').forEach(el => {
+    el.className = 'card__preview size-' + size;
+  });
+  document.querySelectorAll('.size-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.size === size);
+  });
+}
+</script>
+
+</body>
+</html>

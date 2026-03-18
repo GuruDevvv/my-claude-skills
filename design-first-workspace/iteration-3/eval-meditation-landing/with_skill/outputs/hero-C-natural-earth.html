@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant C: Natural Earth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #f5f0e8;
+      --color-card: #ebe5d8;
+      --color-text: #2c2416;
+      --color-text-soft: #6b5e4c;
+      --color-green: #5c7a5e;
+      --color-green-hover: #4a6a4c;
+      --color-terracotta: #b5694d;
+      --font-heading: 'DM Serif Display', serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 48px 24px;
+      position: relative;
+    }
+
+    .hero__nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+
+    .hero__logo {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      color: var(--color-text);
+    }
+
+    .hero__nav-link {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-soft);
+      text-decoration: none;
+    }
+
+    .hero__content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color-green);
+      margin-bottom: 20px;
+    }
+
+    .hero__eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      background: var(--color-green);
+    }
+
+    .hero__title {
+      font-family: var(--font-heading);
+      font-weight: 400;
+      font-size: 40px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .hero__desc {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--color-text-soft);
+      max-width: 340px;
+      margin-bottom: 32px;
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+
+    .hero__cta {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 14px;
+      color: #fff;
+      background: var(--color-green);
+      border: none;
+      padding: 16px 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: background 0.3s ease;
+    }
+
+    .hero__cta:hover {
+      background: var(--color-green-hover);
+    }
+
+    .hero__cta--outline {
+      background: none;
+      color: var(--color-text);
+      border: 1.5px solid var(--color-text-soft);
+    }
+
+    .hero__cta--outline:hover {
+      background: var(--color-card);
+      border-color: var(--color-text);
+    }
+
+    .hero__stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: 24px 0;
+      border-top: 1px solid rgba(44, 36, 22, 0.12);
+    }
+
+    .hero__stat {
+      text-align: center;
+    }
+
+    .hero__stat-value {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      color: var(--color-terracotta);
+      display: block;
+    }
+
+    .hero__stat-label {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--color-text-soft);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        padding: 48px 64px;
+      }
+
+      .hero__content {
+        max-width: 600px;
+      }
+
+      .hero__eyebrow {
+        font-size: 13px;
+        margin-bottom: 24px;
+      }
+
+      .hero__title {
+        font-size: 60px;
+      }
+
+      .hero__desc {
+        font-size: 17px;
+        max-width: 480px;
+        margin-bottom: 40px;
+      }
+
+      .hero__actions {
+        flex-direction: row;
+        gap: 16px;
+      }
+
+      .hero__cta {
+        font-size: 15px;
+        padding: 16px 36px;
+      }
+
+      .hero__stats {
+        max-width: 400px;
+        padding: 32px 0;
+      }
+
+      .hero__stat-value {
+        font-size: 36px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .hero {
+        padding: 48px 120px;
+      }
+
+      .hero__title {
+        font-size: 76px;
+      }
+
+      .hero__desc {
+        font-size: 19px;
+        max-width: 560px;
+      }
+
+      .hero__stats {
+        max-width: 480px;
+      }
+
+      .hero__stat-value {
+        font-size: 42px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <nav class="hero__nav">
+      <span class="hero__logo">Тишина</span>
+      <a href="#" class="hero__nav-link">О курсе</a>
+    </nav>
+    <div class="hero__content">
+      <span class="hero__eyebrow">Онлайн-курс</span>
+      <h1 class="hero__title">Тишина внутри</h1>
+      <p class="hero__desc">Восемь недель осознанной практики. Научитесь слышать себя в мире, который не замолкает ни на секунду.</p>
+      <div class="hero__actions">
+        <a href="#" class="hero__cta">Начать путь — 3 900 ₽</a>
+        <a href="#" class="hero__cta hero__cta--outline">Узнать подробнее</a>
+      </div>
+    </div>
+    <div class="hero__stats">
+      <div class="hero__stat">
+        <span class="hero__stat-value">8</span>
+        <span class="hero__stat-label">Недель</span>
+      </div>
+      <div class="hero__stat">
+        <span class="hero__stat-value">24</span>
+        <span class="hero__stat-label">Урока</span>
+      </div>
+      <div class="hero__stat">
+        <span class="hero__stat-value">1:1</span>
+        <span class="hero__stat-label">Обратная связь</span>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant A: Warm Sand</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --color-bg: #f5efe6;
+      --color-bg-deep: #e8ddd0;
+      --color-text: #3a2e28;
+      --color-text-soft: #6b5d54;
+      --color-accent: #c49a6c;
+      --color-accent-deep: #a07850;
+      --color-cream: #faf6f0;
+      --font-heading: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Raleway', sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--color-text);
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3rem);
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(170deg, var(--color-cream) 0%, var(--color-bg) 40%, var(--color-bg-deep) 100%);
+    }
+
+    /* Organic circle decoration */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: clamp(300px, 50vw, 700px);
+      height: clamp(300px, 50vw, 700px);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,154,108,0.12) 0%, rgba(196,154,108,0.03) 60%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    /* Subtle grain */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .hero__tag {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: clamp(1rem, 3vw, 2rem);
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.2s forwards;
+    }
+
+    .hero__title {
+      font-family: var(--font-heading);
+      font-weight: 400;
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      line-height: 1.15;
+      color: var(--color-text);
+      margin-bottom: clamp(0.75rem, 2vw, 1.25rem);
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.4s forwards;
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-heading);
+      font-weight: 400;
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      color: var(--color-text-soft);
+      width: min(80%, 600px);
+      margin: 0 auto clamp(1.5rem, 4vw, 3rem);
+      line-height: 1.5;
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.6s forwards;
+    }
+
+    .hero__divider {
+      width: 60px;
+      height: 1px;
+      background: var(--color-accent);
+      margin: 0 auto clamp(1.5rem, 4vw, 3rem);
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.7s forwards;
+    }
+
+    .hero__cta {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+      letter-spacing: 0.08em;
+      color: var(--color-cream);
+      background: var(--color-accent-deep);
+      border: none;
+      padding: clamp(0.9rem, 2vw, 1.15rem) clamp(2rem, 4vw, 3rem);
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.8s forwards;
+    }
+
+    .hero__cta:hover {
+      background: var(--color-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(160,120,80,0.25);
+    }
+
+    .hero__note {
+      font-size: 0.8rem;
+      color: var(--color-text-soft);
+      margin-top: clamp(1rem, 2vw, 1.5rem);
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 1s forwards;
+    }
+
+    /* Bottom decorative dots */
+    .hero__dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: clamp(2rem, 5vw, 4rem);
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 1.1s forwards;
+    }
+
+    .hero__dots span {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      opacity: 0.5;
+    }
+
+    .hero__dots span:nth-child(2) { opacity: 0.8; width: 6px; height: 6px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tablet */
+    @media (min-width: 768px) {
+      .hero__title { font-size: 3.2rem; }
+      .hero__subtitle { font-size: 1.3rem; width: min(65%, 600px); }
+    }
+
+    /* Desktop */
+    @media (min-width: 1024px) {
+      .hero { padding: 4rem 3rem; }
+      .hero__title { font-size: 4rem; }
+      .hero__subtitle { font-size: 1.4rem; }
+      .hero__divider { width: 80px; }
+    }
+
+    /* Wide */
+    @media (min-width: 1440px) {
+      .hero__title { font-size: 4.5rem; }
+      .hero__content { max-width: 950px; }
+      .hero__subtitle { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero__content">
+      <p class="hero__tag">Онлайн-курс медитации</p>
+      <h1 class="hero__title">Тишина внутри</h1>
+      <p class="hero__subtitle">8 недель осознанной практики, которая вернёт вам покой и ясность</p>
+      <div class="hero__divider"></div>
+      <a href="#" class="hero__cta">Начать путь — 3 900 &#8381;</a>
+      <p class="hero__note">8 недель &middot; видеоуроки &middot; медитации &middot; поддержка</p>
+      <div class="hero__dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

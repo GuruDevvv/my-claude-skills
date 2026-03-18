@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Hero Prototypes Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #111;
+      color: #e0e0e0;
+      padding: 32px 24px;
+      min-height: 100vh;
+    }
+
+    .header {
+      max-width: 1400px;
+      margin: 0 auto 32px;
+    }
+
+    .header__title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .header__sub {
+      font-size: 14px;
+      color: #888;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+
+    /* Size toggle */
+    .toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .toggle__btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border: 1px solid #333;
+      background: transparent;
+      color: #aaa;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .toggle__btn:hover { border-color: #555; color: #ddd; }
+    .toggle__btn.active {
+      background: #fff;
+      color: #111;
+      border-color: #fff;
+    }
+
+    /* Grid */
+    .grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    @media (min-width: 900px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Card */
+    .card {
+      background: #1a1a1a;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #252525;
+    }
+
+    .card__header {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #252525;
+    }
+
+    .card__info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .card__name {
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    .card__desc {
+      font-size: 12px;
+      color: #666;
+      font-weight: 300;
+    }
+
+    .card__tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .card__tag {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: #252525;
+      color: #888;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .card__open {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #6ea0f0;
+      text-decoration: none;
+      padding: 6px 12px;
+      border: 1px solid rgba(110,160,240,0.3);
+      border-radius: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .card__open:hover {
+      background: rgba(110,160,240,0.1);
+      border-color: rgba(110,160,240,0.5);
+    }
+
+    .card__iframe-wrapper {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      background: #0a0a0a;
+    }
+
+    .card__iframe-wrapper iframe {
+      width: 100%;
+      border: none;
+      display: block;
+      transition: height 0.3s ease;
+    }
+
+    /* Default height: mobile */
+    .card__iframe-wrapper iframe { height: 600px; }
+
+    body.size-tablet .card__iframe-wrapper iframe { height: 800px; }
+    body.size-desktop .card__iframe-wrapper iframe { height: 700px; }
+
+    .footer {
+      max-width: 1400px;
+      margin: 48px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid #252525;
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+    }
+  </style>
+</head>
+<body class="size-mobile">
+
+  <div class="header">
+    <h1 class="header__title">Тишина внутри — Hero Prototypes</h1>
+    <p class="header__sub">6 вариантов Hero-секции. Сравните на разных размерах экрана.</p>
+
+    <div class="toggle">
+      <button class="toggle__btn active" data-size="mobile">Mobile (600px)</button>
+      <button class="toggle__btn" data-size="tablet">Tablet (800px)</button>
+      <button class="toggle__btn" data-size="desktop">Desktop (700px)</button>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__info">
+          <div class="card__name">A — Soft Dawn</div>
+          <div class="card__desc">Тёплый минимализм, светлый фон, мягкие градиентные орбы</div>
+          <div class="card__tags">
+            <span class="card__tag">Centered</span>
+            <span class="card__tag">Light</span>
+            <span class="card__tag">Warm</span>
+            <span class="card__tag">Serif</span>
+          </div>
+        </div>
+        <a href="hero-A-soft-dawn.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <div class="card__iframe-wrapper">
+        <iframe src="hero-A-soft-dawn.html" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__info">
+          <div class="card__name">B — Deep Twilight</div>
+          <div class="card__desc">Тёмная тема, звёздные частицы, фиолетовые акценты</div>
+          <div class="card__tags">
+            <span class="card__tag">Centered</span>
+            <span class="card__tag">Dark</span>
+            <span class="card__tag">Cool</span>
+            <span class="card__tag">Particles</span>
+          </div>
+        </div>
+        <a href="hero-B-deep-twilight.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <div class="card__iframe-wrapper">
+        <iframe src="hero-B-deep-twilight.html" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__info">
+          <div class="card__name">C — Split Sage</div>
+          <div class="card__desc">Двухколоночный лейаут, зелёные тона, органичные формы</div>
+          <div class="card__tags">
+            <span class="card__tag">Split layout</span>
+            <span class="card__tag">Light</span>
+            <span class="card__tag">Sage</span>
+            <span class="card__tag">Organic</span>
+          </div>
+        </div>
+        <a href="hero-C-split-sage.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <div class="card__iframe-wrapper">
+        <iframe src="hero-C-split-sage.html" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__info">
+          <div class="card__name">D — Warm Earth</div>
+          <div class="card__desc">Центрированный, тёплые охры, дышащий круг, карточки фич</div>
+          <div class="card__tags">
+            <span class="card__tag">Centered</span>
+            <span class="card__tag">Light</span>
+            <span class="card__tag">Earth</span>
+            <span class="card__tag">Cards</span>
+          </div>
+        </div>
+        <a href="hero-D-warm-earth.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <div class="card__iframe-wrapper">
+        <iframe src="hero-D-warm-earth.html" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__info">
+          <div class="card__name">E — Editorial Mist</div>
+          <div class="card__desc">Журнальный лейаут, текст слева + декоративная колонка справа</div>
+          <div class="card__tags">
+            <span class="card__tag">Asymmetric</span>
+            <span class="card__tag">Light</span>
+            <span class="card__tag">Editorial</span>
+            <span class="card__tag">Brutalist</span>
+          </div>
+        </div>
+        <a href="hero-E-editorial-mist.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <div class="card__iframe-wrapper">
+        <iframe src="hero-E-editorial-mist.html" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__info">
+          <div class="card__name">F — Night Bloom</div>
+          <div class="card__desc">Тёмная, розовые акценты, два столбца, орбитальный декор</div>
+          <div class="card__tags">
+            <span class="card__tag">Split layout</span>
+            <span class="card__tag">Dark</span>
+            <span class="card__tag">Rose</span>
+            <span class="card__tag">Animated</span>
+          </div>
+        </div>
+        <a href="hero-F-night-bloom.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <div class="card__iframe-wrapper">
+        <iframe src="hero-F-night-bloom.html" loading="lazy"></iframe>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Design-First Skill — 6 Hero Prototypes — Iteration 5 Evaluation
+  </div>
+
+  <script>
+    const toggleBtns = document.querySelectorAll('.toggle__btn');
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        toggleBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const size = btn.dataset.size;
+        document.body.className = 'size-' + size;
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant D: Terracotta Earth</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #faf5ef;
+      --text: #2c1e13;
+      --text-soft: #6b5744;
+      --terracotta: #c67b5c;
+      --terracotta-dark: #a85d3f;
+      --sand: #d4c4a8;
+      --sage: #8a9a7a;
+      --cream: #f0e8d8;
+      --clay: #b5651d;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Grain texture */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr;
+      align-items: center;
+      padding: 48px 24px;
+      position: relative;
+    }
+
+    /* Asymmetric layout with editorial feel */
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* Decorative arch shape */
+    .arch {
+      width: 180px;
+      height: 240px;
+      border: 2px solid var(--sand);
+      border-radius: 90px 90px 0 0;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 30px;
+    }
+
+    .arch::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 60%;
+      background: linear-gradient(to top, var(--terracotta), transparent);
+      opacity: 0.3;
+    }
+
+    .arch-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--terracotta);
+      opacity: 0.15;
+    }
+
+    .text-block {
+      text-align: left;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 20px;
+    }
+
+    .tag::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--terracotta);
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-weight: 400;
+      font-size: 46px;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .subtitle {
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--text-soft);
+      margin-bottom: 32px;
+      max-width: 340px;
+    }
+
+    .cta-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      background: var(--terracotta);
+      padding: 16px 32px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.2s ease;
+      width: fit-content;
+    }
+
+    .cta-button:hover {
+      background: var(--terracotta-dark);
+      transform: translateY(-1px);
+    }
+
+    .price-note {
+      font-size: 13px;
+      color: var(--text-soft);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .price-note svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: var(--sage);
+      stroke-width: 2;
+    }
+
+    /* Horizontal feature bar */
+    .features {
+      display: flex;
+      gap: 1px;
+      background: var(--sand);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .feature {
+      flex: 1;
+      background: var(--cream);
+      padding: 16px 12px;
+      text-align: center;
+    }
+
+    .feature-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--terracotta);
+      display: block;
+    }
+
+    .feature-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: var(--text-soft);
+      margin-top: 4px;
+    }
+
+    @media (min-width: 768px) {
+      .hero-inner {
+        max-width: 700px;
+        flex-direction: row;
+        align-items: center;
+        gap: 60px;
+      }
+      .arch { width: 220px; height: 300px; border-radius: 110px 110px 0 0; flex-shrink: 0; }
+      h1 { font-size: 54px; }
+      .subtitle { font-size: 17px; max-width: 400px; }
+      .features { max-width: 400px; }
+    }
+
+    @media (min-width: 1440px) {
+      .hero-inner {
+        max-width: 900px;
+        gap: 80px;
+      }
+      .arch { width: 280px; height: 380px; border-radius: 140px 140px 0 0; }
+      .arch-icon { width: 50px; height: 50px; }
+      h1 { font-size: 68px; }
+      .subtitle { font-size: 18px; max-width: 460px; }
+      .cta-button { font-size: 15px; padding: 18px 40px; }
+      .feature-num { font-size: 26px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="arch">
+        <div class="arch-icon"></div>
+      </div>
+
+      <div class="text-block">
+        <span class="tag">Онлайн-курс медитации</span>
+        <h1>Тишина<br><em>внутри</em></h1>
+        <p class="subtitle">8 недель мягкой, осознанной практики. Без эзотерики и пафоса — только вы и тишина.</p>
+
+        <div class="cta-group">
+          <a href="#" class="cta-button">Начать путь — 3 900 ₽</a>
+          <span class="price-note">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Безопасная оплата, доступ навсегда
+          </span>
+        </div>
+
+        <div class="features">
+          <div class="feature">
+            <span class="feature-num">8</span>
+            <span class="feature-label">Недель</span>
+          </div>
+          <div class="feature">
+            <span class="feature-num">32</span>
+            <span class="feature-label">Урока</span>
+          </div>
+          <div class="feature">
+            <span class="feature-num">24/7</span>
+            <span class="feature-label">Доступ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
