@@ -81,17 +81,22 @@ Read each found CLAUDE.md (first 100 lines) and store content for later analysis
 Check for code manifests and business folders. Use detection signals from `references/project-type-checklists.md` section "Project Type Detection".
 
 ```bash
-# Code signals
+# Code signals — manifests AND src/ directory
 ls package.json requirements.txt go.mod Cargo.toml pyproject.toml *.sln 2>/dev/null
-# Business/product signals
-ls -d docs/audience docs/marketing docs/analytics docs/strategy docs/operations docs/products audience marketing analytics strategy operations products 2>/dev/null
+ls -d src/ app/ lib/ 2>/dev/null
+# Business/product signals — also match numbered prefixes (e.g., 02-audience, 04-marketing)
+find . -maxdepth 2 -type d \( -name '*audience*' -o -name '*marketing*' -o -name '*analytics*' -o -name '*strategy*' -o -name '*operations*' -o -name '*products*' \) 2>/dev/null | head -10
 ```
 
 Classification:
-- Code manifests found, no business folders → **Code**
-- Business folders found, no code manifests → **Product**
+- Code manifests found AND `src/`/`app/`/`lib/` exists, no business folders → **Code**
+- Business folders found (3+), no `src/`/`app/`/`lib/` → **Product** (even if package.json exists — utility scripts don't make it a code project)
 - Mostly `.md`/`.html`/`.txt` with no manifests or business folders → **Docs**
-- Both code manifests and business folders → **Mixed**
+- `src/`/`app/`/`lib/` exists AND 3+ business folders → **Mixed**
+
+**Key insight:** `package.json` alone doesn't indicate a Code project — many docs/product projects have it for utility scripts. The presence of `src/`, `app/`, or `lib/` is a much stronger signal.
+
+If none of the above match (very few files, no clear signals) → treat as **Docs** and focus on file hygiene. Note the ambiguity in the report.
 
 ### File count
 ```bash

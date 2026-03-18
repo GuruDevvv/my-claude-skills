@@ -10,18 +10,25 @@ Reference file for project-audit skill. Read by SKILL.md and parallel agent prom
 
 | Signal | Type |
 |--------|------|
-| `package.json`, `requirements.txt`, `go.mod`, `Cargo.toml`, `*.sln`, `src/` | **Code** |
-| Mostly `.md`, `.html`, `.txt`, `.pdf` + folders like `docs/`, `marketing/`, `audience/`, `analytics/` | **Product/Business** |
-| Only `.md`/`.html` without business structure (wiki, tech docs, API docs) | **Documentation** |
-| Both code manifests and business documentation | **Mixed** — both checklists apply |
+| Code manifest + `src/`, `app/`, or `lib/` directory, no business folders | **Code** |
+| 3+ business-oriented folders (audience, marketing, analytics, strategy, operations, products), no `src/`/`app/`/`lib/` | **Product/Business** |
+| Only `.md`/`.html` without business structure or code dirs (wiki, tech docs, API docs) | **Documentation** |
+| `src/`/`app/`/`lib/` exists AND 3+ business-oriented folders | **Mixed** — both checklists apply |
+
+**Code manifests:** `package.json`, `requirements.txt`, `go.mod`, `Cargo.toml`, `*.sln`, `pyproject.toml`
+
+**Business folder detection:** Also match numbered prefixes: `02-audience`, `04-marketing`, etc. Use glob patterns like `*-audience`, `*-marketing`.
 
 ### Mixed Detection Rule
 
-If the project has a **code manifest** (package.json, requirements.txt, etc.) **AND 3+ business-oriented folders** (audience, marketing, analytics, strategy, operations, products) → **Mixed**.
+`package.json` alone does NOT make a project "Code" — many Product/Business projects have it for utility scripts or deploy tooling.
 
-Code manifest + only `docs/` → **Code**.
+The key signal is `src/`, `app/`, or `lib/` — these indicate actual application code.
 
-When in doubt → **ask user**.
+- `src/` + 3+ business folders → **Mixed**
+- `package.json` + 3+ business folders but no `src/` → **Product/Business**
+- `src/` + only `docs/` → **Code**
+- When in doubt → **ask user**
 
 ---
 
