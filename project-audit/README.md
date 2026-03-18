@@ -46,15 +46,12 @@ The skill auto-detects the project type and uses type-specific checklists:
 
 Severity is calibrated per project type (e.g., missing `.gitignore` is Critical for code projects but Warning for docs projects).
 
-## Companion Skills (recommended)
-
-These skills enhance Full mode with deeper analysis:
-
-- **`claude-md-management:claude-md-improver`** — deep CLAUDE.md audit with structure analysis and improvement suggestions
-- **`claude-code-setup:claude-automation-recommender`** — analyzes project and recommends hooks, MCP servers, skills, and settings
-
-Without them the skill works fully using built-in fallback checklists. With them, Full mode gives deeper, more targeted analysis.
-
 ## Report
 
-The audit produces a structured report saved to `~/.claude/projects/<slug>/memory/audits/`. Subsequent audits can compare with previous reports to show what was fixed, what's new, and what persists.
+The audit produces a **detailed per-area report** (not just a summary table) with sections for each audit area: CLAUDE.md, Memory, Architecture, Git, Automations. Each section includes what was checked, findings with severity, and specific recommendations.
+
+Reports are saved to `~/.claude/projects/<slug>/memory/audits/`. Subsequent audits can compare with previous reports to show what was fixed, what's new, and what persists.
+
+## Safety
+
+The skill is strictly **read-only** — it diagnoses and reports but never modifies, creates, or deletes project files. All changes require explicit user approval after the report.
