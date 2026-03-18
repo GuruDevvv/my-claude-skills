@@ -34,6 +34,7 @@ Diagnose organizational health of any project: CLAUDE.md, memory, file structure
 
 | Rule | Why |
 |------|-----|
+| **READ-ONLY: NEVER modify, create, or delete any project files** | This is a diagnostic tool. It observes and reports. All changes require explicit user approval after the report. |
 | Don't read `.env`, `*.pem`, `*.key`, `*secret*`, `credentials*` | Content enters context and can leak into output. Note existence and size only. |
 | Spotted a token/key → write `[SECRET hidden]` | Even accidental exposure in a report is a leak. |
 | `| head -30` on any command with large output | Protects context window on large projects. |
@@ -131,11 +132,11 @@ Add a "Changes since last audit" section to the report before the Action plan.
 
 ## Quick mode
 
-Quick runs Steps 1-3 sequentially. No companion skill delegation, no git checks, no automations.
+Quick runs Steps 1-3 sequentially. No agents, no git checks, no automations.
 
 ### Quick Step 1 — CLAUDE.md audit
 
-Use fallback checklist from `references/checklists.md`, section "CLAUDE.md checklist". Do NOT invoke companion skills in Quick mode.
+Use checklist from `references/checklists.md`, section "CLAUDE.md checklist".
 
 Key checks:
 - **Documented folder structure vs reality** — run `ls` on project root and compare with what CLAUDE.md describes. Stale structure docs are the #1 source of Claude getting confused about where things are. This is the single most impactful check.
@@ -188,14 +189,16 @@ Checks:
 
 5. **Apply severity modifiers** from `references/project-type-checklists.md` section "Severity Modifiers Table"
 
-After Step 3, compile report (see Report section below). End Quick report with:
-> Для полного аудита (git, автоматизации, глубокий анализ CLAUDE.md): `/project-audit full`
+After Step 3, compile the detailed report (see Report template below). Fill in sections 1-3. Sections 4-5 go into "Пропущено" with note: "Quick mode — git и автоматизации не проверяются."
+
+End Quick report with:
+> Для полного аудита (git, автоматизации, глубокий анализ): `/project-audit full`
 
 ---
 
 ## Full mode
 
-After Step 0, dispatch 5 parallel agents using the Agent tool. Full mode covers everything Quick does plus git hygiene, automations, and deeper CLAUDE.md analysis via companion skills.
+After Step 0, dispatch 5 parallel agents using the Agent tool. Full mode covers everything Quick does plus git hygiene, automations, and deeper analysis.
 
 ### Agent dispatch
 
@@ -214,18 +217,13 @@ After Step 0, dispatch 5 parallel agents using the Agent tool. Full mode covers 
    - `{COMMON_SAFETY_RULES}` → content from "Common Safety Rules" section
    - `{COMMON_OUTPUT_FORMAT}` → content from "Common Output Format" section
 4. Dispatch all 5 agents **in parallel** using the Agent tool:
-   - **Agent 1** (CLAUDE.md deep audit) — `subagent_type: "general-purpose"` — may invoke `claude-md-management:claude-md-improver` skill
-   - **Agent 2** (Memory audit) — `subagent_type: "Explore"` — read-only scan
-   - **Agent 3** (File structure) — `subagent_type: "Explore"` — read-only scan
-   - **Agent 4** (Git hygiene) — `subagent_type: "Explore"` — read-only scan
-   - **Agent 5** (Automations) — `subagent_type: "general-purpose"` — may invoke `claude-code-setup:claude-automation-recommender` skill
+   - **Agent 1** (CLAUDE.md deep audit) — `subagent_type: "Explore"` — read-only
+   - **Agent 2** (Memory audit) — `subagent_type: "Explore"` — read-only
+   - **Agent 3** (File structure) — `subagent_type: "Explore"` — read-only
+   - **Agent 4** (Git hygiene) — `subagent_type: "Explore"` — read-only
+   - **Agent 5** (Automations) — `subagent_type: "Explore"` — read-only
 
-### Skill delegation pattern (Agents 1 and 5)
-
-Each agent that delegates to a companion skill follows this pattern:
-- Try to invoke the skill via the Skill tool
-- **Success:** integrate skill findings into agent output
-- **Not found / failed:** tell user "Скилл X не установлен/не сработал. Выполняю ручную проверку." and use fallback checklist from `references/checklists.md`
+**Important:** Agents do NOT invoke companion skills. All agents use fallback checklists from `references/checklists.md`. This keeps agent context small and prevents token explosion from nested skill invocations.
 
 ### Synthesis
 
@@ -233,54 +231,138 @@ After all 5 agents return:
 1. Collect all FINDINGS blocks from agent responses (each agent outputs findings in the Common Output Format)
 2. Deduplicate — same issue found by multiple agents → keep the more detailed version, note which agents flagged it
 3. Apply severity modifiers from `references/project-type-checklists.md` section "Severity Modifiers Table" (e.g., missing .gitignore in a docs project is Warning, not Critical)
-4. Sort by severity: Critical → Warning → Low
-5. Compile into the report template below
-6. If any agent failed or timed out — note in "Skipped" section with reason
+4. **Build the detailed report** — map each agent's findings to the corresponding report section:
+   - Agent 1 → Section "1. CLAUDE.md"
+   - Agent 2 → Section "2. Memory"
+   - Agent 3 → Section "3. Архитектура и файлы"
+   - Agent 4 → Section "4. Git гигиена"
+   - Agent 5 → Section "5. Автоматизации"
+5. For each section, fill in "Что проверено" (from agent's ALL CLEAR + findings topics), "Находки" (findings with severity), "Рекомендации" (actionable fix for each finding)
+6. Build the summary table from highest severity per area
+7. Build the Action plan from all Critical + Warning findings across all areas
+8. If any agent failed or timed out — note in "Пропущено" section with reason
 
 ---
 
 ## Report template
 
-```markdown
-# Audit: [project name]
+The report is a **detailed document with analysis per area**, not a summary table. Each area gets its own section with what was checked, what was found, and specific recommendations.
 
-**Date:** YYYY-MM-DD | **Mode:** Quick/Full | **Type:** Code/Product/Docs/Mixed
-**Files:** ~N | **Read:** Y | **Issues:** Z
+```markdown
+# Аудит: [project name]
+
+**Дата:** YYYY-MM-DD | **Режим:** Quick/Full | **Тип:** Code/Product/Docs/Mixed
+**Файлов:** ~N | **Проблем:** Z
+
+## Сводка
+
+| Область | Статус | Находок |
+|---------|--------|---------|
+| CLAUDE.md | 🟢/⚠️/🔴 | N |
+| Memory | 🟢/⚠️/🔴 | N |
+| Архитектура | 🟢/⚠️/🔴 | N |
+| Git | 🟢/⚠️/🔴 или ⏭️ | N |
+| Автоматизации | 🟢/⚠️/🔴 или ⏭️ | N |
+
+*Статус = наивысший severity среди находок в области. ⏭️ = пропущено (Quick mode).*
 
 ---
 
-## Skipped
-- [what was skipped and why]
+## 1. CLAUDE.md
 
-## All clear
-- [one line per healthy item]
+### Что проверено
+[Список проверок: структура, ссылки, свежесть, секреты, дубли с memory...]
 
-## 🔴 Critical
-- [finding] *(Step N)*
+### Находки
+- 🔴 Critical: [конкретная проблема с путями/файлами]
+- ⚠️ Warning: [проблема]
+- 🟢 Low: [мелочь]
 
-## ⚠️ Warning
-- [finding] *(Step N)*
+*(Если всё чисто: "Проблем не обнаружено.")*
 
-## 🟢 Low
-- [finding] *(Step N)*
+### Рекомендации
+- [Что конкретно сделать для каждой находки]
+
+---
+
+## 2. Memory
+
+### Что проверено
+[MEMORY.md индекс, ссылки, orphans, frontmatter, zombie references, overlap с CLAUDE.md...]
+
+### Находки
+- ...
+
+### Рекомендации
+- ...
+
+---
+
+## 3. Архитектура и файлы
+
+### Что проверено
+[Зоны по чеклисту типа проекта, root clutter, пустые папки, большие файлы, дубли...]
+
+### Находки
+- ...
+
+### Рекомендации
+- ...
+
+---
+
+## 4. Git гигиена *(только Full)*
+
+### Что проверено
+[.gitignore, секреты по имени файла, бинарники, untracked, статус...]
+
+### Находки
+- ...
+
+### Рекомендации
+- ...
+
+---
+
+## 5. Автоматизации *(только Full)*
+
+### Что проверено
+[Hooks, MCP серверы, settings, рекомендации по типу проекта...]
+
+### Находки
+- ...
+
+### Рекомендации
+- ...
+
+---
+
+## Пропущено
+- [что пропущено и почему — Quick mode пропускает секции 4-5, отсутствие git/memory и т.д.]
 
 ---
 
 ## Action plan
-1. 🔴 [action]
-2. 🔴 [action]
-3. ⚠️ [action]
+
+Приоритезированный список действий (только Critical + Warning):
+
+1. 🔴 [действие — конкретное, с указанием файлов]
+2. 🔴 [действие]
+3. ⚠️ [действие]
+4. ⚠️ [действие]
 
 **Какие пункты выполнить?**
 ```
 
 ### Report principles
 
-- **"All clear" stays short** — one line per healthy item, no details
-- **Every finding references its step** — `*(Step N)* ` or `*(Agent N)*`
-- **Action plan includes Critical + Warning only** — Low items are informational
-- **Language adaptation** — match the user's language (RU or EN), emoji headers stay constant
-- **Closing question is key** — "Какие пункты выполнить?" lets the user pick what to address
+- **Per-area structure** — each area has "Что проверено", "Находки", "Рекомендации". This makes the report a useful reference document, not just a list.
+- **Summary table at top** — quick overview before the details
+- **Findings are specific** — include file paths, counts, examples. Not "есть проблемы" but "CLAUDE.md:15 ссылается на `docs/api.md` — файл не найден"
+- **Recommendations are actionable** — not "fix this" but "переместить `report.html` из корня в `docs/`"
+- **Action plan = Critical + Warning only** — Low items stay informational in area sections
+- **Language adaptation** — match the user's language (RU or EN), section structure stays constant
+- **Closing question is key** — "Какие пункты выполнить?" lets the user pick what to address. Skill does NOT execute fixes.
 
 ### Severity criteria
 
@@ -335,10 +417,9 @@ After writing:
 | Project >200 files in Quick | Work normally, `| head` on all commands, no scope question |
 | Project >1000 files in Full | Ask: "~N файлов. Сфокусироваться на корне и ключевых папках?" |
 | No CLAUDE.md, no memory, no git | All three become Critical/Warning findings. Focus on file architecture |
-| Skill delegation fails | Note: "Скилл X не сработал: [error]. Выполнена ручная проверка." Continue with fallback |
+| Agent times out or errors | Add to "Пропущено" section, continue with remaining agents' results |
 | Previous audit exists in memory | Mention: "Предыдущий аудит: [date]. Показать что изменилось?" |
 | Mixed project | Apply both checklists (code + product), take highest severity per finding |
-| Agent times out or errors | Add to "Skipped" section, continue with remaining agents' results |
 
 ---
 

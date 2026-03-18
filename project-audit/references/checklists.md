@@ -1,6 +1,6 @@
 # Fallback Checklists
 
-Used as fallbacks in both **Quick mode** (always — Quick does not delegate to companion skills) and **Full mode** (when the companion skill is not installed). Each section maps to a specific audit step or agent.
+Used by both **Quick mode** (sequentially) and **Full mode** (each agent uses the relevant section). Each section maps to a specific audit step or agent.
 
 ---
 

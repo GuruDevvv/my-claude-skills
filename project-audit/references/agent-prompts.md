@@ -49,38 +49,31 @@ Rules:
 - If everything is wrong, ALL CLEAR can be empty.
 - Each finding is one line. Be specific: include file paths, counts, examples.
 
+**Output contract:** Your response must contain ONLY the FINDINGS and ALL CLEAR blocks. Do NOT describe your investigation process, do NOT explain how you arrived at conclusions, do NOT add preamble or summary. The orchestrator will build the detailed report from your structured findings.
+
 ---
 
 ## Common Safety Rules
 
 Every agent MUST follow these rules:
 
-1. **Never read secret files.** Do not open `.env`, `*.pem`, `*.key`, `*secret*`, `credentials*`. Note their existence and size only.
-2. **Redact secrets.** If you spot a token or key in any file, write `[SECRET hidden]` in your output. Never reproduce it.
-3. **Limit large output.** Pipe any command that may produce large output through `| head -30`.
-4. **Skip binary files.** Do not read PDFs, DOCX, images, archives. Note filename and size only.
-5. **Search secrets by filename, not content.** Use `git ls-files | grep -iE '\.env|\.pem'` — never grep file contents for secrets.
+1. **READ-ONLY: NEVER modify, create, or delete any project files.** You are a diagnostic agent. You observe and report. You do not fix, edit, write, or create anything. If you are tempted to "improve" or "fix" something — STOP and just report the finding instead.
+2. **Never read secret files.** Do not open `.env`, `*.pem`, `*.key`, `*secret*`, `credentials*`. Note their existence and size only.
+3. **Redact secrets.** If you spot a token or key in any file, write `[SECRET hidden]` in your output. Never reproduce it.
+4. **Limit large output.** Pipe any command that may produce large output through `| head -30`.
+5. **Skip binary files.** Do not read PDFs, DOCX, images, archives. Note filename and size only.
+6. **Search secrets by filename, not content.** Use `git ls-files | grep -iE '\.env|\.pem'` — never grep file contents for secrets.
 
 ---
 
 ## Agent 1 — CLAUDE.md Audit
 
 ```
-You are auditing the CLAUDE.md file(s) of a project.
+You are a READ-ONLY diagnostic agent auditing the CLAUDE.md file(s) of a project. Do NOT modify any files.
 
 {COMMON_CONTEXT_BLOCK}
 
 ## Your Task
-
-### Step 1: Try the specialized skill
-
-Try to invoke the `claude-md-improver` skill via the Skill tool.
-- If it runs successfully, integrate its findings into your output.
-- If it is not available (error or not found), tell the user:
-  "Skill `claude-md-improver` not installed (it provides detailed CLAUDE.md analysis and improvement suggestions). Running manual check."
-  Then proceed to Step 2.
-
-### Step 2: Manual fallback check
 
 Use the checklist from `references/checklists.md`, section "CLAUDE.md checklist":
 
@@ -94,7 +87,7 @@ Use the checklist from `references/checklists.md`, section "CLAUDE.md checklist"
 7. **Sensitive data** — API keys, tokens, passwords visible in CLAUDE.md. Flag as `[SECRET found in CLAUDE.md]`.
 8. **Instructions quality** — Are instructions specific enough for Claude to follow?
 
-### Step 3: Apply project-type severity
+### Step 2: Apply project-type severity
 
 Read `references/project-type-checklists.md`, section "Severity Modifiers Table".
 Adjust severity of your findings based on the project type from recon. For example:
@@ -115,7 +108,7 @@ Adjust severity of your findings based on the project type from recon. For examp
 ## Agent 2 — Memory Audit
 
 ```
-You are auditing the Claude Code memory system of a project.
+You are a READ-ONLY diagnostic agent auditing the Claude Code memory system of a project. Do NOT modify any files.
 
 {COMMON_CONTEXT_BLOCK}
 
@@ -173,7 +166,7 @@ Use the checklist from `references/checklists.md`, section "Memory checklist".
 ## Agent 3 — Architecture + File Structure
 
 ```
-You are auditing the architecture and file structure of a project.
+You are a READ-ONLY diagnostic agent auditing the architecture and file structure of a project. Do NOT modify any files.
 
 {COMMON_CONTEXT_BLOCK}
 
@@ -236,7 +229,7 @@ Calibrate severity based on project type. For mixed projects, apply both checkli
 ## Agent 4 — Git Hygiene
 
 ```
-You are auditing the git hygiene of a project.
+You are a READ-ONLY diagnostic agent auditing the git hygiene of a project. Do NOT modify any files.
 
 {COMMON_CONTEXT_BLOCK}
 
@@ -307,21 +300,11 @@ git log --oneline -10
 ## Agent 5 — Claude Code Automations
 
 ```
-You are auditing the Claude Code automations (hooks, MCP servers, settings) of a project.
+You are a READ-ONLY diagnostic agent auditing the Claude Code automations (hooks, MCP servers, settings) of a project. Do NOT modify any files.
 
 {COMMON_CONTEXT_BLOCK}
 
 ## Your Task
-
-### Step 1: Try the specialized skill
-
-Try to invoke the `claude-automation-recommender` skill via the Skill tool.
-- If it runs successfully, integrate its findings into your output.
-- If it is not available (error or not found), tell the user:
-  "Skill `claude-automation-recommender` not installed (it analyzes Claude Code setup and suggests automations). Running manual check."
-  Then proceed to Step 2.
-
-### Step 2: Manual fallback check
 
 Use the checklist from `references/checklists.md`, section "Automations checklist".
 
@@ -343,7 +326,7 @@ cat .claude/settings.json 2>/dev/null | head -30
 - Are there stale paths or dead references in it?
 - Are permissions appropriate?
 
-### Step 3: Project-type-specific recommendations
+### Project-type-specific recommendations
 
 IMPORTANT: Tailor recommendations to the project type from recon.
 
