@@ -75,8 +75,15 @@ You are a READ-ONLY diagnostic agent auditing the CLAUDE.md file(s) of a project
 
 ## Your Task
 
-1. Read `references/checklists.md`, section "CLAUDE.md checklist". Follow every item in that checklist.
-2. Read `references/project-type-checklists.md`, section "Severity Modifiers Table". Adjust severity of your findings based on the project type from recon.
+Follow the checklist below. Check every item.
+
+{CHECKLIST}
+
+### Severity calibration
+
+Adjust severity of your findings based on the project type from recon:
+
+{SEVERITY_MODIFIERS}
 
 ### Safety Rules
 
@@ -108,33 +115,9 @@ ALL CLEAR:
 
 ## Your Task
 
-Use the checklist from `references/checklists.md`, section "Memory checklist".
+Follow the checklist below. Check every item.
 
-### MEMORY.md index
-- Read MEMORY.md.
-- Is it organized by topic (not chronologically)?
-- Is it under ~200 lines? (Longer gets truncated by Claude Code)
-- Are descriptions brief and useful for relevance matching?
-
-### Link integrity (first-level only)
-- For every link in MEMORY.md, check if the target file exists. Use Glob or Read.
-- Only check first-level links (links directly in MEMORY.md), not links inside linked files.
-- Flag broken links.
-
-### Orphan detection
-- List all files in the memory directory.
-- Compare against links in MEMORY.md.
-- Files not referenced from MEMORY.md are orphans. Flag them.
-
-### Individual memory files
-- For each linked memory file, check:
-  - **Frontmatter** — does it have `name`, `description`, `type` fields?
-  - **Staleness** — does the content reference files or facts that no longer exist?
-  - **References** — if the memory mentions specific project files, do those files still exist?
-
-### Cross-checks
-- **CLAUDE.md overlap** — Is the same information duplicated in both CLAUDE.md and memory? Flag it.
-- **Zombie references** — Memory files that reference deleted/moved project resources.
+{CHECKLIST}
 
 ### Safety Rules
 
@@ -156,13 +139,11 @@ You are a READ-ONLY diagnostic agent auditing the architecture and file structur
 
 ## Your Task
 
-### Step 1: Identify project type checklist
+### Step 1: Project type checklist
 
-Read `references/project-type-checklists.md`. Based on the project type from recon, use the matching checklist:
-- Code → section "Code Project Checklist"
-- Product/Business → section "Product/Business Project Checklist"
-- Documentation → section "Documentation Project Checklist"
-- Mixed → apply both Code and Product/Business checklists
+Use the project-type checklist injected below to check zone presence:
+
+{CHECKLIST}
 
 ### Step 2: Deep architecture scan
 
@@ -176,8 +157,6 @@ For each zone in the applicable checklist, check whether the project covers it:
 - Note structural oddities (e.g., code scattered in root, configs mixed with source).
 
 ### Step 3: File hygiene
-
-Use the checklist from `references/checklists.md`, section "File structure checklist".
 
 **Root directory:**
 - Identify files in root that don't belong there (data files, HTML pages, images, random scripts).
@@ -196,8 +175,9 @@ Use the checklist from `references/checklists.md`, section "File structure check
 
 ### Step 4: Apply severity modifiers
 
-Read `references/project-type-checklists.md`, section "Severity Modifiers Table".
-Calibrate severity based on project type. For mixed projects, apply both checklists and take the highest severity.
+Use the severity table injected below. For mixed projects, apply both checklists and take the highest severity.
+
+{SEVERITY_MODIFIERS}
 
 ### Safety Rules
 
@@ -222,14 +202,16 @@ You are a READ-ONLY diagnostic agent auditing the git hygiene of a project. Do N
 If the recon shows "Git: no" — skip the audit entirely and return:
 
 FINDINGS:
-- (none — not a git repository)
+- 🟢 Low: Not a git repository — git checks skipped
 
 ALL CLEAR:
-- Git audit skipped: project is not a git repository.
+- (skipped — not a git repo)
 
 ## Your Task
 
-Read `references/checklists.md`, section "Git checklist". Follow every item in that checklist.
+Follow the checklist below. Check every item.
+
+{CHECKLIST}
 
 Additional checks beyond the checklist:
 
@@ -278,7 +260,9 @@ You are a READ-ONLY diagnostic agent auditing the Claude Code automations (hooks
 
 ## Your Task
 
-Read `references/checklists.md`, section "Automations checklist". Follow every item in that checklist.
+Follow the checklist below. Check every item.
+
+{CHECKLIST}
 
 To read settings files, use the Read tool (not cat):
 ```
@@ -309,8 +293,12 @@ IMPORTANT: Tailor recommendations to the project type from recon.
 
 When the orchestrator builds the actual prompt for each agent, it replaces:
 
-| Placeholder | Replaced with |
-|-------------|---------------|
-| `{COMMON_CONTEXT_BLOCK}` | The filled-in recon results block from the top of this file |
-| `{COMMON_SAFETY_RULES}` | The 5 safety rules listed in the "Common Safety Rules" section |
-| `{COMMON_OUTPUT_FORMAT}` | The FINDINGS + ALL CLEAR format from "Common Output Format" section |
+| Placeholder | Replaced with | Source |
+|-------------|---------------|--------|
+| `{COMMON_CONTEXT_BLOCK}` | Filled-in recon results from Step 0 | Built by orchestrator |
+| `{COMMON_SAFETY_RULES}` | The 6 safety rules from this file's "Common Safety Rules" section | agent-prompts.md |
+| `{COMMON_OUTPUT_FORMAT}` | The FINDINGS + ALL CLEAR format from "Common Output Format" section | agent-prompts.md |
+| `{CHECKLIST}` | The relevant checklist section for this agent (see SKILL.md agent↔checklist mapping) | checklists.md or project-type-checklists.md |
+| `{SEVERITY_MODIFIERS}` | Severity Modifiers Table (only for Agents 1 and 3) | project-type-checklists.md |
+
+**Important:** Agents run in the project directory and cannot access the skill's `references/` folder. The orchestrator MUST read reference files and inject their content into each prompt.

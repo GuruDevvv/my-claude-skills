@@ -67,7 +67,9 @@ Before auditing, map the environment. Run all discovery commands in parallel whe
 ### Git, CLAUDE.md, Memory discovery
 ```
 git rev-parse --is-inside-work-tree 2>/dev/null && echo "GIT: yes" || echo "GIT: no"
-Glob("**/CLAUDE.md")          # find all CLAUDE.md files in project
+```
+Use the Glob tool with pattern `**/CLAUDE.md` to find all CLAUDE.md files in the project.
+```
 ls ~/.claude/projects/ 2>/dev/null | head -20
 ```
 
@@ -81,13 +83,12 @@ Read each found CLAUDE.md (first 100 lines) and store content for later analysis
 
 Check for code manifests and business folders. Use detection signals from `references/project-type-checklists.md` section "Project Type Detection".
 
-```
+```bash
 # Code signals — manifests AND src/ directory
 ls package.json requirements.txt go.mod Cargo.toml pyproject.toml *.sln 2>/dev/null
 ls -d src/ app/ lib/ 2>/dev/null
-# Business/product signals — also match numbered prefixes (e.g., 02-audience, 04-marketing)
-Glob("*{audience,marketing,analytics,strategy,operations,products}*", maxDepth=2, dirsOnly=true)
 ```
+For business/product signals (also match numbered prefixes like `02-audience`, `04-marketing`), use the Glob tool with pattern `*{audience,marketing,analytics,strategy,operations,products}*` — check first 2 directory levels only.
 
 Classification:
 - Code manifests found AND `src/`/`app/`/`lib/` exists, no business folders → **Code**
@@ -166,10 +167,7 @@ Checks:
 ### Quick Step 3 — Architecture scan
 
 1. **Top-level scan:**
-   ```
-   Glob("**/", maxDepth=2)   # list directories up to 2 levels deep
-   ls -la                     # root contents
-   ```
+   Use the Glob tool with pattern `*/` and `*/*/` to list directories up to 2 levels deep. Also run `ls -la` for root contents.
 
 2. **Load checklist** from `references/project-type-checklists.md` matching detected project type (Code/Product/Docs/Mixed). For Mixed projects, load both Code and Product checklists.
 
@@ -205,8 +203,12 @@ After Step 0, dispatch 5 parallel agents using the Agent tool. Full mode covers 
 
 ### Agent dispatch
 
-1. Read `references/agent-prompts.md` to get prompt templates for each agent (sections "Agent 1" through "Agent 5")
-2. Build RECON RESULTS context block from Step 0 data:
+**Preparation — read all reference files first:**
+
+1. Read `references/agent-prompts.md` — get prompt templates, common blocks (Safety Rules, Output Format)
+2. Read `references/checklists.md` — get all checklists
+3. Read `references/project-type-checklists.md` — get type detection, severity modifiers
+4. Build RECON RESULTS context block from Step 0 data:
    - Project name (derived from CWD folder name)
    - Project type (code/product/docs/mixed)
    - Git status (yes/no)
@@ -215,18 +217,34 @@ After Step 0, dispatch 5 parallel agents using the Agent tool. Full mode covers 
    - File count
    - Root listing (`ls` output, first 20 lines)
    - CLAUDE.md content (first 100 lines of each found file)
-3. In each agent prompt, replace placeholders:
-   - `{COMMON_CONTEXT_BLOCK}` → filled RECON RESULTS from Step 0
-   - `{COMMON_SAFETY_RULES}` → content from "Common Safety Rules" section
-   - `{COMMON_OUTPUT_FORMAT}` → content from "Common Output Format" section
-4. Dispatch all 5 agents **in parallel** using the Agent tool. Set `timeout: 300000` (5 min) on each to prevent hangs:
-   - **Agent 1** (CLAUDE.md deep audit) — `subagent_type: "Explore"`, `timeout: 300000`
-   - **Agent 2** (Memory audit) — `subagent_type: "Explore"`, `timeout: 300000`
-   - **Agent 3** (File structure) — `subagent_type: "Explore"`, `timeout: 300000`
-   - **Agent 4** (Git hygiene) — `subagent_type: "Explore"`, `timeout: 300000`
-   - **Agent 5** (Automations) — `subagent_type: "Explore"`, `timeout: 300000`
 
-**Important:** Agents do NOT invoke companion skills. All agents use fallback checklists from `references/checklists.md`. This keeps agent context small and prevents token explosion from nested skill invocations.
+**Build each agent prompt by replacing these placeholders:**
+
+| Placeholder | Content source |
+|-------------|---------------|
+| `{COMMON_CONTEXT_BLOCK}` | Filled RECON RESULTS from Step 0 |
+| `{COMMON_SAFETY_RULES}` | "Common Safety Rules" section from agent-prompts.md |
+| `{COMMON_OUTPUT_FORMAT}` | "Common Output Format" section from agent-prompts.md |
+| `{CHECKLIST}` | The relevant checklist section from checklists.md (see agent-specific mapping below) |
+| `{SEVERITY_MODIFIERS}` | "Severity Modifiers Table" section from project-type-checklists.md |
+
+**Agent ↔ checklist mapping:**
+- Agent 1 → "CLAUDE.md checklist" + "Severity Modifiers Table"
+- Agent 2 → "Memory checklist"
+- Agent 3 → "File structure checklist" + the project-type checklist (Code/Product/Docs) + "Severity Modifiers Table"
+- Agent 4 → "Git checklist"
+- Agent 5 → "Automations checklist"
+
+**Why inject:** Agents run in the project directory, not the skill directory. They cannot access `references/` files themselves. The orchestrator MUST read these files and paste their content into each agent's prompt.
+
+**Dispatch all 5 agents in parallel** using the Agent tool:
+- **Agent 1** (CLAUDE.md deep audit) — `subagent_type: "Explore"`
+- **Agent 2** (Memory audit) — `subagent_type: "Explore"`
+- **Agent 3** (File structure) — `subagent_type: "Explore"`
+- **Agent 4** (Git hygiene) — `subagent_type: "Explore"`
+- **Agent 5** (Automations) — `subagent_type: "Explore"`
+
+**Important:** Agents do NOT invoke companion skills. Checklists are injected into prompts by the orchestrator. This keeps agent context small and prevents token explosion from nested skill invocations.
 
 ### Synthesis
 
