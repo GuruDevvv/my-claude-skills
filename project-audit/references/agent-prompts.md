@@ -24,21 +24,24 @@ RECON RESULTS:
 
 ## Common Output Format
 
-Every agent MUST end its response with exactly this format:
+Every agent MUST end its response with **exactly** this format. The orchestrator parses these lines programmatically — deviating from the format (e.g. using [YELLOW], [INFO], custom severity labels) will cause findings to be missed in the final report.
 
 ```
 FINDINGS:
-- [severity] [finding description]
-- ...
+- 🔴 Critical: [finding description]
+- ⚠️ Warning: [finding description]
+- 🟢 Low: [finding description]
 
 ALL CLEAR:
 - [what was checked and found healthy]
 ```
 
-Severity levels (use exactly these):
-- `🔴 Critical` — must fix, blocks quality or safety
-- `⚠️ Warning` — should fix, notable problem
-- `🟢 Low` — minor, nice to fix
+**Severity markers — use EXACTLY these emoji+word prefixes, no substitutes:**
+- `🔴 Critical:` — must fix, blocks quality or safety
+- `⚠️ Warning:` — should fix, notable problem
+- `🟢 Low:` — minor, nice to fix
+
+**Do NOT use:** `[YELLOW]`, `[RED]`, `[GREEN]`, `[INFO]`, `[HIGH]`, `[LOW]`, or any other format.
 
 Rules:
 - At least one section must be non-empty.
