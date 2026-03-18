@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetricFlow — Мягкий пастельный</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --lavender: #E8E0F0;
+    --lavender-deep: #C4B5D4;
+    --mint: #D0F0E0;
+    --mint-deep: #7ECBA1;
+    --peach: #FDE8D8;
+    --peach-deep: #F5A873;
+    --sky: #D6EEFB;
+    --sky-deep: #6BB8E8;
+    --pink: #F8D7E8;
+    --pink-deep: #E8829E;
+    --bg: #F7F3FB;
+    --surface: #FFFFFF;
+    --text: #3D3552;
+    --text-dim: #9B93A8;
+    --border: #EDE6F5;
+    --sidebar-w: 240px;
+  }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 24px 14px;
+    z-index: 100;
+  }
+  .sidebar .logo {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 6px;
+    padding: 0 10px;
+  }
+  .sidebar .logo-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 0 10px;
+    margin-bottom: 28px;
+  }
+  .sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .sidebar nav a:hover { background: var(--lavender); color: var(--text); }
+  .sidebar nav a.active { background: var(--lavender); color: var(--text); }
+  .sidebar nav a .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  /* TOPNAV — mobile */
+  .topnav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .topnav .logo {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .topnav-links { display: flex; gap: 12px; }
+  .topnav-links a {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .topnav-links a.active { color: var(--text); }
+
+  /* MAIN */
+  .main { padding: 16px; }
+
+  .greeting {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--lavender), var(--mint));
+    border-radius: 20px;
+  }
+  .greeting h1 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .greeting p {
+    font-size: 13px;
+    color: var(--text);
+    opacity: 0.7;
+  }
+
+  /* METRIC CARDS */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .metric-card {
+    background: var(--surface);
+    border-radius: 18px;
+    padding: 16px;
+    border: 1px solid var(--border);
+  }
+  .metric-card .icon-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .metric-card:nth-child(1) .icon-circle { background: var(--lavender); }
+  .metric-card:nth-child(2) .icon-circle { background: var(--peach); }
+  .metric-card:nth-child(3) .icon-circle { background: var(--mint); }
+  .metric-card:nth-child(4) .icon-circle { background: var(--sky); }
+  .metric-card .icon-circle svg { width: 18px; height: 18px; fill: none; stroke-width: 2; }
+  .metric-card:nth-child(1) .icon-circle svg { stroke: #8B6BAE; }
+  .metric-card:nth-child(2) .icon-circle svg { stroke: #D4874A; }
+  .metric-card:nth-child(3) .icon-circle svg { stroke: #4DAA7A; }
+  .metric-card:nth-child(4) .icon-circle svg { stroke: #4A96C8; }
+
+  .metric-card .label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .metric-card .value {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  .metric-card .change {
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+  .metric-card .change.up { color: var(--mint-deep); }
+  .metric-card .change.down { color: var(--pink-deep); }
+
+  /* SOFT SPARKLINE */
+  .soft-spark {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 28px;
+    margin-top: 8px;
+  }
+  .soft-spark .dot-bar {
+    flex: 1;
+    border-radius: 6px;
+  }
+  .metric-card:nth-child(1) .soft-spark .dot-bar { background: var(--lavender); }
+  .metric-card:nth-child(1) .soft-spark .dot-bar:last-child { background: var(--lavender-deep); }
+  .metric-card:nth-child(2) .soft-spark .dot-bar { background: var(--peach); }
+  .metric-card:nth-child(2) .soft-spark .dot-bar:last-child { background: var(--peach-deep); }
+  .metric-card:nth-child(3) .soft-spark .dot-bar { background: var(--mint); }
+  .metric-card:nth-child(3) .soft-spark .dot-bar:last-child { background: var(--mint-deep); }
+  .metric-card:nth-child(4) .soft-spark .dot-bar { background: var(--sky); }
+  .metric-card:nth-child(4) .soft-spark .dot-bar:last-child { background: var(--sky-deep); }
+
+  /* PANELS */
+  .panel {
+    background: var(--surface);
+    border-radius: 18px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .panel h2 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .svg-chart { width: 100%; height: auto; }
+
+  /* PROGRESS ITEMS */
+  .progress-list { display: flex; flex-direction: column; gap: 12px; }
+  .progress-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .progress-item .row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .progress-item .bar-track {
+    height: 10px;
+    background: var(--bg);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-item .bar-fill {
+    height: 100%;
+    border-radius: 5px;
+  }
+
+  /* TIMELINE */
+  .timeline { display: flex; flex-direction: column; gap: 12px; }
+  .timeline-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .timeline-item .time-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+  .timeline-item .time-content {
+    font-size: 13px;
+  }
+  .timeline-item .time-content strong { font-weight: 700; }
+  .timeline-item .time-content .when {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 2px;
+    display: block;
+  }
+
+  /* TABLET */
+  @media (min-width: 768px) {
+    .topnav { display: none; }
+    .sidebar { display: block; }
+    .main { margin-left: var(--sidebar-w); padding: 28px; }
+    .metrics-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .charts-row { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; }
+    .greeting h1 { font-size: 28px; }
+  }
+
+  @media (min-width: 1440px) {
+    .main { padding: 36px 44px; }
+    .metric-card .value { font-size: 28px; }
+    .metric-card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="logo">MetricFlow</div>
+  <div class="logo-sub">Аналитика для стартапов</div>
+  <nav>
+    <a href="#" class="active">
+      <span class="dot" style="background:var(--lavender-deep)"></span>
+      Главная
+    </a>
+    <a href="#">
+      <span class="dot" style="background:var(--mint-deep)"></span>
+      Метрики
+    </a>
+    <a href="#">
+      <span class="dot" style="background:var(--peach-deep)"></span>
+      Клиенты
+    </a>
+    <a href="#">
+      <span class="dot" style="background:var(--sky-deep)"></span>
+      Финансы
+    </a>
+    <a href="#">
+      <span class="dot" style="background:var(--pink-deep)"></span>
+      Настройки
+    </a>
+  </nav>
+</aside>
+
+<header class="topnav">
+  <div class="logo">MetricFlow</div>
+  <div class="topnav-links">
+    <a href="#" class="active">Главная</a>
+    <a href="#">Метрики</a>
+    <a href="#">Финансы</a>
+  </div>
+</header>
+
+<main class="main">
+  <div class="greeting">
+    <h1>Доброе утро!</h1>
+    <p>Вот как обстоят дела с вашим продуктом сегодня</p>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <div class="label">Выручка</div>
+      <div class="value">$48.2K</div>
+      <div class="change up">+12.3%</div>
+      <div class="soft-spark">
+        <div class="dot-bar" style="height:40%"></div>
+        <div class="dot-bar" style="height:50%"></div>
+        <div class="dot-bar" style="height:55%"></div>
+        <div class="dot-bar" style="height:65%"></div>
+        <div class="dot-bar" style="height:75%"></div>
+        <div class="dot-bar" style="height:85%"></div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+      </div>
+      <div class="label">Отток</div>
+      <div class="value">3.2%</div>
+      <div class="change down">+0.4%</div>
+      <div class="soft-spark">
+        <div class="dot-bar" style="height:65%"></div>
+        <div class="dot-bar" style="height:55%"></div>
+        <div class="dot-bar" style="height:50%"></div>
+        <div class="dot-bar" style="height:58%"></div>
+        <div class="dot-bar" style="height:52%"></div>
+        <div class="dot-bar" style="height:60%"></div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <div class="label">LTV</div>
+      <div class="value">$1,240</div>
+      <div class="change up">+8.1%</div>
+      <div class="soft-spark">
+        <div class="dot-bar" style="height:35%"></div>
+        <div class="dot-bar" style="height:45%"></div>
+        <div class="dot-bar" style="height:55%"></div>
+        <div class="dot-bar" style="height:65%"></div>
+        <div class="dot-bar" style="height:72%"></div>
+        <div class="dot-bar" style="height:82%"></div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      </div>
+      <div class="label">Активные</div>
+      <div class="value">2,847</div>
+      <div class="change up">+5.6%</div>
+      <div class="soft-spark">
+        <div class="dot-bar" style="height:45%"></div>
+        <div class="dot-bar" style="height:55%"></div>
+        <div class="dot-bar" style="height:60%"></div>
+        <div class="dot-bar" style="height:68%"></div>
+        <div class="dot-bar" style="height:75%"></div>
+        <div class="dot-bar" style="height:82%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-row">
+    <div class="panel">
+      <h2>Рост выручки</h2>
+      <svg class="svg-chart" viewBox="0 0 460 170" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="pastelArea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#C4B5D4" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#D0F0E0" stop-opacity="0.1"/>
+          </linearGradient>
+        </defs>
+        <line x1="40" y1="30" x2="440" y2="30" stroke="#EDE6F5" stroke-width="0.5"/>
+        <line x1="40" y1="65" x2="440" y2="65" stroke="#EDE6F5" stroke-width="0.5"/>
+        <line x1="40" y1="100" x2="440" y2="100" stroke="#EDE6F5" stroke-width="0.5"/>
+        <line x1="40" y1="135" x2="440" y2="135" stroke="#EDE6F5" stroke-width="0.5"/>
+        <path d="M60,130 Q120,118 160,108 T260,75 T360,45 L400,30 L400,150 L60,150 Z" fill="url(#pastelArea)"/>
+        <path d="M60,130 Q120,118 160,108 T260,75 T360,45 L400,30" fill="none" stroke="#C4B5D4" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="400" cy="30" r="5" fill="#C4B5D4" stroke="#fff" stroke-width="2"/>
+        <text x="60" y="164" text-anchor="middle" font-size="10" fill="#9B93A8" font-family="Nunito">Сен</text>
+        <text x="120" y="164" text-anchor="middle" font-size="10" fill="#9B93A8" font-family="Nunito">Окт</text>
+        <text x="180" y="164" text-anchor="middle" font-size="10" fill="#9B93A8" font-family="Nunito">Ноя</text>
+        <text x="240" y="164" text-anchor="middle" font-size="10" fill="#9B93A8" font-family="Nunito">Дек</text>
+        <text x="300" y="164" text-anchor="middle" font-size="10" fill="#9B93A8" font-family="Nunito">Янв</text>
+        <text x="360" y="164" text-anchor="middle" font-size="10" fill="#9B93A8" font-family="Nunito">Фев</text>
+        <text x="400" y="164" text-anchor="middle" font-size="10" fill="#3D3552" font-family="Nunito" font-weight="700">Мар</text>
+      </svg>
+    </div>
+
+    <div class="panel">
+      <h2>Тарифы</h2>
+      <div class="progress-list">
+        <div class="progress-item">
+          <div class="row"><span>Free</span><span>1,204</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:65%;background:var(--lavender-deep)"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="row"><span>Старт</span><span>847</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:45%;background:var(--mint-deep)"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="row"><span>Про</span><span>421</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:28%;background:var(--peach-deep)"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="row"><span>Бизнес</span><span>298</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--sky-deep)"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="row"><span>Энтерпрайз</span><span>77</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--pink-deep)"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Последние события</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-dot" style="background:var(--mint-deep)"></div>
+        <div class="time-content">
+          <strong>Алексей К.</strong> оформил подписку <strong>Про</strong>
+          <span class="when">18 марта, 14:32</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-dot" style="background:var(--sky-deep)"></div>
+        <div class="time-content">
+          <strong>Мария С.</strong> перешла на <strong>Бизнес</strong>
+          <span class="when">17 марта, 11:05</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-dot" style="background:var(--pink-deep)"></div>
+        <div class="time-content">
+          <strong>Дмитрий В.</strong> отменил подписку <strong>Старт</strong>
+          <span class="when">17 марта, 09:18</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-dot" style="background:var(--mint-deep)"></div>
+        <div class="time-content">
+          <strong>Елена П.</strong> оформила подписку <strong>Про</strong>
+          <span class="when">16 марта, 16:44</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

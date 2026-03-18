@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Dashboard — Variant C: Neon Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #0a0e17;
+      --color-surface: rgba(255,255,255,0.04);
+      --color-surface-hover: rgba(255,255,255,0.07);
+      --color-text: #e8eaf0;
+      --color-text-dim: #6b7394;
+      --color-cyan: #00e5ff;
+      --color-violet: #b388ff;
+      --color-pink: #ff6090;
+      --color-green: #69f0ae;
+      --color-border: rgba(255,255,255,0.06);
+      --glow-cyan: 0 0 20px rgba(0,229,255,0.15);
+      --glow-violet: 0 0 20px rgba(179,136,255,0.15);
+      --radius: 14px;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-sans: 'Space Grotesk', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* Top ambient glow */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(0,229,255,0.06), rgba(179,136,255,0.04), transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Header */
+    .header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--color-border);
+      position: relative;
+      z-index: 5;
+      backdrop-filter: blur(12px);
+    }
+
+    .header__left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header__logo {
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid var(--color-cyan);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .header__title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .header__status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--color-green);
+      font-family: var(--font-mono);
+      font-weight: 500;
+    }
+
+    .header__status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--color-green);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .header__right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header__date {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-text-dim);
+      padding: 6px 12px;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+    }
+
+    /* Main */
+    .main {
+      padding: 24px 20px;
+      max-width: 1280px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .main__title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .main__title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .main__subtitle {
+      font-size: 13px;
+      color: var(--color-text-dim);
+    }
+
+    /* KPI cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      backdrop-filter: blur(12px);
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card:hover {
+      background: var(--color-surface-hover);
+    }
+
+    .kpi-card--cyan:hover { border-color: rgba(0,229,255,0.2); box-shadow: var(--glow-cyan); }
+    .kpi-card--violet:hover { border-color: rgba(179,136,255,0.2); box-shadow: var(--glow-violet); }
+    .kpi-card--pink:hover { border-color: rgba(255,96,144,0.2); box-shadow: 0 0 20px rgba(255,96,144,0.15); }
+    .kpi-card--green:hover { border-color: rgba(105,240,174,0.2); box-shadow: 0 0 20px rgba(105,240,174,0.15); }
+
+    .kpi-card__label {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-dim);
+      margin-bottom: 10px;
+    }
+
+    .kpi-card__value {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .kpi-card--cyan .kpi-card__value { color: var(--color-cyan); }
+    .kpi-card--violet .kpi-card__value { color: var(--color-violet); }
+    .kpi-card--pink .kpi-card__value { color: var(--color-pink); }
+    .kpi-card--green .kpi-card__value { color: var(--color-green); }
+
+    .kpi-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kpi-card__change {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .kpi-card__change--up { color: var(--color-green); }
+    .kpi-card__change--down { color: var(--color-pink); }
+
+    .kpi-card__sparkline {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 24px;
+    }
+
+    .kpi-card__spark {
+      width: 3px;
+      border-radius: 1px;
+      opacity: 0.5;
+    }
+
+    .kpi-card--cyan .kpi-card__spark { background: var(--color-cyan); }
+    .kpi-card--violet .kpi-card__spark { background: var(--color-violet); }
+    .kpi-card--pink .kpi-card__spark { background: var(--color-pink); }
+    .kpi-card--green .kpi-card__spark { background: var(--color-green); }
+
+    /* Chart card */
+    .chart-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      backdrop-filter: blur(12px);
+    }
+
+    .chart-card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .chart-card__title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .chart-card__tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .chart-tab {
+      padding: 5px 12px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      border-radius: 6px;
+      border: 1px solid var(--color-border);
+      background: transparent;
+      color: var(--color-text-dim);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chart-tab--active {
+      background: rgba(0,229,255,0.1);
+      border-color: rgba(0,229,255,0.3);
+      color: var(--color-cyan);
+    }
+
+    /* Bar chart */
+    .chart-bars {
+      height: 220px;
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      padding-bottom: 1px;
+      border-bottom: 1px solid var(--color-border);
+      position: relative;
+    }
+
+    .chart-bars__col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .chart-bars__bar {
+      width: 100%;
+      max-width: 24px;
+      border-radius: 3px 3px 0 0;
+      background: linear-gradient(to top, var(--color-cyan), var(--color-violet));
+      position: relative;
+      transition: opacity 0.2s;
+    }
+
+    .chart-bars__bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #fff;
+      opacity: 0.3;
+      border-radius: 3px 3px 0 0;
+    }
+
+    .chart-bars__col:hover .chart-bars__bar {
+      opacity: 0.8;
+      box-shadow: 0 0 12px rgba(0,229,255,0.2);
+    }
+
+    .chart-x-labels {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 8px;
+    }
+
+    .chart-x-labels span {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-text-dim);
+    }
+
+    /* Desktop */
+    @media (min-width: 768px) {
+      .main {
+        padding: 32px 40px;
+      }
+
+      .header {
+        padding: 16px 40px;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .main__title {
+        font-size: 26px;
+      }
+
+      .chart-bars {
+        height: 280px;
+      }
+
+      .chart-bars__bar {
+        max-width: 32px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .kpi-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .kpi-card__value {
+        font-size: 34px;
+      }
+
+      .chart-bars__bar {
+        max-width: 44px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__left">
+      <div class="header__logo">S</div>
+      <span class="header__title">Storefront</span>
+      <span class="header__status">Live</span>
+    </div>
+    <div class="header__right">
+      <span class="header__date">2026-03-17</span>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="main__title-row">
+      <h1 class="main__title">Sales Analytics</h1>
+      <span class="main__subtitle">Last 17 days</span>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-card--cyan">
+        <div class="kpi-card__label">revenue</div>
+        <div class="kpi-card__value">$24,830</div>
+        <div class="kpi-card__footer">
+          <span class="kpi-card__change kpi-card__change--up">+12.5%</span>
+          <div class="kpi-card__sparkline">
+            <div class="kpi-card__spark" style="height:40%"></div>
+            <div class="kpi-card__spark" style="height:55%"></div>
+            <div class="kpi-card__spark" style="height:35%"></div>
+            <div class="kpi-card__spark" style="height:70%"></div>
+            <div class="kpi-card__spark" style="height:60%"></div>
+            <div class="kpi-card__spark" style="height:85%"></div>
+            <div class="kpi-card__spark" style="height:75%"></div>
+            <div class="kpi-card__spark" style="height:90%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-card kpi-card--violet">
+        <div class="kpi-card__label">orders</div>
+        <div class="kpi-card__value">342</div>
+        <div class="kpi-card__footer">
+          <span class="kpi-card__change kpi-card__change--up">+8.2%</span>
+          <div class="kpi-card__sparkline">
+            <div class="kpi-card__spark" style="height:50%"></div>
+            <div class="kpi-card__spark" style="height:45%"></div>
+            <div class="kpi-card__spark" style="height:60%"></div>
+            <div class="kpi-card__spark" style="height:55%"></div>
+            <div class="kpi-card__spark" style="height:70%"></div>
+            <div class="kpi-card__spark" style="height:65%"></div>
+            <div class="kpi-card__spark" style="height:80%"></div>
+            <div class="kpi-card__spark" style="height:75%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-card kpi-card--pink">
+        <div class="kpi-card__label">conversion</div>
+        <div class="kpi-card__value">3.24%</div>
+        <div class="kpi-card__footer">
+          <span class="kpi-card__change kpi-card__change--down">-0.3%</span>
+          <div class="kpi-card__sparkline">
+            <div class="kpi-card__spark" style="height:80%"></div>
+            <div class="kpi-card__spark" style="height:70%"></div>
+            <div class="kpi-card__spark" style="height:75%"></div>
+            <div class="kpi-card__spark" style="height:60%"></div>
+            <div class="kpi-card__spark" style="height:65%"></div>
+            <div class="kpi-card__spark" style="height:50%"></div>
+            <div class="kpi-card__spark" style="height:55%"></div>
+            <div class="kpi-card__spark" style="height:45%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-card kpi-card--green">
+        <div class="kpi-card__label">avg. order</div>
+        <div class="kpi-card__value">$72.60</div>
+        <div class="kpi-card__footer">
+          <span class="kpi-card__change kpi-card__change--up">+3.8%</span>
+          <div class="kpi-card__sparkline">
+            <div class="kpi-card__spark" style="height:55%"></div>
+            <div class="kpi-card__spark" style="height:60%"></div>
+            <div class="kpi-card__spark" style="height:58%"></div>
+            <div class="kpi-card__spark" style="height:65%"></div>
+            <div class="kpi-card__spark" style="height:62%"></div>
+            <div class="kpi-card__spark" style="height:72%"></div>
+            <div class="kpi-card__spark" style="height:70%"></div>
+            <div class="kpi-card__spark" style="height:78%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-card__header">
+        <h2 class="chart-card__title">Revenue over time</h2>
+        <div class="chart-card__tabs">
+          <button class="chart-tab chart-tab--active">1D</button>
+          <button class="chart-tab">1W</button>
+          <button class="chart-tab">1M</button>
+          <button class="chart-tab">ALL</button>
+        </div>
+      </div>
+      <div class="chart-bars">
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:42%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:55%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:38%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:67%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:52%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:73%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:48%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:81%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:90%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:65%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:78%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:58%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:85%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:70%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:62%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:88%"></div></div>
+        <div class="chart-bars__col"><div class="chart-bars__bar" style="height:76%"></div></div>
+      </div>
+      <div class="chart-x-labels">
+        <span>Mar 1</span>
+        <span>5</span>
+        <span>9</span>
+        <span>13</span>
+        <span>17</span>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

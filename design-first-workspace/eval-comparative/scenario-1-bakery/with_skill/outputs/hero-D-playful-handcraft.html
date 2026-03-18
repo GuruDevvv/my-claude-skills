@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мука и Время — Выпечка с душой</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #FFF8F0;
+    color: #4A3628;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 48px 20px;
+    position: relative;
+  }
+
+  /* Floating decorative shapes */
+  .deco-circle {
+    position: absolute;
+    border-radius: 50%;
+    z-index: 0;
+  }
+
+  .deco-1 {
+    width: 200px; height: 200px;
+    background: #FDDFC5;
+    top: 10%; left: -60px;
+    opacity: 0.5;
+  }
+
+  .deco-2 {
+    width: 140px; height: 140px;
+    background: #E8D5F0;
+    top: 20%; right: -40px;
+    opacity: 0.4;
+  }
+
+  .deco-3 {
+    width: 100px; height: 100px;
+    background: #D5EAD8;
+    bottom: 15%; left: 10%;
+    opacity: 0.5;
+  }
+
+  .deco-4 {
+    width: 80px; height: 80px;
+    background: #FDE2E2;
+    bottom: 25%; right: 15%;
+    opacity: 0.45;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+  }
+
+  /* Handwritten badge */
+  .hero-handwritten {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 500;
+    color: #C4845C;
+    transform: rotate(-3deg);
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 1.2;
+    color: #4A3628;
+    margin-bottom: 8px;
+  }
+
+  .hero-title-script {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 52px;
+    color: #D47B4A;
+    display: block;
+  }
+
+  .hero-subtitle {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #8B7563;
+    margin-bottom: 32px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+  }
+
+  /* Icon row */
+  .hero-icons {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+
+  .hero-icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero-icon-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+
+  .icon-bg-1 { background: #FDDFC5; }
+  .icon-bg-2 { background: #E8D5F0; }
+  .icon-bg-3 { background: #D5EAD8; }
+
+  .hero-icon-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #8B7563;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #FFF8F0;
+    background: #D47B4A;
+    padding: 16px 40px;
+    border: none;
+    border-radius: 50px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 16px rgba(212, 123, 74, 0.3);
+  }
+
+  .hero-cta:hover {
+    background: #C06A3C;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 123, 74, 0.4);
+  }
+
+  .hero-note {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: #B89A7E;
+    margin-top: 20px;
+    transform: rotate(2deg);
+  }
+
+  /* Rounded card below CTA */
+  .hero-card {
+    margin-top: 40px;
+    background: white;
+    border-radius: 20px;
+    padding: 24px 28px;
+    box-shadow: 0 4px 24px rgba(74, 54, 40, 0.06);
+    display: inline-flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-card-item {
+    text-align: center;
+  }
+
+  .hero-card-emoji {
+    font-size: 24px;
+  }
+
+  .hero-card-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4A3628;
+    margin-top: 4px;
+  }
+
+  .hero-card-divider {
+    width: 1px;
+    height: 40px;
+    background: #EDE4DA;
+  }
+
+  /* Tablet */
+  @media (min-width: 768px) {
+    .hero-title { font-size: 48px; }
+    .hero-title-script { font-size: 64px; }
+    .hero-subtitle { font-size: 17px; max-width: 520px; }
+    .hero-icons { gap: 40px; }
+    .hero-icon-circle { width: 76px; height: 76px; font-size: 32px; }
+    .deco-1 { width: 300px; height: 300px; left: -80px; }
+    .deco-2 { width: 200px; height: 200px; }
+  }
+
+  /* Desktop */
+  @media (min-width: 1440px) {
+    .hero-inner { max-width: 900px; }
+    .hero-title { font-size: 56px; }
+    .hero-title-script { font-size: 80px; }
+    .hero-handwritten { font-size: 28px; }
+    .hero-subtitle { font-size: 18px; max-width: 560px; }
+    .hero-cta { padding: 18px 48px; font-size: 17px; }
+    .hero-note { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="deco-circle deco-1"></div>
+    <div class="deco-circle deco-2"></div>
+    <div class="deco-circle deco-3"></div>
+    <div class="deco-circle deco-4"></div>
+
+    <div class="hero-inner">
+      <span class="hero-handwritten">привет из пекарни! ✦</span>
+      <h1 class="hero-title">
+        Мука и Время
+        <span class="hero-title-script">Выпечка с душой</span>
+      </h1>
+      <p class="hero-subtitle">
+        Торты на заказ, хлеб на закваске и выпечка,
+        в которую вложены любовь, мастерство и настоящие ингредиенты.
+      </p>
+
+      <div class="hero-icons">
+        <div class="hero-icon-item">
+          <div class="hero-icon-circle icon-bg-1">🎂</div>
+          <span class="hero-icon-label">Торты</span>
+        </div>
+        <div class="hero-icon-item">
+          <div class="hero-icon-circle icon-bg-2">🍞</div>
+          <span class="hero-icon-label">Хлеб</span>
+        </div>
+        <div class="hero-icon-item">
+          <div class="hero-icon-circle icon-bg-3">🥐</div>
+          <span class="hero-icon-label">Выпечка</span>
+        </div>
+      </div>
+
+      <a href="#order" class="hero-cta">Заказать торт</a>
+      <p class="hero-note">↑ тут начинается вкусная история</p>
+
+      <div class="hero-card">
+        <div class="hero-card-item">
+          <div class="hero-card-emoji">🌾</div>
+          <div class="hero-card-text">Натурально</div>
+        </div>
+        <div class="hero-card-divider"></div>
+        <div class="hero-card-item">
+          <div class="hero-card-emoji">⏳</div>
+          <div class="hero-card-text">24ч закваска</div>
+        </div>
+        <div class="hero-card-divider"></div>
+        <div class="hero-card-item">
+          <div class="hero-card-emoji">🤲</div>
+          <div class="hero-card-text">Вручную</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

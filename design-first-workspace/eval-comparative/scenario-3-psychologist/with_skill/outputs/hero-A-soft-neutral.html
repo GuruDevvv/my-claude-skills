@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анна Светлова — Психолог</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+  background: #F7F3EE;
+  color: #3D3530;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+}
+
+.hero__label {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #A09080;
+  margin-bottom: 32px;
+}
+
+.hero__photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E8DDD2 0%, #D4C4B0 100%);
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__photo::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+.hero__name {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.1;
+  color: #2C2420;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+
+.hero__title {
+  font-size: 14px;
+  font-weight: 400;
+  color: #8B7D6E;
+  margin-bottom: 48px;
+  letter-spacing: 0.5px;
+}
+
+.hero__divider {
+  width: 40px;
+  height: 1px;
+  background: #C4B5A3;
+  margin-bottom: 48px;
+}
+
+.hero__about {
+  max-width: 500px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #5C5048;
+  margin-bottom: 48px;
+}
+
+.hero__approach {
+  max-width: 500px;
+  list-style: none;
+  margin-bottom: 56px;
+  text-align: center;
+}
+
+.hero__approach li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #7A6D60;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(196, 181, 163, 0.3);
+}
+
+.hero__approach li:last-child {
+  border-bottom: none;
+}
+
+.hero__approach li::before {
+  content: '—  ';
+  color: #C4B5A3;
+}
+
+.hero__cta {
+  display: inline-block;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #2C2420;
+  text-decoration: none;
+  padding: 18px 48px;
+  border: 1px solid #C4B5A3;
+  border-radius: 0;
+  transition: all 0.4s ease;
+  background: transparent;
+}
+
+.hero__cta:hover {
+  background: #2C2420;
+  color: #F7F3EE;
+  border-color: #2C2420;
+}
+
+.hero__footer {
+  margin-top: 64px;
+  font-size: 12px;
+  color: #B0A090;
+  letter-spacing: 0.5px;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 64px 48px;
+  }
+
+  .hero__photo {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 48px;
+  }
+
+  .hero__name {
+    font-size: 56px;
+  }
+
+  .hero__title {
+    font-size: 15px;
+    margin-bottom: 56px;
+  }
+
+  .hero__about {
+    font-size: 16px;
+    max-width: 520px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .hero__name {
+    font-size: 72px;
+  }
+
+  .hero__photo {
+    width: 170px;
+    height: 170px;
+    margin-bottom: 56px;
+  }
+
+  .hero__about {
+    font-size: 17px;
+    max-width: 560px;
+  }
+
+  .hero__approach {
+    max-width: 560px;
+  }
+
+  .hero__cta {
+    padding: 20px 56px;
+    font-size: 14px;
+  }
+}
+</style>
+</head>
+<body>
+<section class="hero">
+  <p class="hero__label">Психолог</p>
+
+  <div class="hero__photo"></div>
+
+  <h1 class="hero__name">Анна Светлова</h1>
+  <p class="hero__title">Работа с тревожностью и эмоциональным выгоранием</p>
+
+  <div class="hero__divider"></div>
+
+  <p class="hero__about">
+    Помогаю вернуть ощущение опоры и спокойствия. В работе использую
+    когнитивно-поведенческий подход и практики осознанности, чтобы вы могли
+    не просто справляться с тревогой, а понимать её и управлять своим состоянием.
+  </p>
+
+  <ul class="hero__approach">
+    <li>Индивидуальный подход к каждому клиенту</li>
+    <li>Когнитивно-поведенческая терапия</li>
+    <li>Техники осознанности и саморегуляции</li>
+    <li>Работа с причинами, а не симптомами</li>
+  </ul>
+
+  <a href="#booking" class="hero__cta">Записаться на консультацию</a>
+
+  <p class="hero__footer">Онлайн и очные консультации · Москва</p>
+</section>
+</body>
+</html>

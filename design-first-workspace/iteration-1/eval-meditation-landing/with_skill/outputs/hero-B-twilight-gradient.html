@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant B: Twilight Gradient</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg-start: #1a1025;
+      --color-bg-mid: #2d1b3d;
+      --color-bg-end: #0f0a18;
+      --color-text: #f0e6f6;
+      --color-text-soft: #b8a5c8;
+      --color-accent: #c89bdf;
+      --color-accent-glow: rgba(200, 155, 223, 0.3);
+      --color-warm: #e8b4b8;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg-start);
+      color: var(--color-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      position: relative;
+      background: linear-gradient(170deg, var(--color-bg-mid) 0%, var(--color-bg-start) 40%, var(--color-bg-end) 100%);
+    }
+
+    /* Soft gradient orbs */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: -20%;
+      width: 60vw;
+      height: 60vw;
+      background: radial-gradient(circle, rgba(200, 155, 223, 0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 5%;
+      right: -15%;
+      width: 50vw;
+      height: 50vw;
+      background: radial-gradient(circle, rgba(232, 180, 184, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Stars / dots scatter */
+    .stars {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .stars span {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: var(--color-text-soft);
+      border-radius: 50%;
+      animation: twinkle 4s ease-in-out infinite;
+    }
+
+    .stars span:nth-child(1) { top: 15%; left: 20%; animation-delay: 0s; }
+    .stars span:nth-child(2) { top: 25%; left: 75%; animation-delay: 1.2s; }
+    .stars span:nth-child(3) { top: 60%; left: 10%; animation-delay: 0.6s; }
+    .stars span:nth-child(4) { top: 45%; left: 85%; animation-delay: 2s; }
+    .stars span:nth-child(5) { top: 80%; left: 40%; animation-delay: 1.5s; }
+    .stars span:nth-child(6) { top: 10%; left: 55%; animation-delay: 3s; }
+    .stars span:nth-child(7) { top: 70%; left: 65%; animation-delay: 0.3s; }
+    .stars span:nth-child(8) { top: 35%; left: 35%; animation-delay: 2.5s; }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.8; }
+    }
+
+    .hero__label {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-warm);
+      margin-bottom: 2rem;
+    }
+
+    .hero__title {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 3rem;
+      line-height: 1.15;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+
+    .hero__title em {
+      font-style: italic;
+      color: var(--color-accent);
+    }
+
+    .hero__divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+      margin: 1.5rem auto;
+    }
+
+    .hero__subtitle {
+      font-weight: 300;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--color-text-soft);
+      max-width: 300px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero__cta {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      padding: 1rem 2.5rem;
+      background: transparent;
+      color: var(--color-accent);
+      border: 1px solid var(--color-accent);
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero__cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--color-accent);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: -1;
+    }
+
+    .hero__cta:hover {
+      color: var(--color-bg-start);
+    }
+
+    .hero__cta:hover::before {
+      opacity: 1;
+    }
+
+    .hero__meta {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .hero__price {
+      font-weight: 300;
+      font-size: 0.9rem;
+      color: var(--color-text-soft);
+    }
+
+    .hero__instructor {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--color-warm);
+    }
+
+    @media (min-width: 768px) {
+      .hero__title {
+        font-size: 4.5rem;
+      }
+      .hero__subtitle {
+        font-size: 1.1rem;
+        max-width: 420px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="stars">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="hero__content">
+      <p class="hero__label">8-недельный онлайн-курс</p>
+      <h1 class="hero__title"><em>Тишина</em> внутри</h1>
+      <div class="hero__divider"></div>
+      <p class="hero__subtitle">Курс медитации для тех, кто устал бежать</p>
+      <a href="#" class="hero__cta">Начать путь</a>
+      <div class="hero__meta">
+        <p class="hero__price">3 900 руб.</p>
+        <p class="hero__instructor">Анна Светлова, 10 лет практики</p>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

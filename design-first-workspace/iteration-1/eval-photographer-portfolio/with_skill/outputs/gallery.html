@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photographer Portfolio — Prototype Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #111;
+      color: #e0e0e0;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 32px 24px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .header p {
+      font-size: 14px;
+      color: #888;
+      font-weight: 300;
+    }
+
+    /* Size toggle */
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .controls button {
+      padding: 8px 20px;
+      background: #222;
+      border: 1px solid #333;
+      color: #aaa;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 4px;
+    }
+
+    .controls button:hover {
+      border-color: #555;
+      color: #ddd;
+    }
+
+    .controls button.active {
+      background: #333;
+      border-color: #666;
+      color: #fff;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .card__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .card__title {
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    .card__tags {
+      display: flex;
+      gap: 6px;
+    }
+
+    .card__tag {
+      padding: 3px 10px;
+      background: #252525;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 300;
+      color: #888;
+    }
+
+    .card__open {
+      font-size: 12px;
+      font-weight: 400;
+      color: #6a9fff;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .card__open:hover {
+      color: #9abfff;
+    }
+
+    .card__iframe-wrap {
+      width: 100%;
+      overflow: hidden;
+      background: #0a0a0a;
+    }
+
+    .card__iframe-wrap iframe {
+      width: 100%;
+      border: none;
+      display: block;
+    }
+
+    .card__desc {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 300;
+      color: #777;
+      border-top: 1px solid #2a2a2a;
+    }
+
+    /* Desktop */
+    @media (min-width: 900px) {
+      body {
+        padding: 48px;
+      }
+
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      body {
+        padding: 48px 80px;
+      }
+
+      .header h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Photographer Portfolio — Hero Prototypes</h1>
+    <p>6 variants &middot; Aleksey Volkov &middot; Architecture & Urban Photography</p>
+  </div>
+
+  <div class="controls">
+    <button data-height="600" class="active">Mobile</button>
+    <button data-height="800">Tablet</button>
+    <button data-height="700">Desktop</button>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="card__header">
+        <div>
+          <div class="card__title">A — Minimal Grid</div>
+          <div class="card__tags">
+            <span class="card__tag">light</span>
+            <span class="card__tag">split-layout</span>
+            <span class="card__tag">serif</span>
+          </div>
+        </div>
+        <a href="hero-A-minimal-grid.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <div class="card__iframe-wrap">
+        <iframe src="hero-A-minimal-grid.html" height="600"></iframe>
+      </div>
+      <div class="card__desc">Split layout: name & CTA left, photo grid right. Cormorant Garamond + Inter. Light warm background.</div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div>
+          <div class="card__title">B — Dark Gallery</div>
+          <div class="card__tags">
+            <span class="card__tag">dark</span>
+            <span class="card__tag">centered</span>
+            <span class="card__tag">cinematic</span>
+          </div>
+        </div>
+        <a href="hero-B-dark-gallery.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <div class="card__iframe-wrap">
+        <iframe src="hero-B-dark-gallery.html" height="600"></iframe>
+      </div>
+      <div class="card__desc">Full-bleed dark hero with text overlay at bottom. Playfair Display + Raleway. Cinematic mood.</div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div>
+          <div class="card__title">C — Editorial Split</div>
+          <div class="card__tags">
+            <span class="card__tag">light</span>
+            <span class="card__tag">asymmetric</span>
+            <span class="card__tag">editorial</span>
+          </div>
+        </div>
+        <a href="hero-C-editorial-split.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <div class="card__iframe-wrap">
+        <iframe src="hero-C-editorial-split.html" height="600"></iframe>
+      </div>
+      <div class="card__desc">Magazine editorial: bold condensed type left, stacked photos right. Oswald + Lora. Warm paper tone.</div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div>
+          <div class="card__title">D — White Space</div>
+          <div class="card__tags">
+            <span class="card__tag">white</span>
+            <span class="card__tag">centered</span>
+            <span class="card__tag">ultra-minimal</span>
+          </div>
+        </div>
+        <a href="hero-D-white-space.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <div class="card__iframe-wrap">
+        <iframe src="hero-D-white-space.html" height="600"></iframe>
+      </div>
+      <div class="card__desc">Maximum whitespace, single featured photo, tiny photo strip. Literata + Jost. Pure white, gallery feel.</div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div>
+          <div class="card__title">E — Brutalist Mono</div>
+          <div class="card__tags">
+            <span class="card__tag">light</span>
+            <span class="card__tag">brutalist</span>
+            <span class="card__tag">bold-type</span>
+          </div>
+        </div>
+        <a href="hero-E-brutalist-mono.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <div class="card__iframe-wrap">
+        <iframe src="hero-E-brutalist-mono.html" height="600"></iframe>
+      </div>
+      <div class="card__desc">Bold Unbounded type, offset photo grid, oversized number overlay. Brutalist personality. Fira Sans body.</div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div>
+          <div class="card__title">F — Warm Film</div>
+          <div class="card__tags">
+            <span class="card__tag">dark</span>
+            <span class="card__tag">warm</span>
+            <span class="card__tag">film-grain</span>
+          </div>
+        </div>
+        <a href="hero-F-warm-film.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <div class="card__iframe-wrap">
+        <iframe src="hero-F-warm-film.html" height="600"></iframe>
+      </div>
+      <div class="card__desc">Warm dark palette with gold accents, film grain overlay, hover-reveal labels. Merriweather + Commissioner.</div>
+    </div>
+
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll('.controls button');
+    const iframes = document.querySelectorAll('.card__iframe-wrap iframe');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const h = btn.dataset.height;
+        iframes.forEach(iframe => {
+          iframe.style.height = h + 'px';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant D: Lavender Mist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #f3f0f8;
+      --color-glass: rgba(255, 255, 255, 0.55);
+      --color-glass-border: rgba(255, 255, 255, 0.7);
+      --color-text: #2d2640;
+      --color-text-soft: #6e6486;
+      --color-accent: #8b6cc7;
+      --color-accent-light: #b69ef0;
+      --font-main: 'Outfit', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 48px 24px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(183, 148, 244, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(148, 196, 244, 0.15) 0%, transparent 50%),
+        var(--color-bg);
+    }
+
+    .hero__card {
+      background: var(--color-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 24px;
+      padding: 40px 28px;
+      max-width: 400px;
+      width: 100%;
+      position: relative;
+    }
+
+    .hero__icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 24px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero__icon svg {
+      width: 28px;
+      height: 28px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .hero__title {
+      font-weight: 300;
+      font-size: 34px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero__subtitle {
+      font-weight: 300;
+      font-size: 15px;
+      color: var(--color-text-soft);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .hero__pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .hero__pill {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--color-accent);
+      background: rgba(139, 108, 199, 0.1);
+      border: 1px solid rgba(139, 108, 199, 0.2);
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+
+    .hero__cta {
+      display: block;
+      width: 100%;
+      font-family: var(--font-main);
+      font-weight: 500;
+      font-size: 15px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+      border: none;
+      padding: 16px 24px;
+      border-radius: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: opacity 0.3s ease;
+    }
+
+    .hero__cta:hover {
+      opacity: 0.9;
+    }
+
+    .hero__note {
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--color-text-soft);
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        padding: 64px 40px;
+      }
+
+      .hero__card {
+        padding: 56px 48px;
+        max-width: 520px;
+        border-radius: 32px;
+      }
+
+      .hero__icon {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 32px;
+      }
+
+      .hero__title {
+        font-size: 44px;
+      }
+
+      .hero__subtitle {
+        font-size: 17px;
+        margin-bottom: 32px;
+      }
+
+      .hero__pills {
+        margin-bottom: 36px;
+      }
+
+      .hero__pill {
+        font-size: 13px;
+        padding: 8px 18px;
+      }
+
+      .hero__cta {
+        font-size: 16px;
+        padding: 18px 24px;
+        width: auto;
+        display: inline-block;
+        min-width: 280px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .hero__card {
+        max-width: 600px;
+        padding: 64px 56px;
+      }
+
+      .hero__title {
+        font-size: 52px;
+      }
+
+      .hero__subtitle {
+        font-size: 19px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero__card">
+      <div class="hero__icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9"/>
+          <circle cx="12" cy="12" r="2"/>
+        </svg>
+      </div>
+      <h1 class="hero__title">Тишина внутри</h1>
+      <p class="hero__subtitle">8 недель осознанной практики.<br>Верните себе спокойствие и ясность.</p>
+      <div class="hero__pills">
+        <span class="hero__pill">8 недель</span>
+        <span class="hero__pill">Медитации</span>
+        <span class="hero__pill">Поддержка</span>
+        <span class="hero__pill">Запись</span>
+      </div>
+      <a href="#" class="hero__cta">Начать путь — 3 900 ₽</a>
+      <p class="hero__note">Безопасная оплата · Мгновенный доступ</p>
+    </div>
+  </section>
+</body>
+</html>

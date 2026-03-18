@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photographer Portfolio — Variant A: Minimal Grid</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #f5f4f0;
+      --color-text: #1a1a1a;
+      --color-muted: #7a7a72;
+      --color-accent: #c8c0b0;
+      --color-line: #d4d0c8;
+      --font-heading: 'Cormorant Garamond', serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--color-line);
+    }
+
+    .nav__logo {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--color-muted);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .nav__links a:hover {
+      color: var(--color-text);
+    }
+
+    /* HERO */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      padding: 40px 24px;
+      min-height: calc(100vh - 65px);
+    }
+
+    .hero__text {
+      margin-bottom: 40px;
+    }
+
+    .hero__name {
+      font-family: var(--font-heading);
+      font-size: 42px;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero__subtitle {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--color-muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero__desc {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--color-muted);
+      max-width: 400px;
+    }
+
+    .hero__cta {
+      display: inline-block;
+      margin-top: 32px;
+      padding: 12px 32px;
+      border: 1px solid var(--color-text);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .hero__cta:hover {
+      background: var(--color-text);
+      color: var(--color-bg);
+    }
+
+    /* PHOTO GRID */
+    .hero__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .photo-block {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .photo-block--tall {
+      grid-row: span 2;
+    }
+
+    .photo-block__inner {
+      width: 100%;
+      height: 100%;
+      min-height: 180px;
+      transition: transform 0.6s ease;
+    }
+
+    .photo-block:hover .photo-block__inner {
+      transform: scale(1.03);
+    }
+
+    .pb-1 { background: #8a8a7e; }
+    .pb-2 { background: #a09b8e; }
+    .pb-3 { background: #6e6e64; }
+    .pb-4 { background: #b5b0a3; }
+    .pb-5 { background: #4a4a44; }
+
+    /* DESKTOP */
+    @media (min-width: 768px) {
+      .nav {
+        padding: 24px 48px;
+      }
+
+      .hero {
+        flex-direction: row;
+        align-items: stretch;
+        padding: 0;
+        gap: 0;
+      }
+
+      .hero__text {
+        flex: 0 0 38%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 60px 48px;
+        margin-bottom: 0;
+        border-right: 1px solid var(--color-line);
+      }
+
+      .hero__name {
+        font-size: 48px;
+      }
+
+      .hero__grid {
+        flex: 1;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 6px;
+        padding: 6px;
+      }
+
+      .photo-block__inner {
+        min-height: 200px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .nav {
+        padding: 28px 80px;
+      }
+
+      .hero__text {
+        flex: 0 0 35%;
+        padding: 80px;
+      }
+
+      .hero__name {
+        font-size: 64px;
+        margin-bottom: 20px;
+      }
+
+      .hero__subtitle {
+        font-size: 14px;
+        margin-bottom: 32px;
+      }
+
+      .hero__desc {
+        font-size: 16px;
+        max-width: 500px;
+      }
+
+      .hero__grid {
+        gap: 8px;
+        padding: 8px;
+      }
+
+      .photo-block__inner {
+        min-height: 240px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav__logo">А. Волков</div>
+    <ul class="nav__links">
+      <li><a href="#">Портфолио</a></li>
+      <li><a href="#">О себе</a></li>
+      <li><a href="#">Контакт</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero__text">
+      <h1 class="hero__name">Алексей<br>Волков</h1>
+      <p class="hero__subtitle">Архитектура &middot; Город</p>
+      <p class="hero__desc">Фотография архитектуры и городских пейзажей. Геометрия, свет, пространство.</p>
+      <a href="#" class="hero__cta">Смотреть работы</a>
+    </div>
+
+    <div class="hero__grid">
+      <div class="photo-block photo-block--tall">
+        <div class="photo-block__inner pb-1"></div>
+      </div>
+      <div class="photo-block">
+        <div class="photo-block__inner pb-2"></div>
+      </div>
+      <div class="photo-block">
+        <div class="photo-block__inner pb-3"></div>
+      </div>
+      <div class="photo-block">
+        <div class="photo-block__inner pb-4"></div>
+      </div>
+      <div class="photo-block photo-block--tall">
+        <div class="photo-block__inner pb-5"></div>
+      </div>
+      <div class="photo-block">
+        <div class="photo-block__inner pb-2"></div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

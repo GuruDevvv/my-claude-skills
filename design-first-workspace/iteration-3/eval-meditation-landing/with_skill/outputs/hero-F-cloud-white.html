@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant F: Cloud White</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #ffffff;
+      --color-text: #111111;
+      --color-text-soft: #777777;
+      --color-border: #e5e5e5;
+      --color-accent: #111111;
+      --color-accent-hover: #333333;
+      --color-tag-bg: #f5f5f5;
+      --font-main: 'Space Grotesk', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 20px 40px;
+    }
+
+    .hero__nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 40px;
+    }
+
+    .hero__logo {
+      font-weight: 500;
+      font-size: 16px;
+      letter-spacing: -0.3px;
+    }
+
+    .hero__nav-cta {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-bg);
+      background: var(--color-text);
+      padding: 8px 16px;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .hero__main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero__overline {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color-text-soft);
+      margin-bottom: 20px;
+    }
+
+    .hero__title {
+      font-weight: 300;
+      font-size: 40px;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+
+    .hero__title strong {
+      font-weight: 600;
+    }
+
+    .hero__body {
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text-soft);
+      max-width: 340px;
+      margin-bottom: 32px;
+    }
+
+    .hero__cta-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .hero__cta {
+      font-family: var(--font-main);
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--color-bg);
+      background: var(--color-accent);
+      border: none;
+      padding: 14px 28px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+
+    .hero__cta:hover {
+      background: var(--color-accent-hover);
+    }
+
+    .hero__price {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+
+    .hero__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hero__tag {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--color-text-soft);
+      background: var(--color-tag-bg);
+      padding: 8px 14px;
+      border-radius: 4px;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        padding: 32px 64px 48px;
+      }
+
+      .hero__nav {
+        margin-bottom: 0;
+      }
+
+      .hero__overline {
+        font-size: 12px;
+        margin-bottom: 24px;
+      }
+
+      .hero__title {
+        font-size: 64px;
+        letter-spacing: -2px;
+      }
+
+      .hero__body {
+        font-size: 17px;
+        max-width: 500px;
+        margin-bottom: 40px;
+      }
+
+      .hero__cta {
+        font-size: 15px;
+        padding: 16px 36px;
+      }
+
+      .hero__price {
+        font-size: 28px;
+      }
+
+      .hero__tags {
+        gap: 10px;
+      }
+
+      .hero__tag {
+        font-size: 13px;
+        padding: 10px 18px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .hero {
+        padding: 40px 120px 64px;
+      }
+
+      .hero__title {
+        font-size: 84px;
+        letter-spacing: -3px;
+      }
+
+      .hero__body {
+        font-size: 19px;
+        max-width: 580px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <nav class="hero__nav">
+      <span class="hero__logo">Тишина внутри</span>
+      <a href="#" class="hero__nav-cta">Записаться</a>
+    </nav>
+    <div class="hero__main">
+      <p class="hero__overline">Онлайн-курс · 8 недель</p>
+      <h1 class="hero__title"><strong>Тишина</strong><br>внутри</h1>
+      <p class="hero__body">Осознанная практика медитации для тех, кто хочет вернуть ясность мысли и внутреннее спокойствие. Без эзотерики — только работающие техники.</p>
+      <div class="hero__cta-row">
+        <a href="#" class="hero__cta">Начать путь</a>
+        <span class="hero__price">3 900 ₽</span>
+      </div>
+      <div class="hero__tags">
+        <span class="hero__tag">Видеоуроки</span>
+        <span class="hero__tag">Медитации</span>
+        <span class="hero__tag">Рабочая тетрадь</span>
+        <span class="hero__tag">Чат поддержки</span>
+        <span class="hero__tag">Запись навсегда</span>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

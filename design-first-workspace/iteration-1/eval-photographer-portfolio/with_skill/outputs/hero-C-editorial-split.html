@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photographer Portfolio — Variant C: Editorial Split</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #f0ede6;
+      --color-dark: #1c1c1a;
+      --color-muted: #6e6b63;
+      --color-line: #ccc8bd;
+      --font-heading: 'Oswald', sans-serif;
+      --font-body: 'Lora', serif;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-dark);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+    }
+
+    .nav__logo {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+
+    .nav__contact {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-style: italic;
+      color: var(--color-muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav__contact:hover {
+      color: var(--color-dark);
+    }
+
+    /* HERO */
+    .hero {
+      padding: 40px 24px;
+      min-height: calc(100vh - 60px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero__label {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 20px;
+    }
+
+    .hero__name {
+      font-family: var(--font-heading);
+      font-size: 52px;
+      font-weight: 300;
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 32px;
+    }
+
+    .hero__photo-main {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: #7a786e;
+      margin-bottom: 24px;
+    }
+
+    .hero__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: auto;
+    }
+
+    .hero__tagline {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-style: italic;
+      color: var(--color-muted);
+      max-width: 260px;
+      line-height: 1.6;
+    }
+
+    .hero__count {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
+
+    .hero__photo-side {
+      display: none;
+    }
+
+    /* CTA */
+    .hero__explore {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 32px;
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-dark);
+      text-decoration: none;
+      transition: gap 0.3s;
+    }
+
+    .hero__explore:hover {
+      gap: 20px;
+    }
+
+    .hero__explore-line {
+      display: inline-block;
+      width: 40px;
+      height: 1px;
+      background: var(--color-dark);
+      transition: width 0.3s;
+    }
+
+    .hero__explore:hover .hero__explore-line {
+      width: 60px;
+    }
+
+    /* DESKTOP */
+    @media (min-width: 768px) {
+      .nav {
+        padding: 28px 48px;
+      }
+
+      .hero {
+        flex-direction: row;
+        gap: 48px;
+        padding: 40px 48px;
+      }
+
+      .hero__left {
+        flex: 0 0 45%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .hero__name {
+        font-size: 56px;
+      }
+
+      .hero__photo-main {
+        width: 100%;
+        aspect-ratio: 3/4;
+        max-height: 70vh;
+      }
+
+      .hero__right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        justify-content: center;
+      }
+
+      .hero__photo-side {
+        display: block;
+        width: 100%;
+        background: #9a9589;
+        aspect-ratio: 16/9;
+      }
+
+      .hero__photo-side--2 {
+        background: #5c5a52;
+        aspect-ratio: 16/10;
+      }
+
+      .hero__bottom {
+        margin-top: 40px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .nav {
+        padding: 32px 80px;
+      }
+
+      .hero {
+        padding: 40px 80px 60px;
+        gap: 80px;
+      }
+
+      .hero__left {
+        flex: 0 0 50%;
+      }
+
+      .hero__label {
+        font-size: 12px;
+        margin-bottom: 28px;
+      }
+
+      .hero__name {
+        font-size: 80px;
+        margin-bottom: 40px;
+      }
+
+      .hero__tagline {
+        font-size: 18px;
+        max-width: 380px;
+      }
+
+      .hero__photo-main {
+        margin-bottom: 0;
+      }
+
+      .hero__explore {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav__logo">Волков</div>
+    <a href="#" class="nav__contact">Написать</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero__left">
+      <p class="hero__label">Архитектурная фотография</p>
+      <h1 class="hero__name">Алексей<br>Волков</h1>
+      <div class="hero__photo-main"></div>
+      <div class="hero__bottom">
+        <p class="hero__tagline">Линии, свет, пространство. Архитектура и городской пейзаж.</p>
+        <span class="hero__count">24 проекта</span>
+      </div>
+      <a href="#" class="hero__explore">
+        Смотреть работы
+        <span class="hero__explore-line"></span>
+      </a>
+    </div>
+
+    <div class="hero__right">
+      <div class="hero__photo-side" style="background: #8a877d;"></div>
+      <div class="hero__photo-side hero__photo-side--2"></div>
+    </div>
+  </section>
+</body>
+</html>

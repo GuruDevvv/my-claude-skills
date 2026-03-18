@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meditation Landing — 6 Hero Prototypes Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --color-bg: #111;
+      --color-card: #1a1a1a;
+      --color-text: #e0e0e0;
+      --color-text-soft: #888;
+      --color-accent: #7b8cde;
+      --color-border: #2a2a2a;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      padding: 2rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .header h1 {
+      font-size: 1.6rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      font-size: 0.9rem;
+      color: var(--color-text-soft);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .card__label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .card__letter {
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--color-accent);
+      background: rgba(123,140,222,0.1);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .card__name {
+      font-weight: 400;
+      font-size: 0.85rem;
+    }
+
+    .card__desc {
+      font-size: 0.75rem;
+      color: var(--color-text-soft);
+    }
+
+    .card__frame {
+      width: 100%;
+      height: 700px;
+      border: none;
+      display: block;
+    }
+
+    .card__link {
+      display: block;
+      text-align: center;
+      padding: 0.6rem;
+      font-size: 0.75rem;
+      color: var(--color-accent);
+      text-decoration: none;
+      border-top: 1px solid var(--color-border);
+      transition: background 0.2s;
+    }
+
+    .card__link:hover {
+      background: rgba(123,140,222,0.05);
+    }
+
+    @media (min-width: 1024px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .card__frame { height: 650px; }
+    }
+
+    @media (min-width: 1440px) {
+      .grid {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      .card__frame { height: 600px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Meditation Landing Prototypes</h1>
+    <p>6 Hero variants for comparison. Click "Open full" to view each at full viewport size.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card__header">
+        <div class="card__label">
+          <span class="card__letter">A</span>
+          <span class="card__name">Warm Sand</span>
+        </div>
+        <span class="card__desc">Serif, earthy, organic shapes</span>
+      </div>
+      <iframe class="card__frame" src="hero-A-warm-sand.html"></iframe>
+      <a class="card__link" href="hero-A-warm-sand.html" target="_blank">Open full &rarr;</a>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__label">
+          <span class="card__letter">B</span>
+          <span class="card__name">Deep Twilight</span>
+        </div>
+        <span class="card__desc">Dark, glassmorphism, starfield</span>
+      </div>
+      <iframe class="card__frame" src="hero-B-deep-twilight.html"></iframe>
+      <a class="card__link" href="hero-B-deep-twilight.html" target="_blank">Open full &rarr;</a>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__label">
+          <span class="card__letter">C</span>
+          <span class="card__name">Sage Garden</span>
+        </div>
+        <span class="card__desc">Two-panel, green, botanical</span>
+      </div>
+      <iframe class="card__frame" src="hero-C-sage-garden.html"></iframe>
+      <a class="card__link" href="hero-C-sage-garden.html" target="_blank">Open full &rarr;</a>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__label">
+          <span class="card__letter">D</span>
+          <span class="card__name">Soft Cloud</span>
+        </div>
+        <span class="card__desc">Light, blurred blobs, rounded</span>
+      </div>
+      <iframe class="card__frame" src="hero-D-soft-cloud.html"></iframe>
+      <a class="card__link" href="hero-D-soft-cloud.html" target="_blank">Open full &rarr;</a>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__label">
+          <span class="card__letter">E</span>
+          <span class="card__name">Golden Dusk</span>
+        </div>
+        <span class="card__desc">Dark amber, cinematic, serif</span>
+      </div>
+      <iframe class="card__frame" src="hero-E-golden-dusk.html"></iframe>
+      <a class="card__link" href="hero-E-golden-dusk.html" target="_blank">Open full &rarr;</a>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__label">
+          <span class="card__letter">F</span>
+          <span class="card__name">Mist Lavender</span>
+        </div>
+        <span class="card__desc">Geometric, modern, lavender</span>
+      </div>
+      <iframe class="card__frame" src="hero-F-mist-lavender.html"></iframe>
+      <a class="card__link" href="hero-F-mist-lavender.html" target="_blank">Open full &rarr;</a>
+    </div>
+  </div>
+</body>
+</html>

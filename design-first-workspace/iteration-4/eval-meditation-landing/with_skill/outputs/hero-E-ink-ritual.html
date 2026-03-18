@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant E: Ink Ritual</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg-warm: #110e0c;
+      --text: #d8cfc4;
+      --text-dim: #7a6f63;
+      --ink: #c9a84c;
+      --ink-faded: rgba(201, 168, 76, 0.15);
+      --ember: #a0522d;
+      --bone: #e8ddd0;
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Heavy grain overlay — like old parchment */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.06'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+      position: relative;
+      background:
+        radial-gradient(ellipse at 50% 30%, rgba(201, 168, 76, 0.04) 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%);
+    }
+
+    /* Vertical golden line — like a spine of a book */
+    .spine {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        var(--ink-faded) 20%,
+        var(--ink-faded) 80%,
+        transparent 100%
+      );
+    }
+
+    .content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      max-width: 380px;
+    }
+
+    /* Decorative alchemical symbol */
+    .sigil {
+      margin: 0 auto 36px;
+      width: 60px;
+      height: 60px;
+    }
+
+    .sigil svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .chapter {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .chapter::before,
+    .chapter::after {
+      content: '';
+      width: 30px;
+      height: 1px;
+      background: var(--ink-faded);
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 48px;
+      line-height: 1.1;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .title-inner {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 56px;
+      color: var(--ink);
+      letter-spacing: 3px;
+    }
+
+    .epigraph {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--text-dim);
+      margin: 24px auto 44px;
+      max-width: 300px;
+      position: relative;
+      padding: 0 20px;
+    }
+
+    .epigraph::before {
+      content: '\201C';
+      font-size: 48px;
+      color: var(--ink-faded);
+      position: absolute;
+      top: -20px;
+      left: 0;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .cta-button {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: transparent;
+      padding: 16px 40px;
+      border: 1px solid var(--ink-faded);
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.3s ease, background 0.3s ease;
+      position: relative;
+    }
+
+    .cta-button::before,
+    .cta-button::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-color: var(--ink);
+      opacity: 0.4;
+    }
+
+    .cta-button::before {
+      top: -1px; left: -1px;
+      border-top: 1px solid;
+      border-left: 1px solid;
+    }
+
+    .cta-button::after {
+      bottom: -1px; right: -1px;
+      border-bottom: 1px solid;
+      border-right: 1px solid;
+    }
+
+    .cta-button:hover {
+      border-color: var(--ink);
+      background: var(--ink-faded);
+    }
+
+    .price {
+      display: block;
+      margin-top: 16px;
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    /* Bottom ornament */
+    .ornament {
+      margin-top: 60px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0.3;
+    }
+
+    .ornament span {
+      width: 4px;
+      height: 4px;
+      background: var(--ink);
+      transform: rotate(45deg);
+    }
+
+    .ornament .line {
+      width: 40px;
+      height: 1px;
+      background: var(--ink);
+      transform: none;
+    }
+
+    @media (min-width: 768px) {
+      .content { max-width: 520px; }
+      h1 { font-size: 62px; letter-spacing: 4px; }
+      .title-inner { font-size: 72px; letter-spacing: 5px; }
+      .epigraph { font-size: 19px; max-width: 400px; }
+      .sigil { width: 72px; height: 72px; }
+      .chapter { letter-spacing: 8px; }
+      .chapter::before, .chapter::after { width: 50px; }
+    }
+
+    @media (min-width: 1440px) {
+      .content { max-width: 650px; }
+      h1 { font-size: 78px; letter-spacing: 6px; }
+      .title-inner { font-size: 90px; letter-spacing: 8px; }
+      .epigraph { font-size: 21px; max-width: 480px; }
+      .cta-button { font-size: 12px; letter-spacing: 4px; padding: 18px 52px; }
+      .sigil { width: 84px; height: 84px; margin-bottom: 44px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="spine"></div>
+
+    <div class="content">
+      <div class="sigil">
+        <svg viewBox="0 0 60 60" fill="none" stroke="#c9a84c" stroke-width="0.7" opacity="0.5">
+          <circle cx="30" cy="30" r="28"/>
+          <circle cx="30" cy="30" r="18"/>
+          <path d="M30 2v56"/>
+          <path d="M2 30h56"/>
+          <circle cx="30" cy="12" r="3"/>
+          <circle cx="30" cy="48" r="3"/>
+          <circle cx="12" cy="30" r="3"/>
+          <circle cx="48" cy="30" r="3"/>
+        </svg>
+      </div>
+
+      <p class="chapter">Практика</p>
+
+      <h1>Тишина<br><span class="title-inner">внутри</span></h1>
+
+      <p class="epigraph">Восемь недель осознанной практики для тех, кто готов перестать убегать от себя</p>
+
+      <a href="#" class="cta-button">Начать путь</a>
+      <span class="price">3 900 ₽ — доступ навсегда</span>
+
+      <div class="ornament">
+        <span></span>
+        <span class="line"></span>
+        <span></span>
+        <span class="line"></span>
+        <span></span>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
