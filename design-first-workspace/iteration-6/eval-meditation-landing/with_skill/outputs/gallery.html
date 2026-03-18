@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Hero Prototypes Gallery</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #111;
+      color: #ccc;
+      padding: 24px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .controls button {
+      font-size: 13px;
+      font-weight: 500;
+      color: #aaa;
+      background: #222;
+      border: 1px solid #333;
+      padding: 8px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .controls button:hover {
+      border-color: #555;
+      color: #fff;
+    }
+
+    .controls button.active {
+      background: #333;
+      color: #fff;
+      border-color: #555;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .card__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .card__info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .card__name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .card__tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .card__tag {
+      font-size: 11px;
+      color: #888;
+      background: #252525;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .card__open {
+      font-size: 13px;
+      font-weight: 500;
+      color: #6b9fff;
+      text-decoration: none;
+      padding: 6px 14px;
+      border: 1px solid rgba(107, 159, 255, 0.3);
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .card__open:hover {
+      background: rgba(107, 159, 255, 0.1);
+      border-color: rgba(107, 159, 255, 0.5);
+    }
+
+    .card__desc {
+      padding: 0 20px;
+      font-size: 12px;
+      color: #666;
+      padding-top: 8px;
+    }
+
+    .card__iframe-wrap {
+      padding: 12px;
+    }
+
+    .card__iframe-wrap iframe {
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      background: #fff;
+      transition: height 0.3s ease;
+    }
+
+    @media (min-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Тишина внутри — Hero Prototypes</h1>
+    <p>6 вариантов Hero-секции для лендинга курса медитации</p>
+  </div>
+
+  <div class="controls">
+    <button data-height="600" class="active">Mobile (600px)</button>
+    <button data-height="800">Tablet (800px)</button>
+    <button data-height="700">Desktop (700px)</button>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card__header">
+        <div class="card__info">
+          <span class="card__name">A — Warm Mist</span>
+          <div class="card__tags">
+            <span class="card__tag">Elegant Serif</span>
+            <span class="card__tag">Clean Sans</span>
+            <span class="card__tag">Centered</span>
+            <span class="card__tag">Light</span>
+          </div>
+        </div>
+        <a href="hero-A-warm-mist.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <p class="card__desc">Cormorant Garamond + Raleway. Warm cream bg, minimal centered, earthy accent.</p>
+      <div class="card__iframe-wrap">
+        <iframe src="hero-A-warm-mist.html" height="600"></iframe>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__info">
+          <span class="card__name">B — Forest Depth</span>
+          <div class="card__tags">
+            <span class="card__tag">Sturdy Serif</span>
+            <span class="card__tag">Bold Sans</span>
+            <span class="card__tag">Split Layout</span>
+            <span class="card__tag">Dark</span>
+          </div>
+        </div>
+        <a href="hero-B-forest-depth.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <p class="card__desc">Merriweather + Montserrat. Dark forest tones, split text-left / visual-right.</p>
+      <div class="card__iframe-wrap">
+        <iframe src="hero-B-forest-depth.html" height="600"></iframe>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__info">
+          <span class="card__name">C — Zen Editorial</span>
+          <div class="card__tags">
+            <span class="card__tag">Condensed Display</span>
+            <span class="card__tag">Elegant Serif</span>
+            <span class="card__tag">Asymmetric</span>
+            <span class="card__tag">Light</span>
+          </div>
+        </div>
+        <a href="hero-C-zen-editorial.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <p class="card__desc">Oswald + Lora. Warm paper bg, editorial asymmetric with sidebar quote.</p>
+      <div class="card__iframe-wrap">
+        <iframe src="hero-C-zen-editorial.html" height="600"></iframe>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__info">
+          <span class="card__name">D — Soft Cloud</span>
+          <div class="card__tags">
+            <span class="card__tag">Bold/Geometric Sans</span>
+            <span class="card__tag">Clean Sans</span>
+            <span class="card__tag">Centered</span>
+            <span class="card__tag">Light</span>
+          </div>
+        </div>
+        <a href="hero-D-soft-cloud.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <p class="card__desc">Nunito + Inter. Lavender-soft bg, glassmorphism cards, pill CTA.</p>
+      <div class="card__iframe-wrap">
+        <iframe src="hero-D-soft-cloud.html" height="600"></iframe>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__info">
+          <span class="card__name">E — Sacred Ink</span>
+          <div class="card__tags">
+            <span class="card__tag">Elegant Serif</span>
+            <span class="card__tag">Condensed/Display</span>
+            <span class="card__tag">Split Layout</span>
+            <span class="card__tag">Dark</span>
+          </div>
+        </div>
+        <a href="hero-E-sacred-ink.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <p class="card__desc">Playfair Display + Fira Sans. Deep dark with gold accent, split with mystic aside.</p>
+      <div class="card__iframe-wrap">
+        <iframe src="hero-E-sacred-ink.html" height="600"></iframe>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <div class="card__info">
+          <span class="card__name">F — Ember Glow</span>
+          <div class="card__tags">
+            <span class="card__tag">Expressive</span>
+            <span class="card__tag">Clean Sans</span>
+            <span class="card__tag">Centered</span>
+            <span class="card__tag">Dark</span>
+          </div>
+        </div>
+        <a href="hero-F-ember-glow.html" target="_blank" class="card__open">Open</a>
+      </div>
+      <p class="card__desc">Unbounded + Commissioner. Dark warm bg, animated ember, rounded pill CTA, tag chips.</p>
+      <div class="card__iframe-wrap">
+        <iframe src="hero-F-ember-glow.html" height="600"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll('.controls button');
+    const iframes = document.querySelectorAll('.card__iframe-wrap iframe');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const h = btn.dataset.height;
+        iframes.forEach(iframe => {
+          iframe.style.height = h + 'px';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

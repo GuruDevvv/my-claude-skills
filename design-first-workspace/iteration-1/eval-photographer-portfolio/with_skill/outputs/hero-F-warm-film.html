@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photographer Portfolio — Variant F: Warm Film</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Commissioner:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #1a1815;
+      --color-text: #e8e2d6;
+      --color-warm: #c4a96a;
+      --color-muted: #8a8274;
+      --color-surface: #242119;
+      --font-heading: 'Merriweather', serif;
+      --font-body: 'Commissioner', sans-serif;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Film grain overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+      z-index: 100;
+    }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(196, 169, 106, 0.15);
+    }
+
+    .nav__logo {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--color-warm);
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--color-muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav__links a:hover {
+      color: var(--color-warm);
+    }
+
+    /* HERO */
+    .hero {
+      padding: 48px 24px 40px;
+      min-height: calc(100vh - 60px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero__intro {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .hero__name {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      color: var(--color-text);
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-warm);
+    }
+
+    /* Photo masonry grid */
+    .hero__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .hero__cell {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .hero__cell-inner {
+      width: 100%;
+      height: 100%;
+      min-height: 160px;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hero__cell:hover .hero__cell-inner {
+      transform: scale(1.05);
+    }
+
+    .hero__cell-label {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 300;
+      color: rgba(232, 226, 214, 0.7);
+      letter-spacing: 0.05em;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.4s;
+    }
+
+    .hero__cell:hover .hero__cell-label {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero__cell--wide {
+      grid-column: span 2;
+    }
+
+    /* Warm earthy palette for photo placeholders */
+    .hc-1 { background: #6b5d4a; }
+    .hc-2 { background: #8a7e6c; }
+    .hc-3 { background: #4e463a; }
+    .hc-4 { background: #9c9080; }
+    .hc-5 { background: #5a524a; }
+    .hc-6 { background: #7a7062; }
+
+    /* Bottom bar */
+    .hero__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 28px;
+      margin-top: 28px;
+      border-top: 1px solid rgba(196, 169, 106, 0.15);
+    }
+
+    .hero__cta {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-warm);
+      text-decoration: none;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--color-warm);
+      transition: opacity 0.3s;
+    }
+
+    .hero__cta:hover {
+      opacity: 0.7;
+    }
+
+    .hero__count {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--color-muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* DESKTOP */
+    @media (min-width: 768px) {
+      .nav {
+        padding: 24px 48px;
+      }
+
+      .hero {
+        padding: 60px 48px 40px;
+      }
+
+      .hero__name {
+        font-size: 48px;
+      }
+
+      .hero__subtitle {
+        font-size: 14px;
+      }
+
+      .hero__grid {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 12px;
+      }
+
+      .hero__cell--wide {
+        grid-column: span 2;
+      }
+
+      .hero__cell-inner {
+        min-height: 220px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .nav {
+        padding: 28px 80px;
+      }
+
+      .hero {
+        padding: 60px 80px 48px;
+      }
+
+      .hero__intro {
+        margin-bottom: 60px;
+      }
+
+      .hero__name {
+        font-size: 64px;
+        margin-bottom: 16px;
+      }
+
+      .hero__subtitle {
+        font-size: 15px;
+        letter-spacing: 0.3em;
+      }
+
+      .hero__grid {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 14px;
+      }
+
+      .hero__cell-inner {
+        min-height: 280px;
+      }
+
+      .hero__cell-label {
+        font-size: 12px;
+        bottom: 16px;
+        left: 16px;
+      }
+
+      .hero__bottom {
+        padding-top: 32px;
+        margin-top: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav__logo">А. Волков</div>
+    <ul class="nav__links">
+      <li><a href="#">Галерея</a></li>
+      <li><a href="#">О себе</a></li>
+      <li><a href="#">Контакт</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero__intro">
+      <h1 class="hero__name">Алексей Волков</h1>
+      <p class="hero__subtitle">Архитектура &middot; Город</p>
+    </div>
+
+    <div class="hero__grid">
+      <div class="hero__cell hero__cell--wide">
+        <div class="hero__cell-inner hc-1"></div>
+        <span class="hero__cell-label">Москва-Сити</span>
+      </div>
+      <div class="hero__cell">
+        <div class="hero__cell-inner hc-2"></div>
+        <span class="hero__cell-label">Старый город</span>
+      </div>
+      <div class="hero__cell">
+        <div class="hero__cell-inner hc-3"></div>
+        <span class="hero__cell-label">Мосты</span>
+      </div>
+      <div class="hero__cell">
+        <div class="hero__cell-inner hc-4"></div>
+        <span class="hero__cell-label">Стекло</span>
+      </div>
+      <div class="hero__cell hero__cell--wide">
+        <div class="hero__cell-inner hc-5"></div>
+        <span class="hero__cell-label">Набережная</span>
+      </div>
+      <div class="hero__cell">
+        <div class="hero__cell-inner hc-6"></div>
+        <span class="hero__cell-label">Детали</span>
+      </div>
+    </div>
+
+    <div class="hero__bottom">
+      <a href="#" class="hero__cta">Все проекты</a>
+      <span class="hero__count">24 серии &middot; 380+ кадров</span>
+    </div>
+  </section>
+</body>
+</html>

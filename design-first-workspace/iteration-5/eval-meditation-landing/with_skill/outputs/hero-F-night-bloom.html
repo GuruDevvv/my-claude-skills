@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant F: Night Bloom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --color-bg: #141118;
+      --color-surface: #1e1a26;
+      --color-text: #c8bdd6;
+      --color-heading: #f4eff9;
+      --color-accent: #d4a0b9;
+      --color-accent-deep: #a06b82;
+      --color-accent-glow: rgba(212,160,185,0.2);
+      --color-muted: #7d7289;
+      --font-heading: 'Cormorant Garamond', serif;
+      --font-body: 'Nunito', sans-serif;
+    }
+
+    html { font-size: 16px; }
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      padding: 48px 24px 40px;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Background elements */
+    .hero__bg-gradient {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 50% 50% at 70% 30%, rgba(212,160,185,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 40% 40% at 30% 70%, rgba(160,107,130,0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* Grain texture overlay */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Mobile: centered */
+    .hero__text {
+      text-align: center;
+    }
+
+    .hero__flower {
+      display: inline-block;
+      margin-bottom: 32px;
+      opacity: 0.7;
+    }
+
+    .hero__flower svg {
+      width: 56px;
+      height: 56px;
+    }
+
+    .hero__title {
+      font-family: var(--font-heading);
+      font-weight: 400;
+      font-size: 44px;
+      line-height: 1.15;
+      color: var(--color-heading);
+      margin-bottom: 8px;
+    }
+
+    .hero__title-accent {
+      display: block;
+      font-style: italic;
+      color: var(--color-accent);
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--color-muted);
+      margin-bottom: 36px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero__cta-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero__cta {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--color-bg);
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-deep) 100%);
+      border: none;
+      padding: 16px 44px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 24px var(--color-accent-glow);
+    }
+
+    .hero__cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 40px rgba(212,160,185,0.35);
+    }
+
+    .hero__note {
+      font-size: 12px;
+      color: var(--color-muted);
+      font-weight: 300;
+    }
+
+    /* Decorative side panel for desktop */
+    .hero__side {
+      display: none;
+    }
+
+    /* Floating particles */
+    .hero__particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero__particle--1 {
+      width: 6px; height: 6px;
+      background: rgba(212,160,185,0.3);
+      top: 20%; right: 15%;
+      animation: drift 10s ease-in-out infinite;
+    }
+
+    .hero__particle--2 {
+      width: 4px; height: 4px;
+      background: rgba(160,107,130,0.25);
+      top: 60%; left: 10%;
+      animation: drift 14s ease-in-out infinite reverse;
+    }
+
+    .hero__particle--3 {
+      width: 8px; height: 8px;
+      background: rgba(212,160,185,0.15);
+      bottom: 25%; right: 25%;
+      animation: drift 12s ease-in-out infinite;
+      animation-delay: 2s;
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(15px, -20px); }
+      50% { transform: translate(-10px, 15px); }
+      75% { transform: translate(20px, 10px); }
+    }
+
+    /* Timeline-style features */
+    .hero__timeline {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-left: 20px;
+      border-left: 1px solid rgba(212,160,185,0.15);
+      text-align: left;
+    }
+
+    .hero__timeline-item {
+      position: relative;
+    }
+
+    .hero__timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -24px;
+      top: 6px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      opacity: 0.6;
+    }
+
+    .hero__timeline-title {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      color: var(--color-heading);
+      margin-bottom: 2px;
+    }
+
+    .hero__timeline-desc {
+      font-size: 13px;
+      color: var(--color-muted);
+      font-weight: 300;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        padding: 48px 48px;
+      }
+
+      .hero__text { text-align: left; }
+      .hero__subtitle { margin-left: 0; margin-right: 0; }
+      .hero__cta-wrapper { align-items: flex-start; }
+      .hero__title { font-size: 50px; }
+
+      .hero__side {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .hero__side-circle {
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        background: var(--color-surface);
+        border: 1px solid rgba(212,160,185,0.1);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hero__side-circle::before {
+        content: '';
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(212,160,185,0.1) 0%, transparent 70%);
+        animation: pulse-glow 4s ease-in-out infinite;
+      }
+
+      @keyframes pulse-glow {
+        0%, 100% { opacity: 0.5; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.1); }
+      }
+
+      .hero__side-ring {
+        position: absolute;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        border: 1px solid rgba(212,160,185,0.06);
+        animation: spin-slow 30s linear infinite;
+      }
+
+      .hero__side-ring::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--color-accent);
+        opacity: 0.4;
+        transform: translateX(-50%);
+      }
+
+      @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      .hero__timeline {
+        margin-top: 0;
+        position: absolute;
+        bottom: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        flex-direction: row;
+        border-left: none;
+        border-top: 1px solid rgba(212,160,185,0.15);
+        padding-left: 0;
+        padding-top: 16px;
+        gap: 32px;
+      }
+
+      .hero__timeline-item::before {
+        left: 0;
+        top: -20px;
+      }
+
+      .hero__timeline-item { padding-left: 0; }
+    }
+
+    @media (min-width: 1440px) {
+      .hero {
+        max-width: 1400px;
+        margin: 0 auto;
+        gap: 80px;
+        padding: 60px 80px;
+      }
+
+      .hero__title { font-size: 68px; letter-spacing: -0.5px; }
+      .hero__subtitle { font-size: 18px; max-width: 500px; }
+      .hero__cta { font-size: 15px; padding: 18px 52px; }
+      .hero__flower svg { width: 64px; height: 64px; }
+
+      .hero__side-circle { width: 360px; height: 360px; }
+      .hero__side-circle::before { width: 240px; height: 240px; }
+      .hero__side-ring { width: 420px; height: 420px; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero__bg-gradient"></div>
+    <div class="hero__particle hero__particle--1"></div>
+    <div class="hero__particle hero__particle--2"></div>
+    <div class="hero__particle hero__particle--3"></div>
+
+    <div class="hero__content">
+      <div class="hero__text">
+        <div class="hero__flower">
+          <svg viewBox="0 0 56 56" fill="none">
+            <circle cx="28" cy="28" r="6" fill="rgba(212,160,185,0.3)"/>
+            <ellipse cx="28" cy="16" rx="5" ry="10" fill="rgba(212,160,185,0.12)" transform="rotate(0 28 28)"/>
+            <ellipse cx="28" cy="16" rx="5" ry="10" fill="rgba(212,160,185,0.12)" transform="rotate(60 28 28)"/>
+            <ellipse cx="28" cy="16" rx="5" ry="10" fill="rgba(212,160,185,0.12)" transform="rotate(120 28 28)"/>
+            <ellipse cx="28" cy="16" rx="5" ry="10" fill="rgba(212,160,185,0.12)" transform="rotate(180 28 28)"/>
+            <ellipse cx="28" cy="16" rx="5" ry="10" fill="rgba(212,160,185,0.12)" transform="rotate(240 28 28)"/>
+            <ellipse cx="28" cy="16" rx="5" ry="10" fill="rgba(212,160,185,0.12)" transform="rotate(300 28 28)"/>
+          </svg>
+        </div>
+        <h1 class="hero__title">Тишина <span class="hero__title-accent">внутри</span></h1>
+        <p class="hero__subtitle">8 недель осознанной практики для тех, кто устал от внутреннего шума и хочет наконец услышать себя</p>
+        <div class="hero__cta-wrapper">
+          <a href="#" class="hero__cta">Начать путь — 3 900 ₽</a>
+          <span class="hero__note">Доступ навсегда · Старт сразу после оплаты</span>
+        </div>
+      </div>
+
+      <div class="hero__timeline">
+        <div class="hero__timeline-item">
+          <div class="hero__timeline-title">Неделя 1-2</div>
+          <div class="hero__timeline-desc">Основы внимания</div>
+        </div>
+        <div class="hero__timeline-item">
+          <div class="hero__timeline-title">Неделя 3-5</div>
+          <div class="hero__timeline-desc">Глубокая практика</div>
+        </div>
+        <div class="hero__timeline-item">
+          <div class="hero__timeline-title">Неделя 6-8</div>
+          <div class="hero__timeline-desc">Интеграция</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__side">
+      <div class="hero__side-ring"></div>
+      <div class="hero__side-circle"></div>
+    </div>
+  </section>
+</body>
+</html>

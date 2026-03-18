@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant C: Deep Amethyst</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #1a0e2e;
+      --bg-deep: #0f0820;
+      --text: #e8e0f0;
+      --text-muted: #a694c0;
+      --accent-violet: #9b6dff;
+      --accent-lavender: #c4b5fd;
+      --accent-gold: #e0c068;
+      --glow: rgba(155, 109, 255, 0.15);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      position: relative;
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(155, 109, 255, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(224, 192, 104, 0.06) 0%, transparent 50%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+    }
+
+    /* Starfield effect */
+    .stars {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: var(--accent-lavender);
+      border-radius: 50%;
+      animation: twinkle 4s ease-in-out infinite;
+    }
+
+    .star:nth-child(1) { top: 12%; left: 15%; animation-delay: 0s; }
+    .star:nth-child(2) { top: 8%; left: 55%; animation-delay: 1.2s; width: 3px; height: 3px; }
+    .star:nth-child(3) { top: 25%; left: 82%; animation-delay: 0.6s; }
+    .star:nth-child(4) { top: 45%; left: 8%; animation-delay: 2s; width: 1px; height: 1px; }
+    .star:nth-child(5) { top: 60%; left: 72%; animation-delay: 3s; }
+    .star:nth-child(6) { top: 78%; left: 28%; animation-delay: 1.8s; width: 1px; height: 1px; }
+    .star:nth-child(7) { top: 15%; left: 38%; animation-delay: 2.5s; }
+    .star:nth-child(8) { top: 88%; left: 65%; animation-delay: 0.3s; width: 3px; height: 3px; }
+    .star:nth-child(9) { top: 35%; left: 92%; animation-delay: 1.5s; }
+    .star:nth-child(10) { top: 55%; left: 45%; animation-delay: 3.5s; width: 1px; height: 1px; }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.8; }
+    }
+
+    .content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      max-width: 400px;
+    }
+
+    /* Mandala-inspired decorative ring */
+    .mandala-ring {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 32px;
+      position: relative;
+    }
+
+    .mandala-ring svg {
+      width: 100%;
+      height: 100%;
+      animation: rotate-slow 30s linear infinite;
+    }
+
+    @keyframes rotate-slow {
+      to { transform: rotate(360deg); }
+    }
+
+    .kicker {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-size: 44px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      background: linear-gradient(180deg, var(--text) 30%, var(--accent-lavender) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    h1 i {
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 320px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--bg-deep);
+      background: linear-gradient(135deg, var(--accent-violet), var(--accent-lavender));
+      padding: 16px 40px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 30px var(--glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(155, 109, 255, 0.3);
+    }
+
+    .cta-button:hover::before {
+      left: 100%;
+    }
+
+    .cta-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    /* Feature pills */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 48px;
+    }
+
+    .pill {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--accent-lavender);
+      background: rgba(155, 109, 255, 0.08);
+      border: 1px solid rgba(155, 109, 255, 0.15);
+      padding: 8px 16px;
+      border-radius: 100px;
+    }
+
+    @media (min-width: 768px) {
+      .content { max-width: 540px; }
+      h1 { font-size: 64px; }
+      .subtitle { font-size: 17px; max-width: 440px; }
+      .mandala-ring { width: 100px; height: 100px; }
+      .pills { gap: 14px; }
+      .pill { font-size: 13px; padding: 10px 20px; }
+    }
+
+    @media (min-width: 1440px) {
+      .content { max-width: 700px; }
+      h1 { font-size: 82px; }
+      .subtitle { font-size: 19px; max-width: 520px; }
+      .mandala-ring { width: 120px; height: 120px; margin-bottom: 40px; }
+      .cta-button { font-size: 15px; padding: 18px 48px; border-radius: 14px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .star { animation: none; opacity: 0.4; }
+      .mandala-ring svg { animation: none; }
+      .cta-button::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="stars">
+      <div class="star"></div><div class="star"></div><div class="star"></div>
+      <div class="star"></div><div class="star"></div><div class="star"></div>
+      <div class="star"></div><div class="star"></div><div class="star"></div>
+      <div class="star"></div>
+    </div>
+
+    <div class="content">
+      <div class="mandala-ring">
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.5" color="#9b6dff" opacity="0.4">
+          <circle cx="50" cy="50" r="48"/>
+          <circle cx="50" cy="50" r="38"/>
+          <circle cx="50" cy="50" r="28"/>
+          <circle cx="50" cy="50" r="18"/>
+          <line x1="50" y1="2" x2="50" y2="98"/>
+          <line x1="2" y1="50" x2="98" y2="50"/>
+          <line x1="16" y1="16" x2="84" y2="84"/>
+          <line x1="84" y1="16" x2="16" y2="84"/>
+        </svg>
+      </div>
+
+      <p class="kicker">Медитация как путь</p>
+      <h1>Тишина<br><i>внутри</i></h1>
+      <p class="subtitle">Авторский курс осознанной медитации. 8 недель практики, которая меняет не привычки — а качество жизни.</p>
+
+      <div class="cta-wrapper">
+        <a href="#" class="cta-button">Начать путь — 3 900 ₽</a>
+        <span class="cta-note">Доступ навсегда после оплаты</span>
+      </div>
+
+      <div class="pills">
+        <span class="pill">8 недель</span>
+        <span class="pill">Видеоуроки</span>
+        <span class="pill">Аудиомедитации</span>
+        <span class="pill">Поддержка</span>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photographer Portfolio — Variant D: White Space</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Literata:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #ffffff;
+      --color-text: #111111;
+      --color-muted: #999999;
+      --color-light: #e5e5e5;
+      --font-heading: 'Literata', serif;
+      --font-body: 'Jost', sans-serif;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+    }
+
+    /* NAV — ultra minimal */
+    .nav {
+      display: flex;
+      justify-content: center;
+      padding: 28px 24px;
+    }
+
+    .nav__logo {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
+
+    /* HERO */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 60px 24px 40px;
+      min-height: calc(100vh - 70px);
+    }
+
+    .hero__name {
+      font-family: var(--font-heading);
+      font-size: 40px;
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 60px;
+    }
+
+    /* Single large featured photo */
+    .hero__featured {
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 16/10;
+      background: #b8b5ad;
+      margin-bottom: 40px;
+    }
+
+    .hero__caption {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-style: italic;
+      color: var(--color-muted);
+      margin-bottom: 48px;
+    }
+
+    .hero__cta {
+      display: inline-block;
+      padding: 14px 44px;
+      background: var(--color-text);
+      color: var(--color-bg);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+
+    .hero__cta:hover {
+      opacity: 0.8;
+    }
+
+    /* Mini gallery strip below */
+    .hero__strip {
+      display: flex;
+      gap: 6px;
+      margin-top: auto;
+      padding-top: 48px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .hero__strip-item {
+      flex: 1;
+      aspect-ratio: 1/1;
+      transition: opacity 0.3s;
+      cursor: pointer;
+    }
+
+    .hero__strip-item:hover {
+      opacity: 0.8;
+    }
+
+    .si-1 { background: #8a8680; }
+    .si-2 { background: #a09c94; }
+    .si-3 { background: #6e6c66; }
+    .si-4 { background: #c4c0b8; }
+
+    /* DESKTOP */
+    @media (min-width: 768px) {
+      .hero {
+        padding: 80px 48px 48px;
+      }
+
+      .hero__name {
+        font-size: 52px;
+      }
+
+      .hero__subtitle {
+        font-size: 15px;
+        margin-bottom: 80px;
+      }
+
+      .hero__featured {
+        max-width: 900px;
+        aspect-ratio: 21/9;
+      }
+
+      .hero__strip {
+        max-width: 700px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .nav {
+        padding: 36px 80px;
+      }
+
+      .hero {
+        padding: 100px 80px 60px;
+      }
+
+      .hero__name {
+        font-size: 68px;
+        margin-bottom: 16px;
+      }
+
+      .hero__subtitle {
+        font-size: 16px;
+        letter-spacing: 0.25em;
+        margin-bottom: 100px;
+      }
+
+      .hero__featured {
+        max-width: 1100px;
+      }
+
+      .hero__caption {
+        font-size: 15px;
+        margin-bottom: 56px;
+      }
+
+      .hero__strip {
+        max-width: 800px;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav__logo">Алексей Волков</div>
+  </nav>
+
+  <section class="hero">
+    <h1 class="hero__name">Алексей Волков</h1>
+    <p class="hero__subtitle">Архитектура &middot; Город</p>
+
+    <div class="hero__featured"></div>
+    <p class="hero__caption">Москва-Сити, 2024</p>
+
+    <a href="#" class="hero__cta">Все работы</a>
+
+    <div class="hero__strip">
+      <div class="hero__strip-item si-1"></div>
+      <div class="hero__strip-item si-2"></div>
+      <div class="hero__strip-item si-3"></div>
+      <div class="hero__strip-item si-4"></div>
+    </div>
+  </section>
+</body>
+</html>

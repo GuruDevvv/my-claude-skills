@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant C: Clean Air</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #ffffff;
+      --color-text: #1a1a2e;
+      --color-text-soft: #6e6e82;
+      --color-accent: #5b7f6e;
+      --color-accent-light: #e8f0ec;
+      --color-accent-dark: #3d5c4d;
+      --color-line: #e5e5e5;
+      --font-main: 'DM Sans', -apple-system, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 3rem 1.5rem 2rem;
+      position: relative;
+    }
+
+    .hero__nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: auto;
+    }
+
+    .hero__logo {
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+
+    .hero__lang {
+      font-size: 0.75rem;
+      color: var(--color-text-soft);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+    }
+
+    .hero__main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 100%;
+    }
+
+    .hero__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--color-accent);
+      background: var(--color-accent-light);
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      width: fit-content;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero__tag-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--color-accent);
+      border-radius: 50%;
+    }
+
+    .hero__title {
+      font-weight: 300;
+      font-size: 2.6rem;
+      line-height: 1.2;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+
+    .hero__title strong {
+      font-weight: 700;
+    }
+
+    .hero__subtitle {
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--color-text-soft);
+      max-width: 340px;
+      margin-bottom: 2rem;
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .hero__cta {
+      display: inline-block;
+      font-family: var(--font-main);
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 0.9rem 2rem;
+      background: var(--color-accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.25s ease;
+    }
+
+    .hero__cta:hover {
+      background: var(--color-accent-dark);
+    }
+
+    .hero__price-line {
+      font-size: 0.85rem;
+      color: var(--color-text-soft);
+      font-weight: 300;
+    }
+
+    .hero__price-line strong {
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    .hero__footer {
+      margin-top: auto;
+      padding-top: 2rem;
+      border-top: 1px solid var(--color-line);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .hero__avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--color-accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--color-accent);
+    }
+
+    .hero__instructor-name {
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+
+    .hero__instructor-desc {
+      font-size: 0.75rem;
+      color: var(--color-text-soft);
+      font-weight: 300;
+    }
+
+    /* Decorative side line */
+    .hero__deco {
+      position: absolute;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 2px;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, var(--color-accent), transparent);
+      opacity: 0.3;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        padding: 3rem 4rem;
+      }
+      .hero__title {
+        font-size: 4rem;
+      }
+      .hero__subtitle {
+        font-size: 1.15rem;
+        max-width: 460px;
+      }
+      .hero__actions {
+        flex-direction: row;
+        align-items: center;
+        gap: 1.5rem;
+      }
+      .hero__deco {
+        right: 4rem;
+        height: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <nav class="hero__nav">
+      <span class="hero__logo">Тишина</span>
+      <a href="#" class="hero__lang">RU / EN</a>
+    </nav>
+
+    <div class="hero__main">
+      <div class="hero__tag">
+        <span class="hero__tag-dot"></span>
+        8 недель онлайн
+      </div>
+      <h1 class="hero__title"><strong>Тишина</strong> внутри</h1>
+      <p class="hero__subtitle">Курс медитации для тех, кто устал бежать. Мягкий вход в практику. Без эзотерики, без давления, в своём ритме.</p>
+      <div class="hero__actions">
+        <a href="#" class="hero__cta">Начать путь</a>
+        <span class="hero__price-line"><strong>3 900 руб.</strong> за весь курс</span>
+      </div>
+    </div>
+
+    <div class="hero__footer">
+      <div class="hero__avatar">АС</div>
+      <div>
+        <p class="hero__instructor-name">Анна Светлова</p>
+        <p class="hero__instructor-desc">10 лет практики медитации</p>
+      </div>
+    </div>
+
+    <div class="hero__deco"></div>
+  </section>
+</body>
+</html>

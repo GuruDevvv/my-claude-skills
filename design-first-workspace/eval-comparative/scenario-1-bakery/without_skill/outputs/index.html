@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мука и Время — крафтовая пекарня</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --cream: #FDF6EE;
+            --warm-brown: #6B4226;
+            --soft-brown: #A0785A;
+            --gold: #C8A96E;
+            --dark: #2C1810;
+            --blush: #F2E0D0;
+            --white: #FFFFFF;
+            --text: #3D2B1F;
+            --text-light: #7A6055;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            color: var(--text);
+            background: var(--cream);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(253, 246, 238, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(107, 66, 38, 0.1);
+            transition: box-shadow 0.3s;
+        }
+        nav.scrolled { box-shadow: 0 2px 20px rgba(44, 24, 16, 0.08); }
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem; font-weight: 700; color: var(--warm-brown);
+            text-decoration: none; letter-spacing: 0.5px;
+        }
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-light);
+            font-size: 0.9rem; font-weight: 500; letter-spacing: 0.5px;
+            text-transform: uppercase; transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--warm-brown); }
+        .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+        .burger span { width: 24px; height: 2px; background: var(--warm-brown); transition: 0.3s; }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 120px 24px 80px;
+            background: linear-gradient(160deg, var(--cream) 0%, var(--blush) 50%, var(--cream) 100%);
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(200, 169, 110, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(160, 120, 90, 0.06) 0%, transparent 50%);
+        }
+        .hero-content { position: relative; max-width: 720px; }
+        .hero-badge {
+            display: inline-block;
+            font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--soft-brown); margin-bottom: 24px;
+            padding: 8px 20px; border: 1px solid var(--gold); border-radius: 30px;
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 6vw, 5rem);
+            color: var(--warm-brown); line-height: 1.15;
+            margin-bottom: 24px; font-weight: 700;
+        }
+        .hero h1 em {
+            font-style: italic; color: var(--gold);
+        }
+        .hero p {
+            font-size: 1.15rem; color: var(--text-light);
+            max-width: 520px; margin: 0 auto 40px; font-weight: 300;
+            line-height: 1.8;
+        }
+        .hero-cta {
+            display: inline-flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+        }
+        .btn {
+            display: inline-block; padding: 16px 36px;
+            font-family: 'Raleway', sans-serif; font-size: 0.9rem;
+            font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+            text-decoration: none; border-radius: 50px;
+            transition: all 0.3s; cursor: pointer; border: none;
+        }
+        .btn-primary {
+            background: var(--warm-brown); color: var(--white);
+        }
+        .btn-primary:hover { background: var(--dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(107,66,38,0.25); }
+        .btn-outline {
+            background: transparent; color: var(--warm-brown);
+            border: 2px solid var(--warm-brown);
+        }
+        .btn-outline:hover { background: var(--warm-brown); color: var(--white); transform: translateY(-2px); }
+
+        .scroll-hint {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            color: var(--soft-brown); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+            animation: float 3s ease-in-out infinite;
+        }
+        .scroll-hint svg { width: 20px; height: 20px; }
+        @keyframes float { 0%,100%{ transform: translateX(-50%) translateY(0); } 50%{ transform: translateX(-50%) translateY(8px); } }
+
+        /* SECTIONS */
+        section { padding: 100px 24px; }
+        .section-header { text-align: center; max-width: 600px; margin: 0 auto 64px; }
+        .section-label {
+            font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 16px; display: block;
+        }
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            color: var(--warm-brown); margin-bottom: 20px;
+        }
+        .section-header p { color: var(--text-light); font-weight: 300; font-size: 1.05rem; }
+
+        /* ABOUT */
+        .about { background: var(--white); }
+        .about-grid {
+            max-width: 1100px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+        }
+        .about-image {
+            aspect-ratio: 4/5; border-radius: 16px; overflow: hidden;
+            background: linear-gradient(135deg, var(--blush), var(--cream));
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .about-image-inner {
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #e8d5c0 0%, #d4b896 40%, #c9a87c 100%);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 6rem; border-radius: 16px;
+        }
+        .about-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem; color: var(--warm-brown); margin-bottom: 24px;
+        }
+        .about-text p {
+            color: var(--text-light); margin-bottom: 20px; font-weight: 300; font-size: 1.02rem;
+        }
+        .about-stats {
+            display: flex; gap: 40px; margin-top: 36px; padding-top: 36px;
+            border-top: 1px solid var(--blush);
+        }
+        .stat-item strong {
+            display: block; font-family: 'Playfair Display', serif;
+            font-size: 2rem; color: var(--warm-brown);
+        }
+        .stat-item span { font-size: 0.85rem; color: var(--text-light); }
+
+        /* PRODUCTS */
+        .products { background: var(--cream); }
+        .products-grid {
+            max-width: 1100px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+        }
+        .product-card {
+            background: var(--white); border-radius: 20px; overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .product-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(44,24,16,0.1); }
+        .product-img {
+            height: 260px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 4rem;
+        }
+        .product-img.cakes { background: linear-gradient(135deg, #f5e1d0, #e8c9b0); }
+        .product-img.bread { background: linear-gradient(135deg, #e8d5b8, #d4c0a0); }
+        .product-img.pastry { background: linear-gradient(135deg, #f0dcc8, #e0c8a8); }
+        .product-body { padding: 28px; }
+        .product-body h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem; color: var(--warm-brown); margin-bottom: 12px;
+        }
+        .product-body p { color: var(--text-light); font-size: 0.95rem; font-weight: 300; margin-bottom: 16px; }
+        .product-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem; color: var(--gold); font-weight: 600;
+        }
+
+        /* PROCESS */
+        .process { background: var(--white); }
+        .process-steps {
+            max-width: 900px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;
+        }
+        .step { text-align: center; }
+        .step-num {
+            width: 56px; height: 56px; border-radius: 50%;
+            background: var(--blush); color: var(--warm-brown);
+            font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .step h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem; color: var(--warm-brown); margin-bottom: 10px;
+        }
+        .step p { font-size: 0.88rem; color: var(--text-light); font-weight: 300; }
+
+        /* GALLERY */
+        .gallery { background: var(--cream); }
+        .gallery-grid {
+            max-width: 1100px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+        }
+        .gallery-item {
+            aspect-ratio: 1; border-radius: 12px; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .gallery-item:hover { transform: scale(1.03); box-shadow: 0 8px 24px rgba(44,24,16,0.12); }
+        .gallery-item:nth-child(1) { background: linear-gradient(135deg, #f0dcc8, #e0c8a8); }
+        .gallery-item:nth-child(2) { background: linear-gradient(135deg, #e8d5b8, #d4c0a0); grid-row: span 2; aspect-ratio: auto; }
+        .gallery-item:nth-child(3) { background: linear-gradient(135deg, #f5e1d0, #e8c9b0); }
+        .gallery-item:nth-child(4) { background: linear-gradient(135deg, #ecdcc8, #dcc8b0); }
+        .gallery-item:nth-child(5) { background: linear-gradient(135deg, #f2e0d0, #e4ccb4); }
+        .gallery-item:nth-child(6) { background: linear-gradient(135deg, #e6d0b8, #d8c0a0); }
+        .gallery-item:nth-child(7) { background: linear-gradient(135deg, #f0d8c0, #e0c4a4); }
+        .gallery-item:nth-child(8) { background: linear-gradient(135deg, #ecdcc8, #dcc8b0); }
+        .gallery-ig {
+            text-align: center; margin-top: 40px;
+        }
+        .gallery-ig a {
+            color: var(--warm-brown); font-weight: 500; text-decoration: none;
+            font-size: 1rem; letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--gold); padding-bottom: 4px;
+            transition: color 0.3s;
+        }
+        .gallery-ig a:hover { color: var(--gold); }
+
+        /* TESTIMONIALS */
+        .testimonials { background: var(--white); }
+        .testimonials-grid {
+            max-width: 1000px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+        }
+        .testimonial {
+            background: var(--cream); border-radius: 16px; padding: 36px;
+        }
+        .testimonial-stars { color: var(--gold); font-size: 1rem; margin-bottom: 16px; letter-spacing: 4px; }
+        .testimonial p {
+            font-size: 0.95rem; color: var(--text); font-style: italic;
+            line-height: 1.8; margin-bottom: 20px; font-weight: 300;
+        }
+        .testimonial-author { display: flex; align-items: center; gap: 12px; }
+        .testimonial-avatar {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--blush); display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+        }
+        .testimonial-name { font-weight: 600; font-size: 0.9rem; color: var(--warm-brown); }
+        .testimonial-role { font-size: 0.8rem; color: var(--text-light); }
+
+        /* ORDER FORM */
+        .order {
+            background: linear-gradient(160deg, var(--blush) 0%, var(--cream) 100%);
+        }
+        .order-container {
+            max-width: 680px; margin: 0 auto;
+            background: var(--white); border-radius: 24px; padding: 56px;
+            box-shadow: 0 20px 60px rgba(44,24,16,0.08);
+        }
+        .order-container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem; color: var(--warm-brown);
+            text-align: center; margin-bottom: 8px;
+        }
+        .order-container > p {
+            text-align: center; color: var(--text-light); font-weight: 300;
+            margin-bottom: 40px;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block; font-size: 0.85rem; font-weight: 500;
+            color: var(--text); margin-bottom: 8px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 14px 18px;
+            border: 1px solid #e0d5cc; border-radius: 12px;
+            font-family: 'Raleway', sans-serif; font-size: 0.95rem;
+            color: var(--text); background: var(--cream);
+            transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.15);
+        }
+        .form-group textarea { resize: vertical; min-height: 100px; }
+        .form-group input::placeholder, .form-group textarea::placeholder {
+            color: #b8a898;
+        }
+        .form-note {
+            font-size: 0.82rem; color: var(--text-light);
+            text-align: center; margin-top: 20px; font-weight: 300;
+        }
+        .form-submit { text-align: center; margin-top: 32px; }
+        .form-submit .btn { width: 100%; padding: 18px; font-size: 0.95rem; }
+
+        /* FOOTER */
+        footer {
+            background: var(--dark); color: rgba(255,255,255,0.7); padding: 64px 24px 32px;
+        }
+        .footer-grid {
+            max-width: 1100px; margin: 0 auto;
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+            margin-bottom: 48px;
+        }
+        .footer-brand .nav-logo { color: var(--gold); font-size: 1.6rem; }
+        .footer-brand p { margin-top: 16px; font-size: 0.9rem; line-height: 1.8; font-weight: 300; }
+        footer h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--white); font-size: 1rem; margin-bottom: 20px;
+        }
+        footer ul { list-style: none; }
+        footer ul li { margin-bottom: 10px; }
+        footer ul a {
+            color: rgba(255,255,255,0.6); text-decoration: none;
+            font-size: 0.9rem; font-weight: 300; transition: color 0.3s;
+        }
+        footer ul a:hover { color: var(--gold); }
+        .footer-bottom {
+            max-width: 1100px; margin: 0 auto;
+            padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.82rem; font-weight: 300;
+        }
+        .footer-social { display: flex; gap: 20px; }
+        .footer-social a {
+            color: rgba(255,255,255,0.5); text-decoration: none;
+            font-size: 0.85rem; transition: color 0.3s;
+        }
+        .footer-social a:hover { color: var(--gold); }
+
+        /* MOBILE */
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .nav-links.open {
+                display: flex; flex-direction: column;
+                position: absolute; top: 100%; left: 0; right: 0;
+                background: var(--cream); padding: 24px; gap: 20px;
+                border-bottom: 1px solid rgba(107,66,38,0.1);
+            }
+            .burger { display: flex; }
+            .about-grid { grid-template-columns: 1fr; gap: 40px; }
+            .about-image { max-height: 400px; }
+            .products-grid { grid-template-columns: 1fr; max-width: 400px; }
+            .process-steps { grid-template-columns: 1fr 1fr; }
+            .gallery-grid { grid-template-columns: 1fr 1fr; }
+            .gallery-item:nth-child(2) { grid-row: auto; aspect-ratio: 1; }
+            .testimonials-grid { grid-template-columns: 1fr; max-width: 480px; }
+            .order-container { padding: 36px 24px; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+        }
+        @media (max-width: 600px) {
+            nav { padding: 14px 20px; }
+            .hero { padding: 100px 20px 80px; }
+            .process-steps { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }
+            .gallery-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .about-stats { flex-direction: column; gap: 20px; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+    <a href="#" class="nav-logo">Мука и Время</a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#about">О нас</a></li>
+        <li><a href="#products">Продукция</a></li>
+        <li><a href="#process">Как заказать</a></li>
+        <li><a href="#gallery">Галерея</a></li>
+        <li><a href="#reviews">Отзывы</a></li>
+        <li><a href="#order">Заказать торт</a></li>
+    </ul>
+    <button class="burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">Крафтовая пекарня</div>
+        <h1>Мука <em>&amp;</em> Время</h1>
+        <p>Торты на заказ, хлеб на закваске и авторская выпечка. Каждое изделие создаётся вручную из натуральных ингредиентов — без спешки, с любовью к деталям.</p>
+        <div class="hero-cta">
+            <a href="#order" class="btn btn-primary">Заказать торт</a>
+            <a href="#products" class="btn btn-outline">Наша выпечка</a>
+        </div>
+    </div>
+    <div class="scroll-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+    <div class="about-grid">
+        <div class="about-image">
+            <div class="about-image-inner">&#127838;</div>
+        </div>
+        <div class="about-text">
+            <span class="section-label">Наша история</span>
+            <h2>Хлеб, которому нужно время</h2>
+            <p>Мы основали «Муку и Время» в 2019 году с простой идеей: настоящий хлеб не терпит суеты. Наша закваска живёт уже пятый год, а тесто для каждого багета вызревает не менее 24 часов.</p>
+            <p>Торты мы создаём для особых моментов — дней рождения, свадеб, годовщин. Каждый торт — это индивидуальный проект: от вкуса до декора мы продумываем всё вместе с вами.</p>
+            <div class="about-stats">
+                <div class="stat-item">
+                    <strong>5+</strong>
+                    <span>лет работы</span>
+                </div>
+                <div class="stat-item">
+                    <strong>2000+</strong>
+                    <span>тортов на заказ</span>
+                </div>
+                <div class="stat-item">
+                    <strong>24ч</strong>
+                    <span>ферментация теста</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+    <div class="section-header">
+        <span class="section-label">Наша продукция</span>
+        <h2>Сделано с заботой о каждой детали</h2>
+        <p>Только натуральные ингредиенты, проверенные рецептуры и ручная работа на каждом этапе</p>
+    </div>
+    <div class="products-grid">
+        <div class="product-card">
+            <div class="product-img cakes">&#127874;</div>
+            <div class="product-body">
+                <h3>Торты на заказ</h3>
+                <p>Авторские торты для праздников и торжеств. Классические бисквиты, муссовые, чизкейки — любой дизайн и вкусовое сочетание на ваш выбор.</p>
+                <span class="product-price">от 3 500 &#8381; / кг</span>
+            </div>
+        </div>
+        <div class="product-card">
+            <div class="product-img bread">&#129384;</div>
+            <div class="product-body">
+                <h3>Хлеб на закваске</h3>
+                <p>Ржаной, пшеничный, с семенами и злаками. Длительная ферментация делает наш хлеб не только вкусным, но и полезным для пищеварения.</p>
+                <span class="product-price">от 350 &#8381; / буханка</span>
+            </div>
+        </div>
+        <div class="product-card">
+            <div class="product-img pastry">&#129360;</div>
+            <div class="product-body">
+                <h3>Выпечка и десерты</h3>
+                <p>Круассаны, синнабоны, эклеры, тарты с сезонными ягодами. Свежая выпечка каждое утро — идеальное начало дня.</p>
+                <span class="product-price">от 180 &#8381; / шт</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+    <div class="section-header">
+        <span class="section-label">Как это работает</span>
+        <h2>Заказать торт — просто</h2>
+        <p>От идеи до готового торта за четыре простых шага</p>
+    </div>
+    <div class="process-steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <h4>Заявка</h4>
+            <p>Заполните форму на сайте или напишите нам в Instagram</p>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <h4>Обсуждение</h4>
+            <p>Подберём вкус, декор и размер торта под ваше событие</p>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <h4>Создание</h4>
+            <p>Готовим торт из свежих ингредиентов за 2-3 дня до события</p>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <h4>Доставка</h4>
+            <p>Привезём торт в назначенное время или подготовим к самовывозу</p>
+        </div>
+    </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+    <div class="section-header">
+        <span class="section-label">Галерея</span>
+        <h2>Наши работы</h2>
+        <p>Каждый торт — это маленькое произведение кондитерского искусства</p>
+    </div>
+    <div class="gallery-grid">
+        <div class="gallery-item">&#127856;</div>
+        <div class="gallery-item">&#127874;</div>
+        <div class="gallery-item">&#129473;</div>
+        <div class="gallery-item">&#127846;</div>
+        <div class="gallery-item">&#129472;</div>
+        <div class="gallery-item">&#127857;</div>
+        <div class="gallery-item">&#129360;</div>
+        <div class="gallery-item">&#127838;</div>
+    </div>
+    <div class="gallery-ig">
+        <a href="https://instagram.com" target="_blank">&#128247; Больше работ в нашем Instagram &rarr;</a>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="reviews">
+    <div class="section-header">
+        <span class="section-label">Отзывы</span>
+        <h2>Что говорят наши клиенты</h2>
+    </div>
+    <div class="testimonials-grid">
+        <div class="testimonial">
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p>Заказывала торт на годовщину свадьбы. Шоколадно-малиновый с золотым декором — гости были в восторге! Вкус невероятный, а оформление именно такое, как я мечтала.</p>
+            <div class="testimonial-author">
+                <div class="testimonial-avatar">&#128105;</div>
+                <div>
+                    <div class="testimonial-name">Анна К.</div>
+                    <div class="testimonial-role">Постоянный клиент</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial">
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p>Беру хлеб на закваске каждую неделю уже полтора года. После него обычный хлеб из магазина просто невозможно есть. Дети тоже в восторге от круассанов!</p>
+            <div class="testimonial-author">
+                <div class="testimonial-avatar">&#128103;</div>
+                <div>
+                    <div class="testimonial-name">Мария С.</div>
+                    <div class="testimonial-role">Мама двоих детей</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial">
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p>Заказывали торт дочке на 5 лет в виде единорога. Такой красивый, что даже резать было жалко! А вкус — нежнейший ванильный бисквит с клубникой. Спасибо!</p>
+            <div class="testimonial-author">
+                <div class="testimonial-avatar">&#128113;</div>
+                <div>
+                    <div class="testimonial-name">Елена В.</div>
+                    <div class="testimonial-role">Благодарная мама</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ORDER FORM -->
+<section class="order" id="order">
+    <div class="order-container">
+        <span class="section-label" style="text-align:center;display:block;">Оформить заказ</span>
+        <h2>Закажите торт мечты</h2>
+        <p>Заполните форму, и мы свяжемся с вами в течение 2 часов для обсуждения деталей</p>
+
+        <form id="orderForm" onsubmit="handleSubmit(event)">
+            <div class="form-row">
+                <div class="form-group" style="margin-bottom:0">
+                    <label for="name">Ваше имя *</label>
+                    <input type="text" id="name" name="name" placeholder="Как вас зовут?" required>
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                    <label for="phone">Телефон *</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group" style="margin-bottom:0">
+                    <label for="date">Дата события *</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                    <label for="guests">Количество гостей</label>
+                    <select id="guests" name="guests">
+                        <option value="">Выберите</option>
+                        <option value="5-10">5-10 человек</option>
+                        <option value="10-20">10-20 человек</option>
+                        <option value="20-30">20-30 человек</option>
+                        <option value="30-50">30-50 человек</option>
+                        <option value="50+">Более 50</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cake-type">Тип торта</label>
+                <select id="cake-type" name="cake-type">
+                    <option value="">Выберите тип</option>
+                    <option value="biscuit">Классический бисквитный</option>
+                    <option value="mousse">Муссовый</option>
+                    <option value="cheesecake">Чизкейк</option>
+                    <option value="honey">Медовик</option>
+                    <option value="napoleon">Наполеон</option>
+                    <option value="custom">Другое (опишу в комментарии)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="wishes">Пожелания по декору и вкусу</label>
+                <textarea id="wishes" name="wishes" placeholder="Расскажите, каким вы видите торт: вкус, цветовая гамма, надписи, особые пожелания..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="instagram">Ваш Instagram (необязательно)</label>
+                <input type="text" id="instagram" name="instagram" placeholder="@your_username">
+            </div>
+
+            <div class="form-submit">
+                <button type="submit" class="btn btn-primary" id="submitBtn">Отправить заявку</button>
+            </div>
+            <p class="form-note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных. Мы свяжемся с вами через WhatsApp или Telegram.</p>
+        </form>
+
+        <div id="successMsg" style="display:none; text-align:center; padding: 40px 0;">
+            <div style="font-size:3rem; margin-bottom:16px;">&#127874;</div>
+            <h3 style="font-family:'Playfair Display',serif; color:var(--warm-brown); margin-bottom:12px; font-size:1.5rem;">Заявка отправлена!</h3>
+            <p style="color:var(--text-light); font-weight:300;">Мы свяжемся с вами в ближайшие 2 часа для обсуждения деталей вашего торта.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="#" class="nav-logo">Мука и Время</a>
+            <p>Крафтовая пекарня в Москве. Торты на заказ, хлеб на закваске и авторская выпечка из натуральных ингредиентов.</p>
+        </div>
+        <div>
+            <h4>Навигация</h4>
+            <ul>
+                <li><a href="#about">О нас</a></li>
+                <li><a href="#products">Продукция</a></li>
+                <li><a href="#process">Как заказать</a></li>
+                <li><a href="#order">Заказать торт</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Контакты</h4>
+            <ul>
+                <li><a href="tel:+74951234567">+7 (495) 123-45-67</a></li>
+                <li><a href="mailto:hello@mukaitime.ru">hello@mukaitime.ru</a></li>
+                <li><a href="#">Москва, ул. Пекарская, 12</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Режим работы</h4>
+            <ul>
+                <li><a href="#">Пн-Пт: 8:00 — 20:00</a></li>
+                <li><a href="#">Сб-Вс: 9:00 — 18:00</a></li>
+                <li><a href="#">Заказ тортов: ежедневно</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>&copy; 2026 Мука и Время. Все права защищены.</span>
+        <div class="footer-social">
+            <a href="https://instagram.com" target="_blank">Instagram</a>
+            <a href="https://t.me" target="_blank">Telegram</a>
+            <a href="https://wa.me" target="_blank">WhatsApp</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+        document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Mobile menu toggle
+    document.getElementById('burger').addEventListener('click', () => {
+        document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.getElementById('navLinks').classList.remove('open');
+        });
+    });
+
+    // Form submission
+    function handleSubmit(e) {
+        e.preventDefault();
+        document.getElementById('orderForm').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+    }
+
+    // Set minimum date to today
+    const dateInput = document.getElementById('date');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+</script>
+
+</body>
+</html>

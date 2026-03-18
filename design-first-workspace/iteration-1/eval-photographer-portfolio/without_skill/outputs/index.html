@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Андрей Волков — Архитектурная фотография</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --white: #fafafa;
+  --black: #111;
+  --gray-100: #f5f5f5;
+  --gray-300: #d4d4d4;
+  --gray-500: #737373;
+  --gray-700: #404040;
+  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Playfair Display', serif;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--black);
+  background: var(--white);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── HEADER ─── */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(250, 250, 250, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--black);
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+nav a {
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: var(--black);
+}
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem 1.5rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 30%, #5d6d7e 60%, #85929e 100%);
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+}
+
+.hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 480px;
+  line-height: 1.7;
+}
+
+/* ─── SECTIONS COMMON ─── */
+section {
+  padding: 5rem 1.5rem;
+}
+
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 2rem;
+}
+
+/* ─── GALLERY ─── */
+.gallery {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.gallery-item .placeholder {
+  width: 100%;
+  display: block;
+}
+
+.gallery-item .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+  transition: background 0.4s ease;
+}
+
+.gallery-item:hover .overlay {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.overlay-text {
+  transform: translateY(1rem);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.gallery-item:hover .overlay-text {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.overlay-text h3 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: #fff;
+  font-weight: 400;
+  margin-bottom: 0.25rem;
+}
+
+.overlay-text span {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 300;
+}
+
+/* Placeholder photo blocks with realistic architecture colors */
+.ph {
+  width: 100%;
+  display: block;
+}
+
+.ph--landscape { aspect-ratio: 3 / 2; }
+.ph--portrait  { aspect-ratio: 2 / 3; }
+.ph--square    { aspect-ratio: 1 / 1; }
+.ph--wide      { aspect-ratio: 16 / 9; }
+.ph--pano      { aspect-ratio: 21 / 9; }
+
+.ph-1 { background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+.ph-2 { background: linear-gradient(145deg, #4a4a4a 0%, #7d7d7d 40%, #b8b8b8 100%); }
+.ph-3 { background: linear-gradient(170deg, #2d3436 0%, #636e72 60%, #b2bec3 100%); }
+.ph-4 { background: linear-gradient(135deg, #d4a574 0%, #c4956a 30%, #8b7355 70%, #5c4a3a 100%); }
+.ph-5 { background: linear-gradient(155deg, #1e272e 0%, #485460 50%, #808e9b 100%); }
+.ph-6 { background: linear-gradient(140deg, #2c2c54 0%, #474787 50%, #706fd3 100%); }
+.ph-7 { background: linear-gradient(165deg, #3d3d3d 0%, #6b6b6b 40%, #a0a0a0 80%, #c8c8c8 100%); }
+.ph-8 { background: linear-gradient(130deg, #2f3542 0%, #57606f 40%, #747d8c 70%, #a4b0be 100%); }
+.ph-9 { background: linear-gradient(150deg, #cc8e35 0%, #d4a04a 30%, #b8860b 60%, #8b6914 100%); }
+
+/* ─── ABOUT ─── */
+.about {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+
+.about-photo {
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(145deg, #3a3a3a 0%, #5a5a5a 50%, #7a7a7a 100%);
+}
+
+.about-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.about-text p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--gray-700);
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+}
+
+.about-text p:last-of-type {
+  margin-bottom: 2.5rem;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  border-top: 1px solid var(--gray-300);
+  padding-top: 2rem;
+}
+
+.stat-number {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 400;
+  display: block;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  letter-spacing: 0.04em;
+}
+
+/* ─── SERVICES ─── */
+.services {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.service-card {
+  padding: 2rem;
+  border: 1px solid var(--gray-300);
+  transition: border-color 0.3s;
+}
+
+.service-card:hover {
+  border-color: var(--black);
+}
+
+.service-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 400;
+  margin-bottom: 0.75rem;
+}
+
+.service-card p {
+  font-size: 0.9rem;
+  color: var(--gray-500);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* ─── FEATURED SERIES ─── */
+.series {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.series-scroll {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+  scrollbar-width: none;
+}
+
+.series-scroll::-webkit-scrollbar { display: none; }
+
+.series-card {
+  flex: 0 0 85%;
+  scroll-snap-align: start;
+}
+
+.series-card .ph {
+  margin-bottom: 1rem;
+}
+
+.series-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 400;
+  margin-bottom: 0.3rem;
+}
+
+.series-card span {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  font-weight: 300;
+}
+
+/* ─── CONTACT ─── */
+.contact {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact p {
+  font-size: 1rem;
+  color: var(--gray-500);
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 2rem;
+}
+
+.contact-email {
+  font-family: var(--font-heading);
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  color: var(--black);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gray-300);
+  padding-bottom: 0.2rem;
+  transition: border-color 0.2s;
+}
+
+.contact-email:hover {
+  border-color: var(--black);
+}
+
+.contact-links {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.contact-links a {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.contact-links a:hover {
+  color: var(--black);
+}
+
+/* ─── FOOTER ─── */
+footer {
+  padding: 2rem 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+footer span {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (min-width: 600px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .gallery-item--span2 {
+    grid-column: span 2;
+  }
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .series-card {
+    flex: 0 0 45%;
+  }
+}
+
+@media (min-width: 900px) {
+  section {
+    padding: 7rem 3rem;
+  }
+  .header-inner {
+    padding: 1.25rem 3rem;
+  }
+  .hero {
+    padding: 3rem 3rem 5rem;
+  }
+  .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  .gallery-item--span2 {
+    grid-column: span 2;
+  }
+  .about {
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+  }
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .series-card {
+    flex: 0 0 30%;
+  }
+  footer {
+    padding: 2rem 3rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .gallery-grid {
+    gap: 0.4rem;
+  }
+}
+
+/* ─── MOBILE NAV ─── */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--black);
+  margin: 5px 0;
+  transition: all 0.3s;
+}
+
+@media (max-width: 599px) {
+  nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100vh;
+    background: var(--white);
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.5rem;
+    transition: right 0.4s ease;
+  }
+  nav.open {
+    right: 0;
+  }
+  nav a {
+    font-size: 1rem;
+  }
+  .nav-toggle {
+    display: block;
+    z-index: 200;
+    position: relative;
+  }
+  .nav-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(4px, 5px);
+  }
+  .nav-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(4px, -5px);
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">Андрей Волков</a>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav>
+      <a href="#portfolio">Портфолио</a>
+      <a href="#about">Обо мне</a>
+      <a href="#services">Услуги</a>
+      <a href="#contact">Контакт</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <h1>Архитектура<br>в кадре</h1>
+    <p>Фиксирую геометрию города, ритм фасадов и тишину бетона. Архитектурная и городская фотография в Москве и Европе.</p>
+  </div>
+</section>
+
+<!-- PORTFOLIO GALLERY -->
+<section id="portfolio">
+  <div class="gallery">
+    <span class="section-label">Избранные работы</span>
+    <h2 class="section-title">Портфолио</h2>
+    <div class="gallery-grid">
+
+      <div class="gallery-item gallery-item--span2">
+        <div class="ph ph--wide ph-1"></div>
+        <div class="overlay">
+          <div class="overlay-text">
+            <h3>Москва-Сити на закате</h3>
+            <span>Москва, 2025</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="ph ph--portrait ph-2"></div>
+        <div class="overlay">
+          <div class="overlay-text">
+            <h3>Вертикали</h3>
+            <span>Дубай, 2024</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="ph ph--square ph-3"></div>
+        <div class="overlay">
+          <div class="overlay-text">
+            <h3>Бруталист</h3>
+            <span>Берлин, 2024</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="ph ph--landscape ph-4"></div>
+        <div class="overlay">
+          <div class="overlay-text">
+            <h3>Золотое сечение</h3>
+            <span>Барселона, 2024</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="ph ph--landscape ph-5"></div>
+        <div class="overlay">
+          <div class="overlay-text">
+            <h3>Мосты Петербурга</h3>
+            <span>Санкт-Петербург, 2025</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item gallery-item--span2">
+        <div class="ph ph--pano ph-6"></div>
+        <div class="overlay">
+          <div class="overlay-text">
+            <h3>Ночной Роттердам</h3>
+            <span>Нидерланды, 2024</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="ph ph--portrait ph-7"></div>
+        <div class="overlay">
+          <div class="overlay-text">
+            <h3>Конструктивизм</h3>
+            <span>Екатеринбург, 2023</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="ph ph--landscape ph-8"></div>
+        <div class="overlay">
+          <div class="overlay-text">
+            <h3>Утренний туман</h3>
+            <span>Москва, 2025</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="ph ph--square ph-9"></div>
+        <div class="overlay">
+          <div class="overlay-text">
+            <h3>Отражения</h3>
+            <span>Лондон, 2024</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="background: var(--gray-100);">
+  <div class="about">
+    <div class="about-photo"></div>
+    <div class="about-text">
+      <span class="section-label">Обо мне</span>
+      <h2 class="section-title">Андрей Волков</h2>
+      <p>Архитектурный фотограф из Москвы. Уже 12 лет снимаю здания, городские пространства и свет, который их преображает. Для меня каждое здание -- это скульптура, а город -- галерея под открытым небом.</p>
+      <p>Работал с архитектурными бюро, девелоперами и журналами. Мои снимки публиковались в AD Russia, SPEECH и Проект Россия. Снимаю коммерческие проекты и личные серии, которые выставляю в галереях.</p>
+      <div class="stats">
+        <div>
+          <span class="stat-number">12</span>
+          <span class="stat-label">лет опыта</span>
+        </div>
+        <div>
+          <span class="stat-number">200+</span>
+          <span class="stat-label">проектов</span>
+        </div>
+        <div>
+          <span class="stat-number">15</span>
+          <span class="stat-label">стран</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED SERIES -->
+<section>
+  <div class="series">
+    <span class="section-label">Серии</span>
+    <h2 class="section-title">Избранные проекты</h2>
+    <div class="series-scroll">
+      <div class="series-card">
+        <div class="ph ph--landscape ph-1"></div>
+        <h3>Бетон и небо</h3>
+        <span>Советский модернизм, 24 снимка</span>
+      </div>
+      <div class="series-card">
+        <div class="ph ph--landscape ph-4"></div>
+        <h3>Новая Москва</h3>
+        <span>Современная архитектура, 18 снимков</span>
+      </div>
+      <div class="series-card">
+        <div class="ph ph--landscape ph-6"></div>
+        <h3>После заката</h3>
+        <span>Ночная городская съёмка, 30 снимков</span>
+      </div>
+      <div class="series-card">
+        <div class="ph ph--landscape ph-8"></div>
+        <h3>Мосты</h3>
+        <span>Инженерная красота, 16 снимков</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" style="background: var(--gray-100);">
+  <div class="services">
+    <span class="section-label">Услуги</span>
+    <h2 class="section-title">Чем могу помочь</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <h3>Архитектурная съёмка</h3>
+        <p>Фотосъёмка зданий, интерьеров и архитектурных объектов для бюро, девелоперов и портфолио проектов.</p>
+      </div>
+      <div class="service-card">
+        <h3>Городские пейзажи</h3>
+        <p>Съёмка городской среды, стрит-фотография, серии о районах и городах для медиа и брендов.</p>
+      </div>
+      <div class="service-card">
+        <h3>Коммерческая лицензия</h3>
+        <p>Лицензирование готовых снимков из архива для редакционного и коммерческого использования.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact">
+    <span class="section-label">Связаться</span>
+    <h2 class="section-title">Давайте работать вместе</h2>
+    <p>Открыт для коммерческих проектов и коллабораций. Напишите, и я отвечу в течение дня.</p>
+    <a href="mailto:hello@volkov.photo" class="contact-email">hello@volkov.photo</a>
+    <div class="contact-links">
+      <a href="#">Telegram</a>
+      <a href="#">Instagram</a>
+      <a href="#">Behance</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>&copy; 2026 Андрей Волков</span>
+  <span>Москва, Россия</span>
+</footer>
+
+<script>
+// Mobile nav toggle
+const toggle = document.querySelector('.nav-toggle');
+const nav = document.querySelector('nav');
+toggle.addEventListener('click', () => {
+  toggle.classList.toggle('active');
+  nav.classList.toggle('open');
+});
+nav.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    toggle.classList.remove('active');
+    nav.classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
