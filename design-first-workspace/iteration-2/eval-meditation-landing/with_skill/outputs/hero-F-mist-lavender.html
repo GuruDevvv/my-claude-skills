@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant F: Mist Lavender</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --color-bg: #f4f0f8;
+      --color-bg-deep: #e8e0f0;
+      --color-text: #2d2640;
+      --color-text-soft: #7a7090;
+      --color-lavender: #8b7ab8;
+      --color-lavender-light: #b8a8d8;
+      --color-warm: #d4a07a;
+      --color-white: #fff;
+      --font-heading: 'Fraunces', Georgia, serif;
+      --font-body: 'Space Grotesk', sans-serif;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--color-text);
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3rem);
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, var(--color-bg) 0%, var(--color-bg-deep) 50%, var(--color-bg) 100%);
+    }
+
+    /* Geometric shapes */
+    .hero__geo {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.07;
+    }
+
+    .hero__geo--1 {
+      top: 10%;
+      right: 8%;
+      width: clamp(80px, 12vw, 180px);
+      height: clamp(80px, 12vw, 180px);
+      border: 2px solid var(--color-lavender);
+      border-radius: 50%;
+      animation: spin 20s linear infinite;
+    }
+
+    .hero__geo--2 {
+      bottom: 15%;
+      left: 6%;
+      width: clamp(60px, 8vw, 120px);
+      height: clamp(60px, 8vw, 120px);
+      border: 2px solid var(--color-lavender);
+      transform: rotate(45deg);
+      animation: spin 30s linear infinite reverse;
+    }
+
+    .hero__geo--3 {
+      top: 40%;
+      left: 15%;
+      width: clamp(40px, 5vw, 80px);
+      height: clamp(40px, 5vw, 80px);
+      background: var(--color-lavender-light);
+      border-radius: 50%;
+      opacity: 0.05;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 880px;
+      width: 100%;
+    }
+
+    .hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 400;
+      font-size: 0.8rem;
+      color: var(--color-lavender);
+      background: rgba(139,122,184,0.08);
+      border: 1px solid rgba(139,122,184,0.15);
+      padding: 0.5rem 1.2rem;
+      border-radius: 50px;
+      margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+      opacity: 0;
+      animation: slideUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero__badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-lavender);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .hero__title {
+      font-family: var(--font-heading);
+      font-weight: 400;
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      line-height: 1.15;
+      color: var(--color-text);
+      margin-bottom: clamp(1rem, 2vw, 1.5rem);
+      opacity: 0;
+      animation: slideUp 0.8s ease 0.4s forwards;
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--color-text-soft);
+      width: min(85%, 600px);
+      margin: 0 auto clamp(2rem, 4vw, 3rem);
+      line-height: 1.65;
+      opacity: 0;
+      animation: slideUp 0.8s ease 0.6s forwards;
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(0.75rem, 1.5vw, 1.25rem);
+      opacity: 0;
+      animation: slideUp 0.8s ease 0.8s forwards;
+    }
+
+    .hero__cta {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: clamp(0.9rem, 1.3vw, 1rem);
+      color: var(--color-white);
+      background: var(--color-lavender);
+      border: none;
+      padding: clamp(0.9rem, 1.8vw, 1.15rem) clamp(2.5rem, 4vw, 3.5rem);
+      border-radius: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .hero__cta:hover {
+      background: #7a68a8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(139,122,184,0.3);
+    }
+
+    .hero__cta-alt {
+      font-size: 0.85rem;
+      color: var(--color-lavender);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(139,122,184,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s;
+    }
+
+    .hero__cta-alt:hover {
+      border-color: var(--color-lavender);
+    }
+
+    /* Bottom info strip */
+    .hero__strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(1rem, 3vw, 3rem);
+      margin-top: clamp(2.5rem, 5vw, 4rem);
+      padding-top: clamp(1.5rem, 3vw, 2.5rem);
+      border-top: 1px solid rgba(139,122,184,0.12);
+      opacity: 0;
+      animation: slideUp 0.8s ease 1s forwards;
+    }
+
+    .hero__strip-item {
+      text-align: center;
+    }
+
+    .hero__strip-value {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      color: var(--color-text);
+      display: block;
+    }
+
+    .hero__strip-label {
+      font-size: 0.7rem;
+      color: var(--color-text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.2rem;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+
+    @media (min-width: 768px) {
+      .hero__title { font-size: 3.2rem; }
+      .hero__subtitle { width: min(65%, 600px); font-size: 1.1rem; }
+      .hero__strip { gap: clamp(2rem, 4vw, 4rem); }
+      .hero__actions { flex-direction: row; gap: 1.5rem; }
+    }
+
+    @media (min-width: 1024px) {
+      .hero__title { font-size: 4rem; }
+      .hero__subtitle { font-size: 1.2rem; }
+    }
+
+    @media (min-width: 1440px) {
+      .hero__title { font-size: 4.5rem; }
+      .hero__content { max-width: 950px; }
+      .hero__subtitle { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero__geo hero__geo--1"></div>
+    <div class="hero__geo hero__geo--2"></div>
+    <div class="hero__geo hero__geo--3"></div>
+    <div class="hero__content">
+      <div class="hero__badge">
+        <span class="hero__badge-dot"></span>
+        Набор открыт
+      </div>
+      <h1 class="hero__title">Тишина внутри</h1>
+      <p class="hero__subtitle">8 недель осознанной практики для тех, кому нужна пауза. Без эзотерики — только работающие техники и бережная поддержка.</p>
+      <div class="hero__actions">
+        <a href="#" class="hero__cta">Начать путь — 3 900 &#8381;</a>
+        <a href="#" class="hero__cta-alt">Подробнее о курсе</a>
+      </div>
+      <div class="hero__strip">
+        <div class="hero__strip-item">
+          <span class="hero__strip-value">8</span>
+          <span class="hero__strip-label">Недель</span>
+        </div>
+        <div class="hero__strip-item">
+          <span class="hero__strip-value">24</span>
+          <span class="hero__strip-label">Урока</span>
+        </div>
+        <div class="hero__strip-item">
+          <span class="hero__strip-value">32</span>
+          <span class="hero__strip-label">Медитации</span>
+        </div>
+        <div class="hero__strip-item">
+          <span class="hero__strip-value">3 900 &#8381;</span>
+          <span class="hero__strip-label">Стоимость</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

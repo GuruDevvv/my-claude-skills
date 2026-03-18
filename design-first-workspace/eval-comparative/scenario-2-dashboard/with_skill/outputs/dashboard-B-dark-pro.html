@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetricFlow — Тёмный режим</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0B0F1A;
+    --surface: #131825;
+    --surface-2: #1A2035;
+    --border: #1E2A45;
+    --text: #E2E8F0;
+    --text-dim: #64748B;
+    --cyan: #22D3EE;
+    --green: #34D399;
+    --pink: #F472B6;
+    --orange: #FB923C;
+    --purple: #A78BFA;
+    --red: #F87171;
+    --sidebar-w: 220px;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 12px;
+    z-index: 100;
+  }
+  .sidebar .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 28px;
+    padding: 0 8px;
+  }
+  .sidebar .logo span { color: var(--text-dim); }
+  .sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 6px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .sidebar nav a:hover { background: var(--surface-2); color: var(--text); }
+  .sidebar nav a.active { background: rgba(34,211,238,0.1); color: var(--cyan); }
+  .sidebar nav a svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+  .sidebar .status-block {
+    position: absolute;
+    bottom: 20px;
+    left: 12px;
+    right: 12px;
+    padding: 12px;
+    background: var(--surface-2);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .sidebar .status-block .dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .sidebar .status-block span {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* TOP NAV — mobile */
+  .topnav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .topnav .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--cyan);
+  }
+  .topnav-links { display: flex; gap: 14px; }
+  .topnav-links a {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .topnav-links a.active { color: var(--cyan); }
+
+  /* MAIN */
+  .main { padding: 16px; }
+
+  .page-header {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .page-header h1 {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .page-header .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 4px 8px;
+    background: rgba(34,211,238,0.1);
+    color: var(--cyan);
+    border-radius: 4px;
+    border: 1px solid rgba(34,211,238,0.2);
+  }
+
+  /* METRICS */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .metric-card:nth-child(1)::before { background: var(--cyan); }
+  .metric-card:nth-child(2)::before { background: var(--pink); }
+  .metric-card:nth-child(3)::before { background: var(--green); }
+  .metric-card:nth-child(4)::before { background: var(--orange); }
+
+  .metric-card .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .metric-card .value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .metric-card:nth-child(1) .value { color: var(--cyan); }
+  .metric-card:nth-child(2) .value { color: var(--pink); }
+  .metric-card:nth-child(3) .value { color: var(--green); }
+  .metric-card:nth-child(4) .value { color: var(--orange); }
+
+  .metric-card .change {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    margin-top: 6px;
+  }
+  .metric-card .change.up { color: var(--green); }
+  .metric-card .change.down { color: var(--red); }
+
+  /* SPARKLINE */
+  .sparkline {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 28px;
+    margin-top: 8px;
+  }
+  .sparkline .bar {
+    flex: 1;
+    border-radius: 1px;
+    opacity: 0.5;
+  }
+  .sparkline .bar:last-child { opacity: 1; }
+
+  .metric-card:nth-child(1) .sparkline .bar { background: var(--cyan); }
+  .metric-card:nth-child(2) .sparkline .bar { background: var(--pink); }
+  .metric-card:nth-child(3) .sparkline .bar { background: var(--green); }
+  .metric-card:nth-child(4) .sparkline .bar { background: var(--orange); }
+
+  /* PANELS */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .panel h2 {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel h2 .indicator {
+    width: 8px; height: 8px;
+    border-radius: 2px;
+  }
+
+  /* SVG chart */
+  .svg-chart { width: 100%; height: auto; }
+
+  /* DATA GRID */
+  .data-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    background: var(--surface-2);
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .data-row .name { color: var(--text-dim); }
+  .data-row .val {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+  }
+  .data-row .bar-bg {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 12px;
+    position: relative;
+  }
+  .data-row .bar-fill {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--purple);
+  }
+
+  /* TABLET */
+  @media (min-width: 768px) {
+    .topnav { display: none; }
+    .sidebar { display: block; }
+    .main { margin-left: var(--sidebar-w); padding: 24px; }
+    .metrics-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .panels-row { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+    .page-header h1 { font-size: 24px; }
+  }
+
+  @media (min-width: 1440px) {
+    .main { padding: 32px 40px; }
+    .metric-card .value { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="logo">metric<span>flow</span> _</div>
+  <nav>
+    <a href="#" class="active">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Дашборд
+    </a>
+    <a href="#">
+      <svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+      Метрики
+    </a>
+    <a href="#">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Когорты
+    </a>
+    <a href="#">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Отчёты
+    </a>
+    <a href="#">
+      <svg viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+      Воронки
+    </a>
+  </nav>
+  <div class="status-block">
+    <div class="dot"></div>
+    <span>Синхронизация OK</span>
+  </div>
+</aside>
+
+<header class="topnav">
+  <div class="logo">metricflow_</div>
+  <div class="topnav-links">
+    <a href="#" class="active">Дашборд</a>
+    <a href="#">Метрики</a>
+    <a href="#">Когорты</a>
+  </div>
+</header>
+
+<main class="main">
+  <div class="page-header">
+    <h1>Панель управления</h1>
+    <div class="badge">LIVE DATA</div>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="label">MRR</div>
+      <div class="value">$48.2K</div>
+      <div class="change up">+12.3%</div>
+      <div class="sparkline">
+        <div class="bar" style="height:40%"></div>
+        <div class="bar" style="height:50%"></div>
+        <div class="bar" style="height:45%"></div>
+        <div class="bar" style="height:55%"></div>
+        <div class="bar" style="height:60%"></div>
+        <div class="bar" style="height:65%"></div>
+        <div class="bar" style="height:58%"></div>
+        <div class="bar" style="height:72%"></div>
+        <div class="bar" style="height:80%"></div>
+        <div class="bar" style="height:90%"></div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Отток</div>
+      <div class="value">3.2%</div>
+      <div class="change down">+0.4%</div>
+      <div class="sparkline">
+        <div class="bar" style="height:60%"></div>
+        <div class="bar" style="height:55%"></div>
+        <div class="bar" style="height:50%"></div>
+        <div class="bar" style="height:52%"></div>
+        <div class="bar" style="height:48%"></div>
+        <div class="bar" style="height:55%"></div>
+        <div class="bar" style="height:50%"></div>
+        <div class="bar" style="height:58%"></div>
+        <div class="bar" style="height:55%"></div>
+        <div class="bar" style="height:62%"></div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="label">LTV</div>
+      <div class="value">$1,240</div>
+      <div class="change up">+8.1%</div>
+      <div class="sparkline">
+        <div class="bar" style="height:35%"></div>
+        <div class="bar" style="height:42%"></div>
+        <div class="bar" style="height:48%"></div>
+        <div class="bar" style="height:50%"></div>
+        <div class="bar" style="height:55%"></div>
+        <div class="bar" style="height:60%"></div>
+        <div class="bar" style="height:65%"></div>
+        <div class="bar" style="height:68%"></div>
+        <div class="bar" style="height:75%"></div>
+        <div class="bar" style="height:85%"></div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Активные</div>
+      <div class="value">2,847</div>
+      <div class="change up">+5.6%</div>
+      <div class="sparkline">
+        <div class="bar" style="height:45%"></div>
+        <div class="bar" style="height:48%"></div>
+        <div class="bar" style="height:52%"></div>
+        <div class="bar" style="height:50%"></div>
+        <div class="bar" style="height:58%"></div>
+        <div class="bar" style="height:62%"></div>
+        <div class="bar" style="height:65%"></div>
+        <div class="bar" style="height:70%"></div>
+        <div class="bar" style="height:72%"></div>
+        <div class="bar" style="height:82%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panels-row">
+    <div class="panel">
+      <h2><span class="indicator" style="background:var(--cyan)"></span> Динамика выручки</h2>
+      <svg class="svg-chart" viewBox="0 0 500 180" preserveAspectRatio="xMidYMid meet">
+        <!-- grid -->
+        <line x1="40" y1="20" x2="480" y2="20" stroke="#1E2A45" stroke-width="0.5"/>
+        <line x1="40" y1="55" x2="480" y2="55" stroke="#1E2A45" stroke-width="0.5"/>
+        <line x1="40" y1="90" x2="480" y2="90" stroke="#1E2A45" stroke-width="0.5"/>
+        <line x1="40" y1="125" x2="480" y2="125" stroke="#1E2A45" stroke-width="0.5"/>
+        <!-- area -->
+        <defs>
+          <linearGradient id="darkArea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M60,125 L120,110 L180,100 L240,90 L300,70 L360,55 L420,35 L460,28 L460,150 L60,150 Z" fill="url(#darkArea)"/>
+        <polyline points="60,125 120,110 180,100 240,90 300,70 360,55 420,35 460,28" fill="none" stroke="#22D3EE" stroke-width="2" stroke-linecap="round"/>
+        <!-- second line -->
+        <polyline points="60,130 120,125 180,118 240,112 300,108 360,102 420,95 460,90" fill="none" stroke="#A78BFA" stroke-width="1.5" stroke-dasharray="4,3" stroke-linecap="round"/>
+        <!-- legend -->
+        <rect x="60" y="162" width="10" height="3" rx="1" fill="#22D3EE"/>
+        <text x="75" y="166" font-size="9" fill="#64748B" font-family="JetBrains Mono">MRR</text>
+        <rect x="110" y="162" width="10" height="3" rx="1" fill="#A78BFA"/>
+        <text x="125" y="166" font-size="9" fill="#64748B" font-family="JetBrains Mono">ARR/12</text>
+      </svg>
+    </div>
+
+    <div class="panel">
+      <h2><span class="indicator" style="background:var(--purple)"></span> Тарифы</h2>
+      <div class="data-grid">
+        <div class="data-row">
+          <span class="name">Free</span>
+          <div class="bar-bg"><div class="bar-fill" style="width:65%"></div></div>
+          <span class="val" style="color:var(--purple)">1,204</span>
+        </div>
+        <div class="data-row">
+          <span class="name">Старт</span>
+          <div class="bar-bg"><div class="bar-fill" style="width:45%"></div></div>
+          <span class="val" style="color:var(--purple)">847</span>
+        </div>
+        <div class="data-row">
+          <span class="name">Про</span>
+          <div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div>
+          <span class="val" style="color:var(--purple)">421</span>
+        </div>
+        <div class="data-row">
+          <span class="name">Бизнес</span>
+          <div class="bar-bg"><div class="bar-fill" style="width:22%"></div></div>
+          <span class="val" style="color:var(--purple)">298</span>
+        </div>
+        <div class="data-row">
+          <span class="name">Энтерпрайз</span>
+          <div class="bar-bg"><div class="bar-fill" style="width:8%"></div></div>
+          <span class="val" style="color:var(--purple)">77</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity feed -->
+  <div class="panel">
+    <h2><span class="indicator" style="background:var(--green)"></span> Лента событий</h2>
+    <div class="data-grid">
+      <div class="data-row">
+        <span class="name" style="color:var(--green)">+подписка</span>
+        <span style="color:var(--text)">Алексей К.</span>
+        <span class="val">Про — $49/мес</span>
+      </div>
+      <div class="data-row">
+        <span class="name" style="color:var(--cyan)">обновление</span>
+        <span style="color:var(--text)">Мария С.</span>
+        <span class="val">Бизнес — $149/мес</span>
+      </div>
+      <div class="data-row">
+        <span class="name" style="color:var(--red)">отмена</span>
+        <span style="color:var(--text)">Дмитрий В.</span>
+        <span class="val">Старт — $19/мес</span>
+      </div>
+      <div class="data-row">
+        <span class="name" style="color:var(--green)">+подписка</span>
+        <span style="color:var(--text)">Елена П.</span>
+        <span class="val">Про — $49/мес</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

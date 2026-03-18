@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetricFlow — Бруталистские данные</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Fira+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --black: #000;
+    --white: #FFF;
+    --yellow: #FFE600;
+    --red: #FF0000;
+    --gray: #888;
+    --light: #F0F0F0;
+  }
+  body {
+    font-family: 'Fira Sans', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    min-height: 100vh;
+  }
+
+  /* DIFFERENT LAYOUT: Full-width header + grid content, NO sidebar even on desktop */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 4px solid var(--black);
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    z-index: 50;
+  }
+  .top-bar .logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .top-bar .logo span {
+    background: var(--black);
+    color: var(--yellow);
+    padding: 2px 6px;
+  }
+  .top-bar nav {
+    display: flex;
+    gap: 4px;
+  }
+  .top-bar nav a {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: var(--black);
+    padding: 6px 10px;
+    border: 2px solid transparent;
+    font-weight: 500;
+  }
+  .top-bar nav a:hover { border-color: var(--black); }
+  .top-bar nav a.active {
+    background: var(--black);
+    color: var(--white);
+  }
+
+  /* SUBHEADER */
+  .subheader {
+    padding: 16px;
+    border-bottom: 2px solid var(--light);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .subheader h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .subheader .date {
+    font-size: 13px;
+    color: var(--gray);
+    font-weight: 500;
+  }
+
+  /* MAIN GRID — no sidebar, full width grid */
+  .main { padding: 0; }
+
+  /* METRIC STRIP — full width, divided equally */
+  .metric-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 2px solid var(--black);
+  }
+  .metric-cell {
+    padding: 20px 16px;
+    border-right: 2px solid var(--black);
+    position: relative;
+  }
+  .metric-cell:last-child { border-right: none; }
+  .metric-cell .label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gray);
+    margin-bottom: 6px;
+  }
+  .metric-cell .value {
+    font-family: 'Oswald', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+  .metric-cell .change {
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 6px;
+  }
+  .metric-cell .change.up { color: #000; }
+  .metric-cell .change.up::before { content: '\25B2 '; font-size: 10px; }
+  .metric-cell .change.down { color: var(--red); }
+  .metric-cell .change.down::before { content: '\25BC '; font-size: 10px; }
+
+  /* BAR INDICATOR */
+  .bar-indicator {
+    margin-top: 10px;
+    height: 6px;
+    background: var(--light);
+    position: relative;
+  }
+  .bar-indicator .fill {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    background: var(--black);
+  }
+  .bar-indicator.warn .fill { background: var(--red); }
+
+  /* CHART GRID */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .chart-block {
+    padding: 20px 16px;
+    border-bottom: 2px solid var(--black);
+  }
+  .chart-block h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chart-block h2 .tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    background: var(--yellow);
+    color: var(--black);
+    font-weight: 700;
+  }
+
+  .svg-chart { width: 100%; height: auto; }
+
+  /* HORIZONTAL BAR CHART */
+  .h-bars { display: flex; flex-direction: column; gap: 10px; }
+  .h-bar-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 60px;
+    align-items: center;
+    gap: 10px;
+  }
+  .h-bar-row .name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .h-bar-row .bar-bg {
+    height: 20px;
+    background: var(--light);
+    position: relative;
+  }
+  .h-bar-row .bar-fill {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    background: var(--black);
+  }
+  .h-bar-row .num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: right;
+  }
+
+  /* DATA LIST */
+  .data-list { list-style: none; }
+  .data-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--light);
+    font-size: 13px;
+  }
+  .data-list li:last-child { border-bottom: none; }
+  .data-list .event-type {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 6px;
+    background: var(--black);
+    color: var(--white);
+  }
+  .data-list .event-type.cancel {
+    background: var(--red);
+  }
+
+  /* TABLET */
+  @media (min-width: 768px) {
+    .metric-strip { grid-template-columns: repeat(4, 1fr); }
+    .metric-cell .value { font-size: 48px; }
+    .content-grid { grid-template-columns: 1fr 1fr; }
+    .chart-block { border-right: 2px solid var(--black); }
+    .chart-block:nth-child(even) { border-right: none; }
+    .subheader h1 { font-size: 36px; }
+    .subheader, .chart-block { padding: 24px; }
+    .metric-cell { padding: 28px 24px; }
+  }
+
+  /* DESKTOP */
+  @media (min-width: 1440px) {
+    .metric-cell .value { font-size: 56px; }
+    .metric-cell { padding: 36px 32px; }
+    .subheader, .chart-block { padding: 32px; }
+    .subheader h1 { font-size: 42px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="logo">METRIC<span>FLOW</span></div>
+  <nav>
+    <a href="#" class="active">Обзор</a>
+    <a href="#">Метрики</a>
+    <a href="#">Когорты</a>
+    <a href="#">Отчёты</a>
+  </nav>
+</header>
+
+<div class="subheader">
+  <h1>Панель метрик</h1>
+  <span class="date">18 марта 2026 / Обновлено 5 мин назад</span>
+</div>
+
+<main class="main">
+  <div class="metric-strip">
+    <div class="metric-cell">
+      <div class="label">Выручка / мес.</div>
+      <div class="value">$48.2K</div>
+      <div class="change up">12.3%</div>
+      <div class="bar-indicator"><div class="fill" style="width:78%"></div></div>
+    </div>
+    <div class="metric-cell">
+      <div class="label">Отток</div>
+      <div class="value">3.2%</div>
+      <div class="change down">0.4%</div>
+      <div class="bar-indicator warn"><div class="fill" style="width:32%"></div></div>
+    </div>
+    <div class="metric-cell">
+      <div class="label">LTV клиента</div>
+      <div class="value">$1,240</div>
+      <div class="change up">8.1%</div>
+      <div class="bar-indicator"><div class="fill" style="width:65%"></div></div>
+    </div>
+    <div class="metric-cell">
+      <div class="label">Активные</div>
+      <div class="value">2,847</div>
+      <div class="change up">5.6%</div>
+      <div class="bar-indicator"><div class="fill" style="width:72%"></div></div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <div class="chart-block">
+      <h2>Рост MRR <span class="tag">7 МЕС</span></h2>
+      <svg class="svg-chart" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid meet">
+        <!-- stepped line chart — brutalist style -->
+        <line x1="20" y1="140" x2="380" y2="140" stroke="#000" stroke-width="2"/>
+        <line x1="20" y1="140" x2="20" y2="10" stroke="#000" stroke-width="2"/>
+        <!-- bars -->
+        <rect x="35" y="100" width="35" height="40" fill="#000"/>
+        <rect x="85" y="85" width="35" height="55" fill="#000"/>
+        <rect x="135" y="75" width="35" height="65" fill="#000"/>
+        <rect x="185" y="60" width="35" height="80" fill="#000"/>
+        <rect x="235" y="45" width="35" height="95" fill="#000"/>
+        <rect x="285" y="30" width="35" height="110" fill="#000"/>
+        <rect x="335" y="15" width="35" height="125" fill="#FFE600"/>
+        <!-- labels -->
+        <text x="52" y="155" text-anchor="middle" font-size="10" font-family="Oswald" fill="#888">СЕН</text>
+        <text x="102" y="155" text-anchor="middle" font-size="10" font-family="Oswald" fill="#888">ОКТ</text>
+        <text x="152" y="155" text-anchor="middle" font-size="10" font-family="Oswald" fill="#888">НОЯ</text>
+        <text x="202" y="155" text-anchor="middle" font-size="10" font-family="Oswald" fill="#888">ДЕК</text>
+        <text x="252" y="155" text-anchor="middle" font-size="10" font-family="Oswald" fill="#888">ЯНВ</text>
+        <text x="302" y="155" text-anchor="middle" font-size="10" font-family="Oswald" fill="#888">ФЕВ</text>
+        <text x="352" y="155" text-anchor="middle" font-size="10" font-family="Oswald" fill="#000" font-weight="700">МАР</text>
+      </svg>
+    </div>
+
+    <div class="chart-block">
+      <h2>По тарифам</h2>
+      <div class="h-bars">
+        <div class="h-bar-row">
+          <span class="name">Free</span>
+          <div class="bar-bg"><div class="bar-fill" style="width:65%"></div></div>
+          <span class="num">1,204</span>
+        </div>
+        <div class="h-bar-row">
+          <span class="name">Старт</span>
+          <div class="bar-bg"><div class="bar-fill" style="width:45%"></div></div>
+          <span class="num">847</span>
+        </div>
+        <div class="h-bar-row">
+          <span class="name">Про</span>
+          <div class="bar-bg"><div class="bar-fill" style="width:28%"></div></div>
+          <span class="num">421</span>
+        </div>
+        <div class="h-bar-row">
+          <span class="name">Бизнес</span>
+          <div class="bar-bg"><div class="bar-fill" style="width:20%"></div></div>
+          <span class="num">298</span>
+        </div>
+        <div class="h-bar-row">
+          <span class="name">Энтерпр.</span>
+          <div class="bar-bg"><div class="bar-fill" style="width:6%"></div></div>
+          <span class="num">77</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-block">
+      <h2>Отток по месяцам <span class="tag">ТРЕНД</span></h2>
+      <svg class="svg-chart" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid meet">
+        <line x1="20" y1="100" x2="380" y2="100" stroke="#000" stroke-width="1"/>
+        <!-- threshold line -->
+        <line x1="20" y1="40" x2="380" y2="40" stroke="#FF0000" stroke-width="1" stroke-dasharray="6,4"/>
+        <text x="382" y="43" font-size="9" font-family="Oswald" fill="#FF0000">5% МАКС</text>
+        <!-- line -->
+        <polyline points="40,55 90,60 140,65 190,58 240,70 290,68 340,62" fill="none" stroke="#000" stroke-width="3"/>
+        <circle cx="340" cy="62" r="5" fill="#FFE600" stroke="#000" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <div class="chart-block">
+      <h2>Последние события</h2>
+      <ul class="data-list">
+        <li>
+          <span class="event-type">Подписка</span>
+          <span>Алексей К. / Про</span>
+          <span>18 мар</span>
+        </li>
+        <li>
+          <span class="event-type">Апгрейд</span>
+          <span>Мария С. / Бизнес</span>
+          <span>17 мар</span>
+        </li>
+        <li>
+          <span class="event-type cancel">Отмена</span>
+          <span>Дмитрий В. / Старт</span>
+          <span>17 мар</span>
+        </li>
+        <li>
+          <span class="event-type">Подписка</span>
+          <span>Елена П. / Про</span>
+          <span>16 мар</span>
+        </li>
+        <li>
+          <span class="event-type">Апгрейд</span>
+          <span>Игорь Л. / Энтерпрайз</span>
+          <span>16 мар</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

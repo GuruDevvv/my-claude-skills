@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant A: Soft Dawn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #fef6ee;
+      --color-bg-warm: #fdebd6;
+      --color-text: #3d2c1e;
+      --color-text-soft: #7a6555;
+      --color-accent: #d4856a;
+      --color-accent-hover: #c07058;
+      --color-highlight: #f0c8a0;
+      --font-heading: 'Cormorant Garamond', serif;
+      --font-body: 'Nunito', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 48px 20px;
+      position: relative;
+      background: linear-gradient(170deg, var(--color-bg) 0%, var(--color-bg-warm) 50%, var(--color-highlight) 100%);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(240, 200, 160, 0.5) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero__tag {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--color-text-soft);
+      margin-bottom: 24px;
+    }
+
+    .hero__title {
+      font-family: var(--font-heading);
+      font-weight: 400;
+      font-size: 42px;
+      line-height: 1.15;
+      color: var(--color-text);
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-heading);
+      font-weight: 400;
+      font-style: italic;
+      font-size: 18px;
+      color: var(--color-text-soft);
+      margin-bottom: 40px;
+      max-width: 320px;
+    }
+
+    .hero__divider {
+      width: 48px;
+      height: 1px;
+      background: var(--color-accent);
+      margin-bottom: 40px;
+    }
+
+    .hero__features {
+      list-style: none;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .hero__features li {
+      font-size: 14px;
+      color: var(--color-text-soft);
+      font-weight: 300;
+    }
+
+    .hero__cta {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: 1px;
+      color: #fff;
+      background: var(--color-accent);
+      border: none;
+      padding: 16px 40px;
+      border-radius: 40px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .hero__cta:hover {
+      background: var(--color-accent-hover);
+    }
+
+    .hero__price-note {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--color-text-soft);
+      font-weight: 300;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        padding: 64px 40px;
+      }
+
+      .hero::before {
+        width: 400px;
+        height: 400px;
+      }
+
+      .hero__tag {
+        font-size: 13px;
+        letter-spacing: 4px;
+        margin-bottom: 32px;
+      }
+
+      .hero__title {
+        font-size: 64px;
+      }
+
+      .hero__subtitle {
+        font-size: 22px;
+        max-width: 500px;
+        margin-bottom: 48px;
+      }
+
+      .hero__features {
+        flex-direction: row;
+        gap: 32px;
+      }
+
+      .hero__features li {
+        font-size: 15px;
+      }
+
+      .hero__cta {
+        font-size: 16px;
+        padding: 18px 48px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .hero__title {
+        font-size: 80px;
+      }
+
+      .hero__subtitle {
+        font-size: 26px;
+        max-width: 600px;
+      }
+
+      .hero::before {
+        width: 500px;
+        height: 500px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <p class="hero__tag">Онлайн-курс медитации</p>
+    <h1 class="hero__title">Тишина внутри</h1>
+    <p class="hero__subtitle">8 недель осознанной практики</p>
+    <div class="hero__divider"></div>
+    <ul class="hero__features">
+      <li>8 недель</li>
+      <li>Видеоуроки + медитации</li>
+      <li>Поддержка группы</li>
+    </ul>
+    <a href="#" class="hero__cta">Начать путь — 3 900 ₽</a>
+    <p class="hero__price-note">Старт ближайшего потока — 1 апреля</p>
+  </section>
+</body>
+</html>

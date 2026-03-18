@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant E: Golden Hour</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #1a1410;
+      --color-surface: #241e17;
+      --color-text: #f0e6d8;
+      --color-text-dim: #a89880;
+      --color-gold: #d4a65a;
+      --color-gold-hover: #e0b86a;
+      --color-warm: #c47a4a;
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Source Sans 3', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 32px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Warm gradient orb */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -30%;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212, 166, 90, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hero__brand {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--color-gold);
+      letter-spacing: 1px;
+    }
+
+    .hero__lang {
+      font-size: 12px;
+      color: var(--color-text-dim);
+      text-decoration: none;
+    }
+
+    .hero__center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 0;
+    }
+
+    .hero__kicker {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 16px;
+      color: var(--color-gold);
+      margin-bottom: 16px;
+    }
+
+    .hero__title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 44px;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .hero__title span {
+      display: block;
+      color: var(--color-gold);
+    }
+
+    .hero__desc {
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--color-text-dim);
+      max-width: 340px;
+      margin-bottom: 36px;
+    }
+
+    .hero__cta {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--color-bg);
+      background: var(--color-gold);
+      border: none;
+      padding: 16px 36px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .hero__cta:hover {
+      background: var(--color-gold-hover);
+    }
+
+    .hero__bottom {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(212, 166, 90, 0.15);
+    }
+
+    .hero__detail {
+      font-size: 12px;
+      color: var(--color-text-dim);
+    }
+
+    .hero__detail strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    .hero__divider-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--color-text-dim);
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        padding: 40px 64px;
+      }
+
+      .hero::before {
+        width: 600px;
+        height: 600px;
+        top: -10%;
+        right: -10%;
+      }
+
+      .hero__brand {
+        font-size: 18px;
+      }
+
+      .hero__kicker {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+
+      .hero__title {
+        font-size: 68px;
+      }
+
+      .hero__desc {
+        font-size: 17px;
+        max-width: 500px;
+        margin-bottom: 44px;
+      }
+
+      .hero__cta {
+        font-size: 15px;
+        padding: 18px 44px;
+      }
+
+      .hero__detail {
+        font-size: 13px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .hero {
+        padding: 48px 120px;
+      }
+
+      .hero__title {
+        font-size: 88px;
+      }
+
+      .hero__desc {
+        font-size: 19px;
+        max-width: 580px;
+      }
+
+      .hero::before {
+        width: 800px;
+        height: 800px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero__top">
+      <span class="hero__brand">Тишина</span>
+      <a href="#" class="hero__lang">RU / EN</a>
+    </div>
+    <div class="hero__center">
+      <p class="hero__kicker">Онлайн-курс медитации</p>
+      <h1 class="hero__title">Тишина<br><span>внутри</span></h1>
+      <p class="hero__desc">Восемь недель, которые изменят ваши отношения с собой. Практики осознанности, дыхания и тишины — в вашем темпе, из любой точки мира.</p>
+      <a href="#" class="hero__cta">Начать путь — 3 900 ₽</a>
+    </div>
+    <div class="hero__bottom">
+      <span class="hero__detail"><strong>8</strong> недель</span>
+      <span class="hero__divider-dot"></span>
+      <span class="hero__detail"><strong>Видео</strong> + аудио</span>
+      <span class="hero__divider-dot"></span>
+      <span class="hero__detail"><strong>Запись</strong> навсегда</span>
+    </div>
+  </section>
+</body>
+</html>

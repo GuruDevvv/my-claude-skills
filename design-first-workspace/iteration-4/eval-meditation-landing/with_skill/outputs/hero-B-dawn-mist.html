@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant B: Dawn Mist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-top: #f7f0ea;
+      --bg-bottom: #ede4db;
+      --text: #3d2e22;
+      --text-soft: #7a6b5d;
+      --accent-rose: #c4716c;
+      --accent-blush: #e8a5a0;
+      --accent-terracotta: #b5704f;
+      --card-bg: rgba(255, 255, 255, 0.55);
+      --border: rgba(196, 113, 108, 0.2);
+    }
+
+    body {
+      font-family: 'Raleway', sans-serif;
+      background: linear-gradient(175deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      position: relative;
+    }
+
+    /* Soft blurred orbs — like morning light */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+
+    .orb--rose {
+      width: 300px;
+      height: 300px;
+      background: rgba(196, 113, 108, 0.15);
+      top: 10%;
+      right: -80px;
+      animation: float-orb 8s ease-in-out infinite;
+    }
+
+    .orb--peach {
+      width: 250px;
+      height: 250px;
+      background: rgba(232, 165, 160, 0.12);
+      bottom: 15%;
+      left: -60px;
+      animation: float-orb 10s ease-in-out infinite reverse;
+    }
+
+    .orb--gold {
+      width: 200px;
+      height: 200px;
+      background: rgba(181, 112, 79, 0.08);
+      top: 40%;
+      left: 60%;
+      animation: float-orb 12s ease-in-out infinite;
+    }
+
+    @keyframes float-orb {
+      0%, 100% { transform: translate(0, 0); }
+      33% { transform: translate(15px, -20px); }
+      66% { transform: translate(-10px, 15px); }
+    }
+
+    /* Glass card */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 24px;
+      padding: 48px 32px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 8px 32px rgba(61, 46, 34, 0.06);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-rose);
+      background: rgba(196, 113, 108, 0.1);
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-family: 'Lora', serif;
+      font-weight: 400;
+      font-size: 38px;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .title-accent {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 44px;
+      color: var(--accent-rose);
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--text-soft);
+      margin-bottom: 36px;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent-rose), var(--accent-terracotta));
+      padding: 16px 36px;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 20px rgba(196, 113, 108, 0.3);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(196, 113, 108, 0.4);
+    }
+
+    .cta-button svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    .details {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .detail {
+      font-size: 12px;
+      color: var(--text-soft);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .detail svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: var(--accent-rose);
+      stroke-width: 2;
+    }
+
+    /* Decorative line */
+    .divider-line {
+      width: 40px;
+      height: 1px;
+      background: var(--accent-blush);
+      margin: 0 auto 28px;
+    }
+
+    @media (min-width: 768px) {
+      .card {
+        max-width: 520px;
+        padding: 64px 56px;
+        border-radius: 32px;
+      }
+      h1 { font-size: 48px; }
+      .title-accent { font-size: 56px; }
+      .subtitle { font-size: 16px; max-width: 380px; }
+      .orb--rose { width: 400px; height: 400px; }
+      .orb--peach { width: 350px; height: 350px; }
+    }
+
+    @media (min-width: 1440px) {
+      .card {
+        max-width: 600px;
+        padding: 72px 64px;
+      }
+      h1 { font-size: 56px; }
+      .title-accent { font-size: 64px; }
+      .subtitle { font-size: 17px; max-width: 440px; }
+      .cta-button { font-size: 15px; padding: 18px 44px; }
+      .orb--rose { width: 500px; height: 500px; filter: blur(100px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .orb { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb--rose"></div>
+  <div class="orb orb--peach"></div>
+  <div class="orb orb--gold"></div>
+
+  <section class="hero">
+    <div class="card">
+      <span class="badge">Онлайн-курс</span>
+      <h1>Тишина</h1>
+      <span class="title-accent">внутри</span>
+      <div class="divider-line"></div>
+      <p class="subtitle">8 недель осознанной практики. Мягкое погружение в медитацию для тех, кто устал от шума.</p>
+      <a href="#" class="cta-button">
+        Начать путь — 3 900 ₽
+        <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+      </a>
+      <div class="details">
+        <span class="detail">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          8 недель
+        </span>
+        <span class="detail">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          В своём темпе
+        </span>
+        <span class="detail">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Навсегда
+        </span>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

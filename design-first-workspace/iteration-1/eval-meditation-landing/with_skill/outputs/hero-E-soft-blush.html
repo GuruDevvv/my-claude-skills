@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тишина внутри — Variant E: Soft Blush</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #fdf6f0;
+      --color-blush: #e8c4b8;
+      --color-blush-deep: #c4937f;
+      --color-blush-light: #f5e0d8;
+      --color-text: #3a2c28;
+      --color-text-soft: #8a7670;
+      --color-white: #ffffff;
+      --font-serif: 'Lora', Georgia, serif;
+      --font-sans: 'Quicksand', -apple-system, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Large decorative shape */
+    .hero__shape {
+      position: absolute;
+      top: -20%;
+      right: -30%;
+      width: 80vw;
+      height: 80vw;
+      background: var(--color-blush-light);
+      border-radius: 50%;
+      opacity: 0.6;
+    }
+
+    .hero__shape--sm {
+      top: auto;
+      bottom: -10%;
+      right: auto;
+      left: -15%;
+      width: 40vw;
+      height: 40vw;
+      opacity: 0.4;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+
+    .hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--color-white);
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      width: fit-content;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+    }
+
+    .hero__badge-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .hero__badge-text {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--color-blush-deep);
+    }
+
+    .hero__title {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: 2.5rem;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .hero__title-line2 {
+      font-style: italic;
+      color: var(--color-blush-deep);
+    }
+
+    .hero__subtitle {
+      font-weight: 300;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--color-text-soft);
+      max-width: 320px;
+      margin-bottom: 2rem;
+    }
+
+    .hero__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 1rem 2rem;
+      background: var(--color-blush-deep);
+      color: var(--color-white);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      width: fit-content;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 15px rgba(196, 147, 127, 0.3);
+    }
+
+    .hero__cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(196, 147, 127, 0.4);
+    }
+
+    .hero__cta-arrow {
+      transition: transform 0.2s ease;
+    }
+
+    .hero__cta:hover .hero__cta-arrow {
+      transform: translateX(3px);
+    }
+
+    .hero__info-row {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .hero__info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .hero__info-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-soft);
+    }
+
+    .hero__info-value {
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      color: var(--color-text);
+    }
+
+    /* Bottom card */
+    .hero__card {
+      position: relative;
+      z-index: 1;
+      margin: 0 1.5rem 2rem;
+      background: var(--color-white);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+    }
+
+    .hero__card-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-blush-light), var(--color-blush));
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--color-white);
+    }
+
+    .hero__card-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .hero__card-desc {
+      font-size: 0.75rem;
+      color: var(--color-text-soft);
+      font-weight: 300;
+    }
+
+    @media (min-width: 768px) {
+      .hero__content {
+        padding: 4rem;
+        max-width: 600px;
+      }
+      .hero__title {
+        font-size: 3.8rem;
+      }
+      .hero__subtitle {
+        font-size: 1.1rem;
+        max-width: 420px;
+      }
+      .hero__shape {
+        width: 50vw;
+        height: 50vw;
+      }
+      .hero__card {
+        max-width: 360px;
+        margin-left: 4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero__shape"></div>
+    <div class="hero__shape hero__shape--sm"></div>
+
+    <div class="hero__content">
+      <div class="hero__badge">
+        <svg class="hero__badge-icon" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="8" stroke="#c4937f" stroke-width="1.2"/>
+          <path d="M10 6v4l2.5 2.5" stroke="#c4937f" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <span class="hero__badge-text">8 недель онлайн</span>
+      </div>
+
+      <h1 class="hero__title">
+        Тишина<br>
+        <span class="hero__title-line2">внутри</span>
+      </h1>
+
+      <p class="hero__subtitle">Курс медитации для тех, кто устал бежать. Начните путь к себе — мягко, в своём темпе.</p>
+
+      <a href="#" class="hero__cta">
+        Начать путь
+        <span class="hero__cta-arrow">&rarr;</span>
+      </a>
+
+      <div class="hero__info-row">
+        <div class="hero__info-item">
+          <span class="hero__info-label">Стоимость</span>
+          <span class="hero__info-value">3 900 руб.</span>
+        </div>
+        <div class="hero__info-item">
+          <span class="hero__info-label">Формат</span>
+          <span class="hero__info-value">Видео + практики</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__card">
+      <div class="hero__card-avatar">АС</div>
+      <div>
+        <p class="hero__card-name">Анна Светлова</p>
+        <p class="hero__card-desc">Преподаватель медитации, 10 лет практики</p>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
