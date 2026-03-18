@@ -14,8 +14,8 @@ The core idea: **don't commit to one design. Generate diverse options, compare, 
 ## How it works (overview)
 
 ```
-Interview → References → Design DNA → Prototypes → Evaluation → Selection → Full build
-   5 min      optional      10 min      parallel       user        mix       go
+Interview → References → Design Brief → Prototypes → Evaluation → Selection → Refine & Build
+   5 min      optional     checkpoint     parallel       user        mix         go
 ```
 
 ---
@@ -67,16 +67,72 @@ If user can't provide any, that's fine — work from the emotional direction (St
 
 ---
 
+## Step 2.5 — Design Brief (checkpoint)
+
+Before generating anything, persist all decisions from Steps 1-2 into a file. This protects against context loss in long sessions and gives the user a correction point before 6 prototypes are generated.
+
+**Create `prototypes/BRIEF.md`** with this structure:
+
+```markdown
+# Design Brief: [Project Name]
+
+## Context
+- **What:** [type of page/component]
+- **Audience:** [who, age, device, context]
+- **Emotion:** [what they should feel]
+- **Action:** [what they should do]
+- **Tech:** [vanilla HTML / React / etc.]
+
+## Brand & Style
+- **Existing assets:** [colors, fonts, logo — or "none"]
+- **References:** [list with 1-line DNA summary each]
+- **Anti-references:** [what to avoid]
+
+## Content
+- **Headline:** [exact text or "TBD — write plausible placeholder"]
+- **Subheadline:** [exact text or TBD]
+- **CTA:** [exact text or TBD]
+- **Images/media:** [available assets or "generate decorative only"]
+
+## Prototype Plan
+| Variant | Direction | Key axes | Font strategy | Color strategy |
+|---------|-----------|----------|---------------|----------------|
+| A | [2-3 words] | Temperature: warm, Layout: centered | Elegant serif | Earth tones |
+| B | ... | ... | ... | ... |
+| ... | ... | ... | ... | ... |
+```
+
+**Show the brief to the user** and ask: "This is what I'll build from. Anything to change before I generate 6 prototypes?"
+
+Only proceed to Step 3 after user confirms (or says "go" / "looks good" / any affirmative).
+
+---
+
 ## Step 3 — Generate Prototypes
 
-### Visual quality delegation (required dependency)
+### Visual quality: ui-ux-pro-max integration (optional, recommended)
 
-This skill handles process and diversity. Visual quality of each prototype is handled by **`ui-ux-pro-max`** — it has 67 styles, 96 palettes, 57 font pairings.
+This skill handles process and diversity. For enhanced visual quality, it can delegate style/palette/font selection to **`ui-ux-pro-max`** (67 styles, 96 palettes, 57 font pairings, Python CLI).
 
-**Before generating prototypes, check that `ui-ux-pro-max` is available.** If it's not installed:
-1. Stop and tell the user: "Для генерации качественных прототипов нужен навык `ui-ux-pro-max`. Установи его и перезапусти."
-2. Provide install instructions: add the skill from the Claude Code skills registry or copy the SKILL.md file to `~/.claude/skills/ui-ux-pro-max/`
-3. Do not proceed with prototype generation without it — the output quality will be generic.
+**Before generating prototypes, check if `ui-ux-pro-max` is available:**
+
+```bash
+python3 skills/ui-ux-pro-max/scripts/search.py --help 2>/dev/null && echo "AVAILABLE" || echo "NOT AVAILABLE"
+```
+
+**If available** — run design system generation for each prototype direction:
+```bash
+python3 skills/ui-ux-pro-max/scripts/search.py "<style keywords>" --design-system -p "<project>"
+```
+Use its output (palette, fonts, effects, anti-patterns) as the foundation for each prototype. This produces noticeably higher quality results.
+
+**If not available** — proceed without it. Use:
+- The Cyrillic font table below (Step 3 → Cyrillic font safety)
+- The diversity axes table (Step 3 → Diversity strategy)
+- Your own knowledge of color theory, typography, and layout
+- References from Step 2 as the primary style guide
+
+The skill is fully functional without `ui-ux-pro-max`. The dependency improves quality, not enables it.
 
 ### What to generate
 
@@ -170,6 +226,22 @@ For Latin-script projects (English, etc.), any Google Font is fine — the table
 
 **Do NOT use** fonts without Cyrillic support for Russian content (e.g., DM Serif Display, DM Sans, Fraunces, Space Grotesk, Libre Baskerville, Cinzel). If unsure — check fonts.google.com for "Cyrillic" in Languages. Broken Cyrillic (□□□) instantly kills the prototype.
 
+### Pre-generation checklist
+
+**Scan this before writing each prototype.** Every item here was a real failure mode in testing.
+
+- [ ] **Mobile-first CSS** — base styles = phone, `@media (min-width: 768px)` for tablet, `@media (min-width: 1440px)` for desktop
+- [ ] **Two breakpoints minimum** — 768px and 1440px
+- [ ] **Real content** — no lorem ipsum. Use brief text or write plausible copy
+- [ ] **Heading 56-80px on 1440px+** — small headings on wide screens = phone layout stretched
+- [ ] **Text max-width >= 500px on desktop** — don't hard-cap below that
+- [ ] **At least 2 of 6 non-centered layouts** — split, editorial, asymmetric
+- [ ] **Hero wrapper 1100-1400px** for multi-column, **800-1000px** only for single-column centered
+- [ ] **Cyrillic fonts verified** (if RU content) — check the table below, no DM Sans/Cinzel/Fraunces
+- [ ] **No clamp() overuse** — fixed values per breakpoint for predictable rhythm
+- [ ] **Standalone HTML** — no external CSS/JS, only Google Fonts CDN
+- [ ] **Placeholder text visually marked** — wrap in `<!-- PLACEHOLDER -->` comments so it doesn't ship to prod
+
 ### File naming
 
 Save to `prototypes/` directory by default, or to the project's existing design/mockup directory if one exists. Create the directory if needed:
@@ -190,24 +262,31 @@ Pattern: `[scope]-[letter]-[style-name].html`
 
 ### Gallery page (mandatory)
 
-After generating all prototypes, create `gallery.html` in the same directory. This is the user's primary way to compare variants. Requirements:
-- Display all prototypes via `<iframe>` in a grid (1 column mobile, 2 columns desktop)
-- Each card has: variant name, style tags, **"Open" link** (`target="_blank"`) to the standalone file
-- Size toggle buttons: Mobile (600px height) / Tablet (768px) / Desktop (900px)
-- Brief 1-line description under each iframe
+After generating all prototypes, create `gallery.html` in the same directory. This is the user's primary way to compare variants.
+
+**Requirements:**
+- Each card has: variant letter + name, style tags, 1-line description
+- **"Open" link** (`target="_blank"`) to the standalone file — this is the primary navigation
 - Dark background for neutral comparison context
+- 1 column on mobile, 2 columns on desktop grid
+
+**iframe display (with caveat):**
+- Display prototypes via `<iframe src="./hero-A-warm-alchemy.html">` using **relative paths**
+- Size toggle buttons: Mobile (600px height) / Tablet (768px) / Desktop (900px)
+- **Important:** iframes with `file://` protocol may be blocked by browser security. The gallery MUST work even without iframes — every card must have a prominent "Open" link. If iframes fail to render, the user still has full access via direct links.
+- If serving via local server (e.g., `python -m http.server`), iframes work reliably. Mention this to the user if they report blank iframes.
 
 ### Parallelization
 
-Generate all prototypes in parallel using subagents when available. Each prototype is independent — they don't share state. This is the biggest time-saver in the workflow.
+Each prototype is independent — they don't share state. Use the Agent tool to generate prototypes in parallel when available: launch one agent per prototype, each with its own style direction.
 
-For each subagent, provide:
-- Full context from Steps 1-2 (interview answers, design DNA)
-- The specific style direction for this variant
-- The content/copy to use
-- Technical requirements (mobile-first, standalone HTML, etc.)
+**What to pass to each agent:**
+- The full `prototypes/BRIEF.md` content (from Step 2.5)
+- This variant's row from the Prototype Plan table
+- The pre-generation checklist above
+- The file naming pattern and target directory
 
-If subagents aren't available, generate sequentially — but still make each one genuinely different.
+**If parallel agents aren't available** (or the runtime doesn't support them), generate sequentially. The key rule: **re-read the BRIEF.md before each prototype** to avoid drift. After writing 3 similar files, the tendency is to repeat patterns — the brief anchors you back to the plan.
 
 ---
 
@@ -218,7 +297,7 @@ After all prototypes are ready, help the user evaluate them. This is where the s
 ### How to present
 
 Tell the user:
-1. Open each file in your browser (or provide file:// links)
+1. Open `gallery.html` in your browser (or open each prototype directly — they're standalone HTML files)
 2. **Check mobile first** — resize browser to phone width or use DevTools responsive mode
 3. Spend 3 seconds on each — first impression matters most
 
@@ -246,13 +325,37 @@ This is how non-designers create unique results — by combining elements they w
 
 ## Step 5 — Refine & Build
 
-Based on the user's choice and mix feedback:
+Based on the user's choice and mix feedback, create the final design artifact.
 
-1. **Create the refined prototype** — apply borrowed elements to the chosen base
-2. **Show it to the user** — one more quick check before scaling up
-3. **Hand off to production** — Step 5 is where this skill ends. The full build (expanding Hero to complete page) belongs to `ui-ux-pro-max` and `frontend-design` skills, with the visual direction already locked in from prototypes.
+### 5a. Merge elements
 
-**Important note on generated palettes:** When working on emotionally-driven projects (personal brands, wellness, art, coaching), don't use palette/font generators from design tools — they tend to produce generic SaaS aesthetics. Derive colors from the mood and references instead.
+When the user wants to combine parts of different prototypes:
+
+1. **Start from the chosen base** — copy it as the starting file
+2. **List what's being borrowed** — be explicit: "Taking the font pairing from B, the color palette from D, and the layout from A"
+3. **Apply changes one category at a time** — first typography, then colors, then layout, then effects. Don't try to merge everything at once — visual conflicts appear when you do
+4. **Check each substitution** — a font that looked great in prototype B might clash with prototype A's color palette. Adjust if needed.
+
+### 5b. Refined prototype
+
+Save the merged result as `prototypes/hero-FINAL-[style-name].html` (same naming pattern, but "FINAL" instead of a letter).
+
+**Show it to the user and ask:**
+> "Here's the merged version. Check it on mobile and desktop. What needs tweaking before we build the full page?"
+
+Iterate until the user says it's good. Keep iterations in the same file (overwrite, don't create hero-FINAL-v2, v3...).
+
+### 5c. Hand off to production
+
+Once the refined prototype is approved:
+
+1. **Update `prototypes/BRIEF.md`** — add a "Final Direction" section with the locked-in palette, fonts, and layout decisions
+2. **The full build** (expanding Hero to complete page) uses this brief as the source of truth for visual direction
+3. If `ui-ux-pro-max` is available, use it for stack-specific guidelines and the pre-delivery UX checklist during the build phase
+
+### Design quality note
+
+When working on emotionally-driven projects (personal brands, wellness, art, coaching), don't use palette/font generators from design tools — they tend to produce generic SaaS aesthetics. Derive colors from the mood and references instead.
 
 ---
 
