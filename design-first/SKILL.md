@@ -97,6 +97,7 @@ Before generating anything, persist all decisions from Steps 1-2 into a file. Th
 ## Prototype Plan
 | Variant | Direction | Key axes | Font strategy | Color strategy |
 |---------|-----------|----------|---------------|----------------|
+| 0 (free) | AI's best shot | No constraints — full creative freedom | — | — |
 | A | [2-3 words] | Temperature: warm, Layout: centered | Elegant serif | Earth tones |
 | B | ... | ... | ... | ... |
 | ... | ... | ... | ... | ... |
@@ -145,18 +146,32 @@ Prototype scope depends on what you're designing:
 
 ### How many variants
 
-**Default: 6 prototypes. Minimum: 4.**
+**Default: 6 prototypes (1 free + 5 structured). Minimum: 4 (1 free + 3 structured).**
 
-Why 6: it's enough to cover diverse directions without overwhelming. Each variant must be *genuinely different* — not the same layout with tweaked colors. Different fonts, different color strategies, different visual techniques.
+The 6 prototypes have two distinct types:
 
-When 4 is enough:
+#### Variant 0 — "Free" (generated FIRST)
+
+The first prototype is generated **without diversity axes, without checklists, without forced constraints**. Give it the full context from Steps 1-2 (audience, emotion, action, brand, references) and let the AI produce its best single shot — the design it would make if there were no skill process.
+
+**Why first:** If generated after the structured variants, it gets contaminated by their patterns. Generated first, it's an honest baseline — sometimes it's the best one.
+
+**File naming:** `[scope]-0-free.html` (e.g., `hero-0-free.html`)
+
+**Prompt for free variant:** "Using all the context from the design brief, create the best possible hero section. No constraints on style, layout, or technique. Use your best judgment for fonts, colors, layout, and effects. Make it as polished and distinctive as you can."
+
+#### Variants A–E — Structured (5 prototypes)
+
+The remaining 5 prototypes follow the diversity strategy below. Each must be *genuinely different* — not the same layout with tweaked colors. Different fonts, different color strategies, different visual techniques.
+
+When 3 structured (+ 1 free = 4 total) is enough:
 - Simple components (button, card, form)
 - User gave very specific references and the direction is clear
 - Tight time constraints (user explicitly says "quick")
 
 ### Diversity strategy
 
-Each prototype should vary on at least 2 of these axes:
+Each structured prototype should vary on at least 2 of these axes:
 
 | Axis | Example range |
 |------|--------------|
@@ -167,7 +182,7 @@ Each prototype should vary on at least 2 of these axes:
 | **Animation** | None/subtle ↔ Cinematic particles ↔ Playful micro-interactions |
 
 If references exist, allocate roughly:
-- **Half** of prototypes inspired by references (extracting and remixing their DNA)
+- **Half** of structured prototypes inspired by references (extracting and remixing their DNA)
 - **Half** exploring different directions (the user might not know they want something unexpected)
 
 ### Technical requirements for each prototype
@@ -247,24 +262,25 @@ For Latin-script projects (English, etc.), any Google Font is fine — the table
 Save to `prototypes/` directory by default, or to the project's existing design/mockup directory if one exists. Create the directory if needed:
 ```
 prototypes/
-├── hero-A-warm-alchemy.html
+├── hero-0-free.html          ← free variant (generated first)
+├── hero-A-warm-alchemy.html  ← structured variants
 ├── hero-B-dark-rose.html
 ├── hero-C-editorial-night.html
 ├── hero-D-kintsugi.html
-├── hero-E-ember.html
-└── hero-F-grimoire.html
+└── hero-E-ember.html
 ```
 
 Pattern: `[scope]-[letter]-[style-name].html`
 - Scope: `hero`, `card`, `dashboard`, `form`, etc.
-- Letter: A through F (for ordering)
-- Style name: 2-3 word description of the visual direction (kebab-case)
+- `0` for the free variant, `A` through `E` for structured (5 variants)
+- Style name: 2-3 word description of the visual direction (kebab-case). Free variant always uses `free`.
 
 ### Gallery page (mandatory)
 
 After generating all prototypes, create `gallery.html` in the same directory. This is the user's primary way to compare variants.
 
 **Requirements:**
+- Variant 0 (free) is displayed **first**, with a distinct label like "AI's Best Shot" — visually separated from the structured variants (e.g., different border color or a divider)
 - Each card has: variant letter + name, style tags, 1-line description
 - **"Open" link** (`target="_blank"`) to the standalone file — this is the primary navigation
 - Dark background for neutral comparison context
@@ -276,11 +292,15 @@ After generating all prototypes, create `gallery.html` in the same directory. Th
 - **Important:** iframes with `file://` protocol may be blocked by browser security. The gallery MUST work even without iframes — every card must have a prominent "Open" link. If iframes fail to render, the user still has full access via direct links.
 - If serving via local server (e.g., `python -m http.server`), iframes work reliably. Mention this to the user if they report blank iframes.
 
-### Parallelization
+### Generation order and parallelization
 
+**Step 1: Generate the free variant (variant 0) FIRST, alone.**
+Give it the full brief context but no diversity constraints. This must complete before structured variants begin — it should not be influenced by them.
+
+**Step 2: Generate structured variants A–E in parallel.**
 Each prototype is independent — they don't share state. Use the Agent tool to generate prototypes in parallel when available: launch one agent per prototype, each with its own style direction.
 
-**What to pass to each agent:**
+**What to pass to each structured agent:**
 - The full `prototypes/BRIEF.md` content (from Step 2.5)
 - This variant's row from the Prototype Plan table
 - The pre-generation checklist above
@@ -368,5 +388,5 @@ When working on emotionally-driven projects (personal brands, wellness, art, coa
 | User says "like this but different" | Extract DNA from "this", generate variations |
 | User wants to skip prototypes | Warn them: "Last time we skipped this, we had to redo everything. 15 minutes of prototypes saves hours of rework." |
 | User can't choose between variants | Ask the 4 evaluation questions. If still stuck — combine the top 2 into a new variant |
-| User wants fewer than 4 variants | OK only for simple components. For pages — hold the line at 4 minimum |
+| User wants fewer than 4 variants | OK only for simple components. For pages — hold the line at 4 minimum (1 free + 3 structured) |
 | Time pressure | Generate 4 instead of 6, skip anti-references question, but never skip the context interview |
