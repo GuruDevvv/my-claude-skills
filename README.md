@@ -11,7 +11,9 @@ Each skill is a folder with a `SKILL.md` file — drop it into `~/.claude/skills
 | Skill | Description |
 |-------|-------------|
 | [design-first](design-first/) | Generate 4–6 diverse HTML design prototypes before coding — interview, brief, parallel prototypes, gallery comparison, pick & build |
-| [multi-layer-review](multi-layer-review/) | Run your spec through a chain of up to 5 reviewers before coding — architecture, code, user POV, robustness, requirements |
+| [multi-layer-review](multi-layer-review/) | Run your spec through up to 5 blind parallel reviewers before coding — architecture, code, user POV, robustness, requirements |
+| [project-audit](project-audit/) | Audit project organization — CLAUDE.md quality, memory consistency, file structure, git hygiene |
+| [spec-first](spec-first/) | Structured project kickoff: Vision (what/why) then Blueprint (how/order) — before writing any code |
 
 ---
 
