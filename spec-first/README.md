@@ -5,7 +5,7 @@ A Claude Code skill that turns a vague project idea into a structured build plan
 Without a spec, Claude starts coding blindly, picks the wrong stack, and you lose all context when the session ends. With spec-first, you answer 10 simple questions, get two documents (`vision.md` + `blueprint.md`), and Claude in any future session knows exactly what to build and where you left off. Takes about **20 minutes**.
 
 ```
-Idea → 10 questions → docs/vision.md → 7 interactive steps → docs/blueprint.md → CLAUDE.md updated → build
+Idea → 10 questions → docs/vision.md → 8 interactive steps → docs/blueprint.md → CLAUDE.md updated → build
 ```
 
 > **Language note:** The skill conducts the interview in Russian. English localization is planned.
@@ -98,7 +98,7 @@ If you struggle with any question, the skill offers smart defaults, analogies, a
 
 **Phase 2 — Blueprint (how and in what order)**
 
-Seven interactive steps, each shown and approved before moving on:
+Eight interactive steps, each shown and approved before moving on:
 
 | Step | What happens |
 |------|-------------|
@@ -109,6 +109,7 @@ Seven interactive steps, each shown and approved before moving on:
 | 5. Build plan | 3–15 tasks with files and "done when" criteria |
 | 6. Acceptance checklist | 5+ checks in "Do X, see Y" format |
 | 7. AI config | *(only if AI is involved)* Provider, system prompt, behavior checks |
+| 8. Fresh eyes review | Re-reads vision + all steps, checks for gaps, order, and specificity |
 
 **Output:** `docs/blueprint.md` with tech stack, structure, data model, deploy plan, task checklist, and acceptance criteria.
 
