@@ -18,3 +18,11 @@ Each skill is a folder with a `SKILL.md` file — drop it into `~/.claude/skills
 ---
 
 *🇷🇺 Есть русские описания внутри каждого скилла*
+
+---
+
+## Research
+
+В `research/` лежат исследования, использованные при разработке скиллов:
+- `spec-first-research.md` — полное исследование Spec-First методологии (10 методологий, 12 шаблонов, 6 реальных катастроф → VIBE SPEC)
+- `project-audit-prompt.txt` — детальный промпт-шаблон для полного аудита проекта (6 шагов)
