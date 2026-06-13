@@ -171,7 +171,21 @@ When 3 structured (+ 1 free = 4 total) is enough:
 
 ### Diversity strategy
 
-Each structured prototype should vary on at least 2 of these axes:
+**CRITICAL: Prototypes must differ STRUCTURALLY, not just visually.** Changing colors, fonts, and shadows while keeping identical layout and interaction patterns produces "6 skins of the same page" — useless for design decisions. The user cannot evaluate UX if every prototype has the same UX.
+
+Each structured prototype should vary on at least 2 **structural axes** AND at least 1 **visual axis**:
+
+#### Structural axes (MANDATORY — vary these FIRST)
+
+| Axis | Example range |
+|------|--------------|
+| **Navigation** | Fixed sidebar ↔ Top bar ↔ Bottom tabs ↔ Hamburger ↔ Scroll-sections (no nav, anchors) ↔ Breadcrumb trail |
+| **Layout architecture** | Single column ↔ Split panel (sidebar + main) ↔ Bento grid ↔ Timeline/vertical flow ↔ Card masonry ↔ Full-width sections |
+| **Information density** | Minimal (one action visible) ↔ Medium (today's plan) ↔ Dense (full week overview) |
+| **Interaction model** | Modal overlays ↔ Inline expand/collapse ↔ Separate pages ↔ Wizard/stepper ↔ Slide-over panels |
+| **Content hierarchy** | What's biggest/first? Schedule → Progress → Instructions → Timer. Each prototype should prioritize differently |
+
+#### Visual axes (vary these SECOND)
 
 | Axis | Example range |
 |------|--------------|
@@ -180,6 +194,8 @@ Each structured prototype should vary on at least 2 of these axes:
 | **Density** | Airy with lots of whitespace ↔ Rich and detailed |
 | **Technique** | Glassmorphism, gradients, grain texture, illustration, photography, minimal flat, brutalist |
 | **Animation** | Static/minimal ↔ Floating elements ↔ Particle systems ↔ Cinematic effects (see Animation Guide below) |
+
+**The rule: if you remove all color and set everything to grayscale, prototypes should STILL look different.** If they don't — the diversity is fake.
 
 **Animation rule: at least 2 of 6 prototypes must have VISIBLE, dynamic animation** — not just fade-in-on-scroll or subtle hover. The audience notices movement first. Static pages feel dead next to animated ones. Allocate animation across the spread:
 - **2-3 prototypes: static or minimal** (subtle hover, gentle fade-in)
