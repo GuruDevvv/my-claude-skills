@@ -1,77 +1,74 @@
 # design-first
 
-**Structured design exploration before coding.** Generate 4–6 diverse HTML prototypes, compare them side-by-side, pick the best — then build.
+**Structured, art-directed design exploration before coding.** Generate diverse HTML prototypes — each led by a bold creative concept — compare them side-by-side, pick the best, then build.
 
 ## The Problem
 
-When AI generates a UI, you get one design. If you don't like it, you tweak endlessly. You never see the alternatives you're missing.
+When AI generates a UI you get one design, and usually a generic one: Inter, purple gradients, glassmorphism, centered hero — "AI slop". You tweak it endlessly and never see the distinctive alternatives you're missing.
 
 ## The Solution
 
 ```
-Interview → References → Design Brief → 6 Prototypes → Gallery → Pick & Mix → Build
+Context (+ASK) → References → Brief → Prototypes → WOW-gate → Gallery → Pick & Mix → Build
 ```
 
-The skill forces **divergent exploration** — 6 genuinely different visual directions, each a standalone HTML file you can open in a browser. A gallery page lets you compare them side by side with mobile/desktop toggle.
+Two principles:
+1. **Diverge, don't commit.** 4–6 genuinely different directions as standalone HTML, compared in a gallery.
+2. **Concept-first, not template.** Each prototype is led by one bold idea ("a 1920s Berlin telegram", "a season command-board"); color, type, layout, motion, and imagery are *derived from the concept* — not picked from a safe default. This is what turns "6 skins of the same page" into 6 real designs.
 
 ## What It Generates
 
-- **Variant 0 (Free)** — AI's unconstrained best shot, generated first
-- **Variants A–E** — 5 structured prototypes, each varying on temperature, typography, density, technique, and animation
-- **Gallery page** — side-by-side comparison with iframe previews and direct links
+- **Variant 0 (Free)** — AI's *riskiest* bet (a bold idea, not the averaged safe shot), generated first.
+- **Variants A–E** — structured prototypes, each a different **concept**, varying on structural axes (nav, layout, density, interaction, hierarchy) — verified by a grayscale test.
+- **Gallery page** — side-by-side comparison with previews and direct links.
 
 ## Key Features
 
-- Context interview to understand audience, emotion, and goals
-- Reference analysis (screenshots, URLs) → Design DNA extraction
-- Design brief checkpoint before generation
-- Cyrillic-safe font table (30+ verified Google Fonts)
-- Mobile-first with desktop breakpoints (768px, 1440px)
-- Animation guide with CSS-only and Canvas particle templates
-- Parallel prototype generation via subagents
-- Optional integration with `ui-ux-pro-max` for enhanced style selection
+- Reads an **existing project's files first**, then asks only the gaps — and **surfaces contradictions/bugs** (e.g. spec says dark, code is light; a body font with no Cyrillic).
+- **Anti-AI-slop directive** applied to every prototype (`references/frontend-aesthetics.md`).
+- **Cyrillic safety gate** — verified distinctive RU font pool + a one-line checker; RU vs Latin font branching (`references/typography.md`).
+- **Autonomous image sourcing** — works with no account/key: a generator if present → Openverse (free) → Picsum → none; downloads locally; self-sufficient if images fail; knows when *not* to use images (`references/imagery.md`).
+- **Visible, dependency-free motion** matched to product type — atmospheric vs functional, incl. advanced scroll-driven/cursor-reactive recipes (`references/motion.md`).
+- **Real imagery is mandatory** (≥ half the prototypes) and sourced centrally before generation, so prototypes never ship image-less.
+- **Navigation-aware + non-standard elements** — sticky TOC/scroll-spy for content-heavy pages; one memorable unconventional interaction per set (`references/interaction-patterns.md`).
+- **Concept-derivation method** with worked examples (`references/art-direction.md`).
+- **WOW-gate** — creative quality gates, not just technical checks.
+- Mobile-first with desktop breakpoints; parallel prototype generation via subagents.
 
 ## Install
 
 ```bash
-# Copy to Claude Code skills directory
 cp -r design-first/ ~/.claude/skills/design-first/
 ```
-
-Or symlink:
-```bash
-ln -s /path/to/my-claude-skills/design-first ~/.claude/skills/design-first
-```
+The skill is a folder (`SKILL.md` + `references/`); copy the directory. Reference files load on demand, so the core stays light in context.
 
 ## Usage
 
-Just describe what you need — the skill triggers on design-related requests:
-
+Describe what you need — the skill triggers on design requests:
 - "Make a landing page for my bakery"
 - "Design a dashboard for analytics"
-- "Сделай дизайн для сайта психолога"
-
-The skill walks you through the interview, generates prototypes, and helps you pick and refine.
+- "Сделай дизайн для сайта психолога" / "редизайн дашборда"
 
 ## Example Output
 
 ```
-prototypes/
+design-first/
+├── SKILL.md
+└── references/
+    ├── frontend-aesthetics.md   ← anti-slop directive
+    ├── typography.md            ← fonts + Cyrillic gate
+    ├── imagery.md               ← image sourcing cascade
+    ├── motion.md                ← animation recipes (+ advanced)
+    ├── art-direction.md         ← concept method + examples
+    └── interaction-patterns.md  ← navigation + non-standard elements
+
+prototypes/                      ← generated per project
 ├── BRIEF.md
 ├── gallery.html
 ├── hero-0-free.html
-├── hero-A-warm-earthy.html
-├── hero-B-dark-moody.html
-├── hero-C-editorial.html
-├── hero-D-playful-handcraft.html
-└── hero-E-minimalist-zen.html
+├── hero-A-[concept].html  …  hero-E-[concept].html
+└── assets/                      ← downloaded images (standalone)
 ```
-
-## Development
-
-The `design-first-workspace/` directory contains iteration history and comparative evaluations used during skill development:
-- `iteration-1/` through `iteration-6/` — skill evolution snapshots with eval outputs
-- `eval-comparative/` — side-by-side comparison (with skill vs. without) across 3 scenarios
 
 ---
 
