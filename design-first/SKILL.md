@@ -19,9 +19,9 @@ Two ideas drive everything:
 ## How it works
 
 ```
-Context → References → Brief → Prototypes → WOW-gate → Gallery → Pick → Refine & Build
- (gather    (in/out of  (concept   (parallel,   (creative   (compare)         (merge)
-  + ASK)     category)   per proto)  art-directed) quality)
+Context → References → Brief → Prototypes → WOW-gate → Gallery → Pick → Refine & Build → Feel pass
+ (gather    (in/out of  (concept   (parallel,   (creative   (compare)         (merge)      (polish the
+  + ASK)     category)   per proto)  art-directed) quality)                                 real build)
 ```
 
 **Reference files** (loaded on demand — read the one you need, don't inline everything):
@@ -31,6 +31,7 @@ Context → References → Brief → Prototypes → WOW-gate → Gallery → Pic
 - `references/motion.md` — dependency-free animation recipes (the visible kind).
 - `references/art-direction.md` — how to invent a concept per prototype, with worked examples.
 - `references/interaction-patterns.md` — navigation patterns + non-standard, memorable elements.
+- `references/feel-polish.md` — the 16 micro-detail rules for the **final build** (Step 5), not prototypes.
 
 ---
 
@@ -203,6 +204,14 @@ Don't ask "which is best?" — ask **"which 1-2 are closest, and what would you 
 3. Save as `prototypes/[scope]-FINAL-[name].html`; iterate in place (don't spawn v2, v3…).
 4. On approval, add a **"Final Direction"** section to `BRIEF.md` (locked palette, fonts, layout) as the source of truth for the full build.
 
+### 5.5 — Feel pass (default; runs on the real build, not prototypes)
+
+Once the final direction is built into **real production code** (the component/page, not the throwaway prototype), run the polish pass: **read `references/feel-polish.md` and apply the 16 micro-detail rules.** This is the layer that separates "looks designed" from "AI-default" — concentric radii, optical alignment, interruptible animation, tabular numbers, image outlines, scale-on-press, and so on.
+
+- **It runs by default** at this point — you don't need to ask permission to polish. The user can opt out with "skip polish", and individual buttons/elements can opt out via the `static` pattern.
+- **Report it** in feel-polish.md's format: changes as Before/After tables grouped by principle; omit principles that needed nothing.
+- **Don't apply it to the prototypes themselves** — they're concept bets, and a 16-point correctness checklist on a throwaway brings back the "passes every check, moves no one" failure this skill exists to fight. Polish the winner, in real code.
+
 ---
 
 ## Quick reference
@@ -217,3 +226,4 @@ Don't ask "which is best?" — ask **"which 1-2 are closest, and what would you 
 | Wants to skip prototypes | "15 min of prototypes saves hours of rework" — hold the line at 4 minimum |
 | Can't choose | Ask the eval questions; if stuck, combine top 2 |
 | Time pressure | 4 instead of 6, skip anti-references question — never skip Step 1 |
+| Final build is done | Run the Feel pass (Step 5.5, feel-polish.md) by default — unless user says "skip polish" |

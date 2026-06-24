@@ -9,7 +9,7 @@ When AI generates a UI you get one design, and usually a generic one: Inter, pur
 ## The Solution
 
 ```
-Context (+ASK) → References → Brief → Prototypes → WOW-gate → Gallery → Pick & Mix → Build
+Context (+ASK) → References → Brief → Prototypes → WOW-gate → Gallery → Pick & Mix → Build → Feel pass
 ```
 
 Two principles:
@@ -33,6 +33,7 @@ Two principles:
 - **Navigation-aware + non-standard elements** — sticky TOC/scroll-spy for content-heavy pages; one memorable unconventional interaction per set (`references/interaction-patterns.md`).
 - **Concept-derivation method** with worked examples (`references/art-direction.md`).
 - **WOW-gate** — creative quality gates, not just technical checks.
+- **Feel pass** — after the final winner is built into real code, a default polish step applies 16 micro-detail rules (concentric radius, optical alignment, interruptible animation, tabular numbers, image outlines, scale-on-press…) and reports Before/After (`references/feel-polish.md`). Skippable with "skip polish".
 - Mobile-first with desktop breakpoints; parallel prototype generation via subagents.
 
 ## Install
@@ -60,7 +61,8 @@ design-first/
     ├── imagery.md               ← image sourcing cascade
     ├── motion.md                ← animation recipes (+ advanced)
     ├── art-direction.md         ← concept method + examples
-    └── interaction-patterns.md  ← navigation + non-standard elements
+    ├── interaction-patterns.md  ← navigation + non-standard elements
+    └── feel-polish.md           ← 16 micro-detail rules for the final build
 
 prototypes/                      ← generated per project
 ├── BRIEF.md
@@ -69,6 +71,10 @@ prototypes/                      ← generated per project
 ├── hero-A-[concept].html  …  hero-E-[concept].html
 └── assets/                      ← downloaded images (standalone)
 ```
+
+## Credits
+
+The Feel pass (`references/feel-polish.md`) distills principles from **["Details that make interfaces feel better"](https://jakub.kr/writing/details-that-make-interfaces-feel-better)** by **Jakub Krehel** — his standalone skill is [`jakubkrehel/make-interfaces-feel-better`](https://github.com/jakubkrehel/make-interfaces-feel-better) (MIT). For a deeper, code-heavy treatment, install his skill directly.
 
 ---
 
