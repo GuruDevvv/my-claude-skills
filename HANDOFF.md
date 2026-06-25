@@ -1,27 +1,30 @@
 # HANDOFF — my-claude-skills
-Обновлено: 2026-06-24 19:15
+Обновлено: 2026-06-25 12:41
 
-## Статус: 🟢 design-first v4 — добавлена фаза Feel pass
+## Статус: 🟢 design-first v4 на GitHub, анонс в TG перезалит
 
 ## Текущее состояние
-design-first v4 (`369d94f`): добавлена финальная фаза **Feel pass** (Step 5.5) — полировка реального билда по 16 микро-правилам (дистиллят скилла `jakubkrehel/make-interfaces-feel-better`, MIT, кредит в README). Новый `references/feel-polish.md`. Запускается по умолчанию, скип «skip polish», НЕ применяется к прототипам. Прошло REVIEW через skill-conductor (production-ready). installed == repo. Обкатано на Olympics (см. ниже).
+design-first v4 (Feel pass) **запушен** в GuruDevvv/my-claude-skills (`831ac9c`). Оба README актуальны. origin/main == локальный main, дерево чистое. Вчерашний анонс в TG-топике «AI Advanced Alumni» (topic 5, msg 3370) участник случайно удалил при чистке «Полезного» (его msg 3470) — **перезалил заново**: новый короткий текст под v4, topic 5, msg 3475 (markdown + превью GitHub).
 
 ## Задачи
-- Боевой прогон Feel pass на портированном дашборде Olympics («дорожки») | там зайдут концентрические радиусы + тени-вместо-границ, отложенные на легаси
 - deep-research скилл всё ещё не ревьюился | свежий взгляд
 - Прогнать skill-scanner на скиллах | безопасность
+- Корневой README: в таблице нет deep-research скилла | добавить строку, если решим публиковать
+- Повторный Feel pass на дашборде Olympics после порта на «дорожки» | отложенные концентрические радиусы/тени
+- (опц.) ответить участнику reply на msg 3470 «перезалил, спасибо» | пока не сделано
 
 ## Блокеры
 Нет блокеров
 
 ## Хрупкие места
-- Скилл грузится при СТАРТЕ Claude Code — после правки рестарт. installed-копия должна = repo (см. feedback_sync_installed_skill_after_edit).
-- Валидатор skill-conductor строго парсит YAML → спотыкается на `Use when:` в description (пре-существующее, Claude Code грузит ОК). README внутри скилла — намеренная конвенция репо.
+- Скилл грузится при СТАРТЕ Claude Code — после правки рестарт. installed-копия должна = repo.
+- Валидатор skill-conductor спотыкается на `Use when:` в description (пре-существующее, Claude Code грузит ОК).
+- Telegram: форум-супергруппа → слать в топик через `reply_to=<topic_id>`, иначе попадёт в General.
 
 ## Следующий шаг
-Дождаться портирования дашборда Olympics на «дорожки» → повторный Feel pass (покажет отложенные принципы). Либо ревью deep-research.
+Ревью deep-research скилла (давно висит) ЛИБО повторный Feel pass на Olympics после порта на «дорожки».
 
 ## Промпт
 > Проект my-claude-skills. Прочитай HANDOFF.md.
-> design-first довели до v4: добавлена фаза Feel pass (Step 5.5 + references/feel-polish.md) — полировка финального билда по 16 микро-правилам Крехеля. Обкатано на Olympics (feel-pass в ветке redesign/site).
-> Продолжи с: повторный Feel pass после портирования дашборда Olympics на «дорожки» (там зайдут отложенные концентрические радиусы/тени), либо ревью deep-research скилла.
+> design-first v4 (Feel pass) запушен на GitHub, оба README актуальны. Ссылка на скилл отправлена в TG-сообщество.
+> Продолжи с: ревью deep-research скилла (свежим взглядом, давно висит без ревью) либо повторный Feel pass на дашборде Olympics после порта на «дорожки».
