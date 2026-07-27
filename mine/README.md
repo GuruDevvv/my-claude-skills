@@ -21,6 +21,11 @@ as not mine.
 Each folder has its own `README.md` with the detail: what is inside, what it will not do, and where it
 gets awkward.
 
+Two of them also ship the research they grew out of, as `research.md` in the same folder:
+[spec-first](spec-first/research.md) (10 methodologies, 12 templates, 6 real project disasters) and
+[design-first](design-first/research.md) (why prototypes kept coming out technically flawless and
+emotionally flat).
+
 ---
 
 ## The order they tend to run in
