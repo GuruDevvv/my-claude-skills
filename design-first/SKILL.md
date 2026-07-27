@@ -183,9 +183,11 @@ If the honest answer to a creative gate is "no", the concept is too weak — cha
 
 ## Step 4 — Present & Evaluate
 
-Create `gallery.html` (variant 0 shown first as "AI's Best Shot", structured variants after; dark neutral bg; "Open" link per card + iframes with relative paths; mobile/desktop note).
+**The user evaluates the prototypes themselves — always deliver a browsable gallery, by default.** Your own screenshot-and-review is at most a self-check, never a substitute: the deliverable is a gallery the user opens in a real browser and judges (visual taste and "does this feel right for my audience" are theirs to call, and prototypes carry interaction/motion a static image loses). Don't skip the gallery in favour of pasting your impressions.
 
-**Optional, recommended — real screenshots:** if a browser-screenshot tool is available (Playwright MCP, or headless Edge/Chrome `--screenshot`), capture each prototype to PNG for a reliable visual gallery (file:// iframes can be blocked). Note: full-bleed `100svh` heroes screenshot only the first viewport; capture sections separately if needed.
+Create `gallery.html` (variant 0 shown first as "AI's Best Shot", structured variants after; dark neutral bg; "Open" link per card + iframes with relative paths; mobile/desktop note). **Then hand the user a live way to view it, and give them the link/path explicitly:** serve the prototype directory over `http://127.0.0.1:<port>` (a local static server — most reliable, since some browsers block `file://` iframes and page-internal `fetch`) and/or give the `file://` path as fallback. Confirm the server responds (curl the gallery + one prototype) before telling the user it's ready.
+
+**Optional self-check — real screenshots:** if a browser-screenshot tool is available (Playwright MCP, or headless Edge/Chrome `--screenshot`), you may capture PNGs to sanity-check the prototypes rendered (headless Chrome needs a writable `--user-data-dir`). This is for your verification only — it does not replace the user's own gallery review. Note: full-bleed `100svh` heroes screenshot only the first viewport; capture sections separately if needed.
 
 Give the user a simple frame:
 > - Does it FEEL right for my audience? (not "do I like it" — "would my users trust/want this?")
