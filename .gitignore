@@ -1,0 +1,23 @@
+# Локальные настройки Claude Code — содержат пути с именем пользователя
+.claude/settings.local.json
+
+# Мусор редакторов и ОС
+.DS_Store
+desktop.ini
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Резервные копии от правок — в репозиторий не нужны
+*.backup*
+*.orig
+*.bak
+
+# Секреты — на случай, если рядом окажется что-то настроечное
+.env
+.env.*
+*_key
+*_token

@@ -2,16 +2,14 @@
 name: project-audit
 description: >
   Project organization audit in Quick (~5 min) and Full (~8 min) modes.
-  Diagnoses: CLAUDE.md quality, memory consistency, file structure,
-  git hygiene, automations. Produces a severity-grouped report with
-  actionable findings, then asks the user which items to address.
+  Diagnoses CLAUDE.md quality, memory consistency, file structure,
+  git hygiene, automations. Produces a severity-grouped actionable report.
   Use when: "аудит проекта", "проверь проект", "проверь структуру",
   "audit project", "check project health", "что не так с проектом",
   "почисти проект", "проверь CLAUDE.md", "memory audit", "аудит memory",
   "project health check", "навести порядок в проекте", "ревью проекта",
-  "что здесь происходит", "оцени состояние проекта", "clean up project".
-  Also trigger on: quick audit, full audit, полный аудит, быстрый аудит,
-  new/unfamiliar project assessment, pre-share/pre-publish cleanup.
+  "оцени состояние проекта", "clean up project", quick/full audit,
+  new project assessment, pre-share cleanup.
   Do NOT use for: code review, PR review, debugging, runtime issues,
   or reviewing specs/designs (use multi-layer-review for those).
 ---
