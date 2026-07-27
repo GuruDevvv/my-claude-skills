@@ -21,3 +21,7 @@ __pycache__/
 .env.*
 *_key
 *_token
+
+# Рабочие заметки сессий — не для публичного репозитория
+HANDOFF.md
+HANDOFF.backup-*
