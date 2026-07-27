@@ -60,11 +60,15 @@ copyright, all rights reserved. Redistributing it would not be legal. Install it
 
 ---
 
-## Research
+## Why they are built this way
 
-В `research/` лежат исследования, использованные при разработке скиллов:
+Two of the skills ship the research they came out of, as `research.md` inside the skill folder:
 
-- `spec-first-research.md` — полное исследование Spec-First методологии (10 методологий, 12 шаблонов,
-  6 реальных катастроф → VIBE SPEC)
-- `project-audit-prompt.txt` — детальный промпт-шаблон для полного аудита проекта (6 шагов)
-- `design-first-wow-research.md`, `design-first-redesign-plan.md` — материалы к design-first
+- [mine/spec-first/research.md](mine/spec-first/research.md) — 10 methodologies, 12 templates and 6
+  real project disasters, boiled down into the VIBE SPEC approach. The argument for why a spec is
+  worth writing when you are not writing the code yourself.
+- [mine/design-first/research.md](mine/design-first/research.md) — why prototypes kept coming out
+  technically flawless and emotionally flat, and what an art-direction layer had to add to fix it.
+
+🇷🇺 Обоснования лежат рядом со своими скиллами, а не отдельной папкой — «почему так сделано»
+логичнее искать там же, где сам скилл.
