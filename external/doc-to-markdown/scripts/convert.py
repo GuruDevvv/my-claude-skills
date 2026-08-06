@@ -7,10 +7,10 @@ DOCX files get automatic post-processing to fix pandoc artifacts.
 
 Usage:
     # Quick Mode (default) - fast, single best tool
-    uv run --with pymupdf4llm --with markitdown scripts/convert.py document.pdf -o output.md
+    uv run --with pymupdf4llm --with "markitdown[all]" scripts/convert.py document.pdf -o output.md
 
     # Heavy Mode - multi-tool parallel execution with merge
-    uv run --with pymupdf4llm --with markitdown scripts/convert.py document.pdf -o output.md --heavy
+    uv run --with pymupdf4llm --with "markitdown[all]" scripts/convert.py document.pdf -o output.md --heavy
 
     # DOCX deep mode - python-docx direct parsing (experimental)
     uv run --with python-docx scripts/convert.py document.docx -o output.md --docx-deep
@@ -20,7 +20,10 @@ Usage:
 
 Dependencies:
     - pymupdf4llm: PDF conversion (LLM-optimized)
-    - markitdown: PDF/DOCX/PPTX conversion
+    - markitdown[all]: PDF/DOCX/PPTX/XLSX conversion.
+      MUST be installed with the [all] extra — bare `markitdown` fails at runtime on
+      .pptx and .xlsx with "the dependencies needed to read .pptx files have not been
+      installed" (verified 2026-08-06).
     - pandoc: DOCX/PPTX conversion (system install: brew install pandoc)
     - python-docx: DOCX deep parsing (optional, for --docx-deep)
 """
@@ -1109,7 +1112,7 @@ Examples:
         print("Error: No conversion tools available.", file=sys.stderr)
         print("Install with:", file=sys.stderr)
         print("  pip install pymupdf4llm", file=sys.stderr)
-        print("  uv tool install markitdown[pdf]", file=sys.stderr)
+        print('  uv tool install "markitdown[all]"', file=sys.stderr)
         print("  brew install pandoc", file=sys.stderr)
         sys.exit(1)
 
