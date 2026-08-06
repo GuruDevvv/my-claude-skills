@@ -32,11 +32,11 @@ uv pip install pymupdf4llm
 ### markitdown
 
 ```bash
-# With PDF support
-uv tool install "markitdown[pdf]"
+# All formats — [all] is required: [pdf] alone fails on .pptx and .xlsx
+uv tool install "markitdown[all]"
 
 # Or
-pip install "markitdown[pdf]"
+pip install "markitdown[all]"
 ```
 
 **Dependencies:** Various per format (pdfminer, python-docx, etc.)

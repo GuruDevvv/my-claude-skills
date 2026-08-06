@@ -14,10 +14,10 @@ Convert documents to high-quality markdown with intelligent multi-tool orchestra
 
 ```bash
 # DOCX → Markdown (one command, zero manual fixes)
-uv run --with pymupdf4llm --with markitdown scripts/convert.py document.docx -o output.md --assets-dir ./media
+uv run --with pymupdf4llm --with "markitdown[all]" scripts/convert.py document.docx -o output.md --assets-dir ./media
 
 # PDF → Markdown
-uv run --with pymupdf4llm --with markitdown scripts/convert.py document.pdf -o output.md
+uv run --with pymupdf4llm --with "markitdown[all]" scripts/convert.py document.pdf -o output.md
 
 # Run tests
 uv run --with pytest pytest scripts/test_convert.py -v
@@ -140,7 +140,7 @@ python scripts/convert_path.py "C:\Users\<windows-user>\Documents\file.pdf"
 ```bash
 # Install all tools
 pip install pymupdf4llm
-uv tool install "markitdown[pdf]"
+uv tool install "markitdown[all]"   # [all], not [pdf] — [pdf] breaks .pptx/.xlsx
 brew install pandoc
 ```
 
