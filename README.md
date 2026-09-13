@@ -18,6 +18,7 @@ Two folders, and the distinction is not cosmetic:
 
 | Skill | What it does | Reach for it when |
 |-------|--------------|-------------------|
+| [idea-storm](mine/idea-storm/) | Nine options across three shelves, three finalists, then two blind reviewers and a decision with a kill sign | A choice is open and the first sensible answer is not good enough |
 | [spec-first](mine/spec-first/) | Project kickoff in two passes: Vision (what and why), then Blueprint (how and in what order) | A new project exists as an idea and nothing is written down yet |
 | [product-check](mine/product-check/) | Five jobs-to-be-done questions, then a readiness score with risks | The idea exists and the real question is whether to build it at all |
 | [deep-research](mine/deep-research/) | Multi-agent research with web search, confidence ratings, saved artifact | The answer is worth several sources and being wrong is expensive |
