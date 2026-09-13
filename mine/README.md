@@ -10,6 +10,7 @@ as not mine.
 
 | Skill | What it does | Reach for it when |
 |-------|--------------|-------------------|
+| [idea-storm](idea-storm/) | Nine options across three shelves, three finalists, then two blind reviewers and a decision with a kill sign | A choice is open and the first sensible answer is not good enough |
 | [spec-first](spec-first/) | Project kickoff in two passes: Vision (what and why), then Blueprint (how and in what order) | A new project exists as an idea and nothing is written down yet |
 | [product-check](product-check/) | Five jobs-to-be-done questions, then a readiness score with named risks | The idea exists and the real question is whether to build it at all |
 | [deep-research](deep-research/) | Multi-agent research with web search, confidence ratings, saved artifact | The answer is worth several sources and being wrong is expensive |
@@ -32,16 +33,17 @@ emotionally flat).
 
 Not a pipeline, but there is a grain to it:
 
-1. **product-check** — should this exist at all?
-2. **spec-first** — what is it, and in what order does it get built?
-3. **multi-layer-review** — attack the spec before any code exists.
-4. **design-first** — decide what it looks like, from a concept rather than a template.
-5. **deep-research** — pulled in at any point where a decision needs real sources.
-6. **project-audit** — later, when the project has grown and drifted.
-7. **human-text** — whenever something has to be read by a person rather than a machine.
+1. **idea-storm** — what are the options, and which one survives a critic who cannot see you?
+2. **product-check** — should the chosen one exist at all?
+3. **spec-first** — what is it, and in what order does it get built?
+4. **multi-layer-review** — attack the spec before any code exists.
+5. **design-first** — decide what it looks like, from a concept rather than a template.
+6. **deep-research** — pulled in at any point where a decision needs real sources.
+7. **project-audit** — later, when the project has grown and drifted.
+8. **human-text** — whenever something has to be read by a person rather than a machine.
 
 ---
 
 🇷🇺 Внутри каждого скилла есть описание на русском. Порядок выше — не жёсткий конвейер, а привычная
-последовательность: сначала проверить идею, потом спека, ревью спеки, дизайн; исследование
+последовательность: сначала штурм вариантов, потом проверка идеи, спека, ревью спеки, дизайн; исследование
 подключается там, где нужно решение с источниками; аудит — когда проект уже разросся.
