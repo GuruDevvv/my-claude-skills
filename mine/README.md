@@ -18,6 +18,7 @@ as not mine.
 | [multi-layer-review](multi-layer-review/) | Up to 5 blind parallel reviewers: architecture, code, user POV, robustness, requirements | A spec is finished and you want it attacked before code exists |
 | [project-audit](project-audit/) | Audits CLAUDE.md quality, memory consistency, file structure, git hygiene | A project has grown messy, or before handing it to someone |
 | [human-text](human-text/) | Russian copy that reads as human-written — rhythm, honest hedging, no AI clichés | Anything a person will read: posts, articles, landing copy, letters |
+| [reels-console](reels-console/) | A vertical reel cut from one static take: pauses gone, crop levels anchored to the face, word-timed captions, music ducked | You filmed yourself talking to camera and need it edited without opening CapCut |
 
 Each folder has its own `README.md` with the detail: what is inside, what it will not do, and where it
 gets awkward.

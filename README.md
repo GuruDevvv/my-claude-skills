@@ -26,6 +26,7 @@ Two folders, and the distinction is not cosmetic:
 | [multi-layer-review](mine/multi-layer-review/) | Up to 5 blind parallel reviewers: architecture, code, user POV, robustness, requirements | A spec is finished and you want it attacked before code exists |
 | [project-audit](mine/project-audit/) | Audits CLAUDE.md quality, memory consistency, file structure, git hygiene | A project has grown messy, or before handing it to someone |
 | [human-text](mine/human-text/) | Russian copy that reads as human-written — rhythm, honest hedging, no AI clichés | Anything a person will read: posts, articles, landing copy, letters |
+| [reels-console](mine/reels-console/) | A vertical reel cut from one static take: pauses gone, crop levels anchored to the face, word-timed captions, music ducked | You filmed yourself talking to camera and need it edited without opening CapCut |
 
 *🇷🇺 У каждого скилла внутри есть описание на русском.*
 
