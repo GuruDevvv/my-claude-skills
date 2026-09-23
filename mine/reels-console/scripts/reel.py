@@ -10,17 +10,21 @@ insightface (последние два нужны только для титро
 
     python reel.py дубль.mp4 -o ролик.mp4 --accent впервые признателен --cta подпишись
     python reel.py дубль.mp4 --dry-run          # только план монтажа, без рендера
+    python reel.py дубль.mp4 --frame --lut look.cube --flash   # «ролик в рамке», цвет, засвет
 
 Полный разбор приёмов — references/recipes.md рядом.
 """
 import argparse, io, json, os, re, shutil, subprocess, sys, tempfile
 
-W, H, FPS = 1080, 1920, 30
+CW, CH = 1080, 1920          # холст готового ролика
+W, H, FPS = CW, CH, 30       # размер, в котором рендерятся планы; в режиме рамки — окно
+# окно «ролика в рамке»: 4:5 почти во всю ширину, по центру, скругление 50 px
+FRAME = dict(w=1030, h=1288, r=50)
 
 
 # ---------- вспомогательное ----------
-def run(args, quiet=True):
-    r = subprocess.run(args, capture_output=True, text=True, encoding="utf-8", errors="replace")
+def run(args, quiet=True, cwd=None):
+    r = subprocess.run(args, capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=cwd)
     if r.returncode != 0:
         print("\nНе выполнилось:", " ".join(str(a) for a in args[:8]), "…")
         print((r.stderr or "")[-1500:])
@@ -203,7 +207,9 @@ def plan_shots(words, dur, accent, zmax, max_shot=3.4, min_shot=1.4):
 
 # ---------- 5. рендер ----------
 def crop_expr(z, ax, ay):
-    cw, ch = "trunc(iw/%s/2)*2" % z, "trunc(ih/%s/2)*2" % z
+    # высота окна считается от ширины: так кроп не искажает пропорции,
+    # даже если исходник и выход разной формы
+    cw, ch = "trunc(iw/%s/2)*2" % z, "trunc(iw*%s/%s/%s/2)*2" % (H, W, z)
     return "crop=%s:%s:max(0\\,min(iw-%s\\,%s*iw-%s/2)):max(0\\,min(ih-%s\\,%s*ih-%s/3))" % (
         cw, ch, cw, ax, cw, ch, ay, ch)
 
@@ -257,7 +263,7 @@ def concat(files, out, workdir):
     run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", out])
 
 
-def put_brolls(base, brolls, out):
+def put_brolls(base, brolls, out, speed=1.0):
     if not brolls:
         run(["ffmpeg", "-y", "-v", "error", "-i", base, "-c", "copy", out])
         return
@@ -265,7 +271,8 @@ def put_brolls(base, brolls, out):
     for i, (path, at, length) in enumerate(brolls):
         ins += ["-i", path]
         fc.append("[%d:v]scale=%d:%d:force_original_aspect_ratio=increase,crop=%d:%d,"
-                  "trim=0:%s,setpts=PTS-STARTPTS+%s/TB[b%d];" % (i + 1, W, H, W, H, length, at, i))
+                  "trim=0:%s,setpts=(PTS-STARTPTS)/%s+%s/TB[b%d];"
+                  % (i + 1, W, H, W, H, round(length * speed, 3), speed, at, i))
         lbl = "[v]" if i == len(brolls) - 1 else "[vb%d]" % i
         fc.append("%s[b%d]overlay=enable='between(t,%s,%s)'%s;" % (prev, i, at, at + length, lbl))
         prev = lbl
@@ -274,7 +281,70 @@ def put_brolls(base, brolls, out):
          "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-c:a", "copy", out])
 
 
-# ---------- 6. титры ----------
+# ---------- 6. вид: цвет, засветы, рамка ----------
+def make_mask(path):
+    """Чёрная картинка с прозрачным скруглённым окном — кладётся поверх ролика."""
+    x0, y0 = (CW - FRAME["w"]) // 2, (CH - FRAME["h"]) // 2
+    x1, y1, r = x0 + FRAME["w"] - 1, y0 + FRAME["h"] - 1, FRAME["r"]
+    inside = ("between(X,%d,%d)*between(Y,%d,%d)*lte(pow(max(0,max(%d-X,X-%d)),2)"
+              "+pow(max(0,max(%d-Y,Y-%d)),2),%d)" % (x0, x1, y0, y1, x0 + r, x1 - r, y0 + r, y1 - r, r * r))
+    run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "color=c=black:s=%dx%d:d=1" % (CW, CH),
+         "-vf", "format=rgba,geq=r=0:g=0:b=0:a='255*(1-%s)'" % inside, "-frames:v", "1", path])
+
+
+def make_flash(path):
+    """Тёплый засвет из правого верхнего угла, прозрачный к краям."""
+    run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "color=c=black:s=%dx%d:d=1" % (CW, CH),
+         "-vf", "format=rgba,geq=r=255:g=205:b=150:a='255*pow(max(0,1-hypot(X-W*0.85,Y-H*0.2)/(W*1.3)),1.6)'",
+         "-frames:v", "1", path])
+
+
+def apply_look(base, out, work, lut=None, lut_mix=0.5, flashes=(), frame=False):
+    """Цвет, засветы и рамка — одним проходом поверх готовой картинки."""
+    if not (lut or flashes or frame):
+        run(["ffmpeg", "-y", "-v", "error", "-i", base, "-c", "copy", out])
+        return
+    ins, fc, cur = ["-i", base], [], "[0:v]"
+    if lut:
+        # lut3d не переносит двоеточие диска в пути, поэтому файл кладётся в рабочую папку
+        shutil.copy(lut, os.path.join(work, "look.cube"))
+        fc.append("%ssplit[la][lb];[lb]lut3d=file=look.cube[lc];[la][lc]blend=all_expr='A+(B-A)*%s'[lk];"
+                  % (cur, lut_mix))
+        cur = "[lk]"
+    if frame:
+        fc.append("%sscale=%d:%d,pad=%d:%d:%d:%d:black[fr];"
+                  % (cur, FRAME["w"], FRAME["h"], CW, CH, (CW - FRAME["w"]) // 2, (CH - FRAME["h"]) // 2))
+        cur = "[fr]"
+    if flashes:
+        fpng = os.path.join(work, "flash.png")
+        make_flash(fpng)
+        for i, t in enumerate(flashes):
+            t0 = round(max(0.0, t - 0.1), 3)
+            ins += ["-loop", "1", "-framerate", str(FPS), "-t", "0.33", "-i", fpng]
+            fc.append("[%d:v]format=rgba,fade=in:st=0:d=0.1:alpha=1,fade=out:st=0.12:d=0.21:alpha=1,"
+                      "setpts=PTS-STARTPTS+%s/TB[f%d];%s[f%d]overlay=enable='between(t,%s,%s)':eof_action=pass[fo%d];"
+                      % (i + 1, t0, i, cur, i, t0, t0 + 0.33, i))
+            cur = "[fo%d]" % i
+    if frame:
+        mpng = os.path.join(work, "mask.png")
+        make_mask(mpng)
+        ins += ["-i", mpng]
+        fc.append("%s[%d:v]overlay=0:0[mk];" % (cur, len(flashes) + 1))
+        cur = "[mk]"
+    fc.append("%sformat=yuv420p[v]" % cur)
+    run(["ffmpeg", "-y", "-v", "error"] + ins + ["-filter_complex", "".join(fc), "-map", "[v]", "-map", "0:a?",
+         "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-c:a", "copy", out], cwd=work)
+
+
+def precrop_to_window(src, ay, out):
+    """Для рамки: заранее вырезает из дубля кусок пропорций окна, глаза на 35% его высоты."""
+    ch = "trunc(iw*%d/%d/2)*2" % (FRAME["h"], FRAME["w"])
+    run(["ffmpeg", "-y", "-v", "error", "-i", src, "-vf",
+         "crop=iw:%s:0:max(0\\,min(ih-%s\\,%s*ih-%s*0.35))" % (ch, ch, ay, ch),
+         "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-c:a", "copy", out])
+
+
+# ---------- 7. титры ----------
 ASS_HEAD = """[Script Info]
 ScriptType: v4.00+
 PlayResX: {w}
@@ -284,16 +354,16 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Base,{font},58,&H00FFFFFF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,4,0,2,90,90,300,204
-Style: Accent,{font_bold},118,&H00FFFFFF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,6,0,2,60,60,540,204
-Style: Cta,{font_bold},132,{cta_colour},&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,6,0,2,60,60,540,204
+Style: Base,{font},58,&H00FFFFFF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,4,0,2,90,90,{mv_base},204
+Style: Accent,{font_bold},118,&H00FFFFFF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,6,0,2,60,60,{mv_acc},204
+Style: Cta,{font_bold},132,{cta_colour},&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,6,0,2,60,60,{mv_acc},204
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
 
 
-def gen_ass(words, accent, cta, path, font, font_bold, cta_colour):
+def gen_ass(words, accent, cta, path, font, font_bold, cta_colour, frame=False):
     def ts(x):
         return "%d:%02d:%05.2f" % (int(x // 3600), int(x % 3600 // 60), x % 60)
 
@@ -316,12 +386,14 @@ def gen_ass(words, accent, cta, path, font, font_bold, cta_colour):
             ev.append("Dialogue: 1,%s,%s,%s,,0,0,0,,%s%s"
                       % (ts(x["s"]), ts(x["e"] + 0.5), st, pop, x["norm"].upper()))
     io.open(path, "w", encoding="utf-8").write(
-        ASS_HEAD.format(w=W, h=H, font=font, font_bold=font_bold, cta_colour=cta_colour)
+        # в рамке титры поднимаются внутрь окна, иначе лягут на чёрное поле
+        ASS_HEAD.format(w=CW, h=CH, font=font, font_bold=font_bold, cta_colour=cta_colour,
+                        mv_base=400 if frame else 300, mv_acc=620 if frame else 540)
         + "\n".join(ev) + "\n")
     return [x for ln in lines for x in ln if x["norm"] in accent or x["norm"] in cta]
 
 
-# ---------- 7. звук ----------
+# ---------- 8. звук ----------
 def mix_audio(video, voice_src, music, sfx, out):
     ins = ["-i", video, "-i", voice_src]
     # asplit нужен только чтобы отдать голос в боковую цепь компрессора под музыку;
@@ -348,6 +420,34 @@ def mix_audio(video, voice_src, music, sfx, out):
         fc.append("".join(mixed) + "amix=inputs=%d:duration=first:normalize=0,alimiter=limit=0.95[a]" % len(mixed))
     run(["ffmpeg", "-y", "-v", "error"] + ins + ["-filter_complex", "".join(fc),
         "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", out])
+
+
+def thin_sfx(sfx, gap=2.0):
+    """Не чаще одного звука в gap секунд: иначе ролик звенит, а не акцентирует."""
+    kept = []
+    for x in sorted(sfx, key=lambda x: x[1]):
+        if not kept or x[1] - kept[-1][1] >= gap:
+            kept.append(x)
+    return kept
+
+
+def parse_sfx(s):
+    # формат: файл@секунда или файл@секунда:громкость
+    m = re.match(r"^(.*)@([\d.]+)(?::([\d.]+))?$", s)
+    if not m:
+        sys.exit("Звук пишется так: волны.wav@7.2 или волны.wav@7.2:0.4 (файл, секунда, громкость)")
+    return m.group(1), float(m.group(2)), m.group(3) or "0.5"
+
+
+def pick_flashes(shots, n=2):
+    """Засвет — на стык перед финальным отъездом и на стык в середине ролика."""
+    cuts = [sh["s"] for sh in shots[1:] if sh["move"] != "punch"]
+    if not cuts:
+        return []
+    picks = [cuts[-1]]
+    if n > 1 and len(cuts) > 2:
+        picks.insert(0, cuts[len(cuts) // 2 - 1])
+    return picks[:n]
 
 
 def contact_sheet(video, out, cols=6, rows=2):
@@ -388,6 +488,13 @@ def main():
     ap.add_argument("--min-pause", type=float, default=0.45, help="паузы длиннее режем")
     ap.add_argument("--keep-pause", type=float, default=0.18, help="сколько паузы оставляем")
     ap.add_argument("--no-subs", action="store_true")
+    ap.add_argument("--frame", action="store_true", help="ролик в скруглённом окне на чёрном фоне")
+    ap.add_argument("--lut", default=None, help="цвет из .cube-файла")
+    ap.add_argument("--lut-mix", type=float, default=0.5, help="сила LUT 0–1; сильнее 0.6 кожа уходит в оранжевый")
+    ap.add_argument("--flash", nargs="*", type=float, default=None,
+                    help="засвет на стыке: без чисел — два авто, или секунды готового ролика")
+    ap.add_argument("--sfx", nargs="*", default=[], help="звук вручную: файл@секунда[:громкость], напр. фон под перебивку")
+    ap.add_argument("--broll-speed", type=float, default=1.0, help="0.85 — перебивки чуть медленнее, смотрятся дороже")
     ap.add_argument("--dry-run", action="store_true", help="только показать план монтажа")
     ap.add_argument("--workdir", default=None)
     a = ap.parse_args()
@@ -435,6 +542,15 @@ def main():
     print("3. лицо и запас кадра")
     ax, ay, zmax, how = face_anchor(src)
     print("   глаза x=%.2f y=%.2f (%s), предельная крупность %.2f" % (ax, ay, how, zmax))
+    if a.frame:
+        global W, H
+        W, H = FRAME["w"], FRAME["h"]
+        if not a.dry_run:
+            framed = os.path.join(work, "tight_frame.mp4")
+            precrop_to_window(tight, ay, framed)
+            tight = framed
+            ax, ay, zmax, how = face_anchor(tight, at=1.0)
+            print("   в окне 4:5: глаза x=%.2f y=%.2f, предельная крупность %.2f" % (ax, ay, zmax))
     if zmax < 1.25:
         print("   ! СНЯТО СЛИШКОМ БЛИЗКО: приближаться некуда, смены крупности почти не будет.")
         print("     Для следующего дубля встаньте в 1,5–2 м от камеры.")
@@ -458,18 +574,27 @@ def main():
 
     print("6. перебивки")
     v_broll = os.path.join(work, "v_broll.mp4")
-    put_brolls(v_shots, [parse_broll(b) for b in a.broll], v_broll)
+    put_brolls(v_shots, [parse_broll(b) for b in a.broll], v_broll, a.broll_speed)
+
+    flashes = []
+    if a.flash is not None:
+        flashes = a.flash or pick_flashes(shots)
+    if a.lut or flashes or a.frame:
+        print("   вид:%s%s%s" % (" цвет" if a.lut else "", " засветы на %s с" % ", ".join("%.1f" % t for t in flashes) if flashes else "",
+                               " рамка" if a.frame else ""))
+    v_look = os.path.join(work, "v_look.mp4")
+    apply_look(v_broll, v_look, work, a.lut and os.path.abspath(a.lut), a.lut_mix, flashes, a.frame)
 
     print("7. титры")
-    v_subs = v_broll
+    v_subs = v_look
     hits = []
     if words:
         ass = os.path.join(work, "subs.ass")
-        hits = gen_ass(words, accent, cta, ass, a.font, a.font_bold, a.cta_colour)
+        hits = gen_ass(words, accent, cta, ass, a.font, a.font_bold, a.cta_colour, a.frame)
         v_subs = os.path.join(work, "v_subs.mp4")
         cwd = os.getcwd()
         os.chdir(work)  # у фильтра subtitles путь с двоеточием диска ломается
-        run(["ffmpeg", "-y", "-v", "error", "-i", v_broll, "-vf", "subtitles=subs.ass,format=yuv420p",
+        run(["ffmpeg", "-y", "-v", "error", "-i", v_look, "-vf", "subtitles=subs.ass,format=yuv420p",
              "-c:v", "libx264", "-preset", "slow", "-crf", "19", "-c:a", "copy", v_subs])
         os.chdir(cwd)
 
@@ -477,9 +602,13 @@ def main():
     sfx = []
     if a.whoosh:
         sfx += [(a.whoosh, sh["s"], "0.45") for sh in shots if sh["move"] in ("punch", "pullout")]
+        sfx += [(a.whoosh, max(0.0, t - 0.1), "0.30") for t in flashes]
     if a.pop:
         sfx += [(a.pop, w["s"], "0.30") for w in hits]
-    mix_audio(v_subs, tight, a.music, sfx, out)
+    auto = thin_sfx(sfx)
+    if len(auto) < len(sfx):
+        print("   звуков-акцентов %d, оставлено %d (не чаще раза в 2 с)" % (len(sfx), len(auto)))
+    mix_audio(v_subs, tight, a.music, auto + [parse_sfx(x) for x in a.sfx], out)
 
     sheet = os.path.splitext(out)[0] + "-sheet.png"
     contact_sheet(out, sheet)
