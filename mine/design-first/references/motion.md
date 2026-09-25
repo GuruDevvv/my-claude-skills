@@ -21,11 +21,15 @@ All recipes are standalone: inline CSS + tiny inline JS, **no CDN libraries** (G
 
 ### Reveal-on-scroll (reliable IntersectionObserver + optional CSS-native enhancement)
 ```css
-.reveal{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s ease}
-.reveal.visible{opacity:1;transform:none}
+/* hidden only when JS runs (html.js), so no-JS / failed-JS shows everything */
+.js .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s ease}
+.js .reveal.visible{opacity:1;transform:none}
 ```
 ```html
+<!-- in <head>: --> <script>document.documentElement.classList.add('js')</script>
 <script>
+// safety net: whatever didn't reveal in 2.5s shows anyway (observer quirks, print, screenshots)
+setTimeout(()=>document.querySelectorAll('.reveal').forEach(e=>e.classList.add('visible')),2500);
 if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(e=>e.classList.add('visible'));}
 else{var io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('visible');io.unobserve(en.target);}}),{threshold:.18});
 document.querySelectorAll('.reveal').forEach(e=>io.observe(e));}

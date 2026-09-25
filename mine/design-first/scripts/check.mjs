@@ -33,6 +33,8 @@ const targets = argv.flatMap((a) => {
   return [pathToFileURL(p).href];
 });
 
+if (!targets.length) { console.error('Nothing to check: no .html files found in ' + argv.join(' ')); process.exit(2); }
+
 const chromePath = () => {
   const c = [process.env.CHROME_PATH,
     'C:/Program Files/Google/Chrome/Application/chrome.exe',
@@ -74,14 +76,26 @@ const MEASURE = String.raw`(async () => {
     !/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE|SVG|TITLE)$/i.test(el.tagName) &&
     [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim().length > 1));
 
-  const rgba = (s) => { const m = (s || '').match(/[\d.]+/g); return m ? [+m[0], +m[1], +m[2], m.length > 3 ? +m[3] : 1] : null; };
+  // any CSS colour (rgb, hsl, oklch, lab, color(), named) → [r,g,b,a] in sRGB, via a 1×1 canvas
+  const cc = document.createElement('canvas'); cc.width = cc.height = 1;
+  const cx = cc.getContext('2d', { willReadFrequently: true });
+  const rgba = (str) => {
+    if (!str || str === 'none') return null;
+    if (/^transparent$/i.test(str)) return [0, 0, 0, 0];
+    cx.fillStyle = '#010203'; cx.fillStyle = str;
+    if (cx.fillStyle === '#010203' && !/^(#010203|rgb\(1, 2, 3\))$/i.test(str)) return null;   // unparsable
+    cx.clearRect(0, 0, 1, 1); cx.fillRect(0, 0, 1, 1);
+    const d = cx.getImageData(0, 0, 1, 1).data;
+    return [d[0], d[1], d[2], d[3] / 255];
+  };
+  const COLOR_RE = /(?:rgba?|hsla?|oklch|oklab|lch|lab|hwb|color)\([^()]*\)|#[0-9a-f]{3,8}\b|\btransparent\b/gi;
   const over = (fg, bg) => fg.map((v, i) => (i < 3 ? fg[3] * v + (1 - fg[3]) * bg[i] : 1));
   const lum = (c) => { const [r, g, b] = c.slice(0, 3).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; });
     return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
   const effOpacity = (el) => { let o = 1; for (let n = el; n && n.nodeType === 1; n = n.parentElement) o *= +getComputedStyle(n).opacity; return o; };
 
   // 2. contrast, 3. stuck-invisible, 4. tiny text
-  const lowContrast = [], invisible = [], tiny = [], overImage = [];
+  const lowContrast = [], invisible = [], tiny = [], overImage = [], onGradient = [];
   for (const el of texts) {
     const r = el.getBoundingClientRect();
     const cs = getComputedStyle(el);
@@ -96,7 +110,12 @@ const MEASURE = String.raw`(async () => {
         if (/auto|scroll|hidden|clip/.test(getComputedStyle(a).overflowX) && a.scrollWidth > a.clientWidth + 1) {
           const ar = a.getBoundingClientRect(); return r.right <= ar.left + 1 || r.left >= ar.right - 1; } } return false; };
       const collapsed = n && (n.getBoundingClientRect().height < 1 || n.getBoundingClientRect().width < 1);   // e.g. li.hid{opacity:0;height:0}
-      const deliberate = (n && (collapsed || getComputedStyle(n).pointerEvents === 'none' || n.closest('[aria-hidden="true"],[hidden],[inert]'))) || offSlide();
+      // …or one half of a cross-fade (tabs, flip card, before/after): a visible sibling occupies the same spot
+      const crossFade = () => { if (!n || !n.parentElement) return false; const nr = n.getBoundingClientRect();
+        return [...n.parentElement.children].some((sib) => { if (sib === n) return false; const sr = sib.getBoundingClientRect();
+          return +getComputedStyle(sib).opacity > 0.5 && sr.width && sr.height &&
+            sr.left < nr.right && sr.right > nr.left && sr.top < nr.bottom && sr.bottom > nr.top; }); };
+      const deliberate = (n && (collapsed || n.closest('[aria-hidden="true"],[hidden],[inert]'))) || offSlide() || crossFade();
       if (!deliberate) invisible.push({ el, label: sel(el) + ' «' + sample + '»' });
       continue;
     }
@@ -111,14 +130,14 @@ const MEASURE = String.raw`(async () => {
     let stack = document.elementsFromPoint(rr.left + Math.min(rr.width / 2, 20), rr.top + rr.height / 2);
     const i = stack.indexOf(el);
     const below = i >= 0 ? stack.slice(i) : (() => { const a = []; for (let n = el; n; n = n.parentElement) a.push(n); return a; })();
-    const layers = []; let base = [255, 255, 255, 1], image = false;
+    const layers = []; let base = [255, 255, 255, 1], image = false, gradient = false;
     for (const n of below) {
       if (n !== el && /^(IMG|VIDEO|CANVAS|PICTURE|IFRAME)$/.test(n.tagName)) { image = true; break; }
       const ns = getComputedStyle(n);
       if (/url\(/.test(ns.backgroundImage)) { image = true; break; }
       if (/gradient/.test(ns.backgroundImage)) {
-        const stops = (ns.backgroundImage.match(/rgba?\([^)]+\)/g) || []).map(rgba).filter(Boolean);
-        if (stops.length) layers.push(stops);
+        const stops = (ns.backgroundImage.match(COLOR_RE) || []).map(rgba).filter(Boolean);
+        if (stops.length) { layers.push(stops); gradient = true; }
       }
       const bc = rgba(ns.backgroundColor);
       if (bc && bc[3] > 0) { if (bc[3] >= 0.999) { base = bc; break; } layers.push([bc]); }
@@ -127,10 +146,13 @@ const MEASURE = String.raw`(async () => {
     let bgs = [base];
     for (let k = layers.length - 1; k >= 0; k--) bgs = layers[k].flatMap((s) => bgs.map((u) => over(s, u)));
     const fg0 = [fill[0], fill[1], fill[2], fill[3] * op];
-    const ratio = Math.min(...bgs.map((b) => { const fg = fg0[3] < 1 ? over(fg0, b) : fg0;
-      const [hi, lo] = [lum(fg), lum(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); }));
+    const ratios = bgs.map((b) => { const fg = fg0[3] < 1 ? over(fg0, b) : fg0;
+      const [hi, lo] = [lum(fg), lum(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); });
     const large = fs >= 24 || (fs >= 18.6 && +cs.fontWeight >= 700);
     const need = large ? 3 : 4.5;
+    // on a gradient the text sits on only part of it: fail only if it fails everywhere, otherwise ask for eyes
+    if (gradient && Math.max(...ratios) >= need) { if (Math.min(...ratios) < need) onGradient.push(sel(el) + ' «' + sample + '»'); continue; }
+    const ratio = gradient ? Math.max(...ratios) : Math.min(...ratios);
     // below 3 nobody reads it comfortably (FAIL); 3..4.5 is weak for small text (WARN)
     if (ratio < need) lowContrast.push({ el: sel(el), text: sample, ratio: +ratio.toFixed(2), need, color: cs.color,
       bg: bgs.map((b) => 'rgb(' + b.slice(0, 3).map(Math.round).join(',') + ')').join(' | '), fontSize: fs, opacity: +op.toFixed(2) });
@@ -147,6 +169,7 @@ const MEASURE = String.raw`(async () => {
   out.invisible = dedup(still.map((x) => x.label));
   out.tiny = dedup(tiny);
   out.overImage = dedup(overImage).length;
+  out.onGradient = dedup(onGradient);
 
   // 5. fonts without Cyrillic (only families used on Cyrillic text)
   const generic = /^(serif|sans-serif|monospace|cursive|fantasy|system-ui|ui-\w+|-apple-system|inherit|initial)$/i;
@@ -157,16 +180,23 @@ const MEASURE = String.raw`(async () => {
   }
   const ctx = document.createElement('canvas').getContext('2d');
   const w = (font) => { ctx.font = font; return ctx.measureText('ЖжЩщЫыЁёДдФф').width; };
-  out.noCyrillic = [];
+  const same = (f, sample) => ['monospace', 'serif'].every((g) => {
+    ctx.font = '72px "' + f + '", ' + g; const a = ctx.measureText(sample).width;
+    ctx.font = '72px ' + g; return Math.abs(a - ctx.measureText(sample).width) < 0.5; });
+  out.noCyrillic = []; out.fontNotLoaded = [];
   for (const f of fams) {
     try { await document.fonts.load('72px "' + f + '"', 'Жж'); } catch {}
-    const missing = ['monospace', 'serif'].every((g) => Math.abs(w('72px "' + f + '", ' + g) - w('72px ' + g)) < 0.5);
-    if (missing) out.noCyrillic.push(f);
+    const faces = [...document.fonts].filter((ff) => ff.family.replace(/^["']|["']$/g, '') === f);
+    const loaded = faces.some((ff) => ff.status === 'loaded');
+    if (faces.length && !loaded) { out.fontNotLoaded.push(f); continue; }          // declared, file never arrived
+    if (!faces.length && same(f, 'abcxyzABC')) { out.fontNotLoaded.push(f); continue; }   // not declared, not installed
+    if (same(f, 'ЖжЩщЫыЁёДдФф')) out.noCyrillic.push(f);
   }
 
   // 6. broken images
   out.brokenImages = [...document.images].filter((im) => im.complete && im.naturalWidth === 0 && im.src)
     .map((im) => im.getAttribute('src')).slice(0, 5);
+  out.pendingImages = [...document.images].filter((im) => !im.complete).map((im) => im.getAttribute('src')).slice(0, 5);
   return out;
 })()`;
 
@@ -190,21 +220,35 @@ async function main() {
     const f = join(profile, 'DevToolsActivePort');
     if (existsSync(f)) port = readFileSync(f, 'utf8').split('\n')[0].trim();
   }
-  if (!port) throw new Error('Chrome did not start');
+  if (!port) { chrome.kill(); throw new Error('Chrome did not start'); }
+  let ws;
+  try {
   const tab = await (await fetch(`http://127.0.0.1:${port}/json/new?about:blank`, { method: 'PUT' })).json();
-  const ws = new WebSocket(tab.webSocketDebuggerUrl);
+  ws = new WebSocket(tab.webSocketDebuggerUrl);
   await new Promise((r, j) => { ws.onopen = r; ws.onerror = j; });
   let id = 0; const pending = new Map(); const listeners = [];
   ws.onmessage = (m) => { const d = JSON.parse(m.data);
     if (d.id && pending.has(d.id)) { const { res, rej } = pending.get(d.id); pending.delete(d.id); d.error ? rej(new Error(d.error.message)) : res(d.result); }
     else listeners.forEach((l) => l(d)); };
-  const send = (method, params = {}) => new Promise((res, rej) => { const i = ++id; pending.set(i, { res, rej }); ws.send(JSON.stringify({ id: i, method, params })); });
+  const send = (method, params = {}) => new Promise((res, rej) => { const i = ++id;
+    const t = setTimeout(() => { pending.delete(i); rej(new Error(method + ' timed out')); }, 90000);
+    pending.set(i, { res: (v) => { clearTimeout(t); res(v); }, rej: (e) => { clearTimeout(t); rej(e); } });
+    ws.send(JSON.stringify({ id: i, method, params })); });
+  ws.onclose = () => { for (const { rej } of pending.values()) rej(new Error('Chrome connection closed')); pending.clear(); };
   const once = (method, ms = 15000) => new Promise((res) => { const t = setTimeout(res, ms);
     const l = (d) => { if (d.method === method) { clearTimeout(t); listeners.splice(listeners.indexOf(l), 1); res(d); } }; listeners.push(l); });
   const evaluate = async (expr) => { const r = await send('Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true, timeout: 60000 });
     if (r.exceptionDetails) throw new Error(r.exceptionDetails.exception?.description || r.exceptionDetails.text); return r.result.value; };
 
-  await send('Page.enable'); await send('Runtime.enable');
+  await send('Page.enable'); await send('Runtime.enable'); await send('Network.enable');
+  let failedReqs = []; const reqUrl = new Map();
+  listeners.push((d) => {
+    if (d.method === 'Network.requestWillBeSent') reqUrl.set(d.params.requestId, d.params.request.url);
+    if (d.method === 'Network.responseReceived' && d.params.response.status >= 400)
+      failedReqs.push(d.params.response.status + ' ' + d.params.response.url);
+    if (d.method === 'Network.loadingFailed' && !d.params.canceled)
+      failedReqs.push(d.params.errorText + ' ' + (reqUrl.get(d.params.requestId) || '?'));
+  });
   let jsErrors = [];
   listeners.push((d) => { if (d.method === 'Runtime.exceptionThrown') jsErrors.push(d.params.exceptionDetails.exception?.description?.split('\n')[0] || d.params.exceptionDetails.text); });
   if (shotsDir) mkdirSync(shotsDir, { recursive: true });
@@ -212,7 +256,7 @@ async function main() {
   const report = []; let fails = 0;
   for (const url of targets) {
     for (const width of widths) {
-      jsErrors = [];
+      jsErrors = []; failedReqs = [];
       const height = width < 768 ? 844 : 900;
       await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 768 });
       const loaded = once('Page.loadEventFired');
@@ -235,11 +279,15 @@ async function main() {
       if (weak.length) problems.push(`WARN ${weak.length} small texts with weak contrast 3–4.5 (worst ${weak[0].ratio}: ${weak[0].el} «${weak[0].text}») — fix if it is body copy or a CTA`);
       for (const s of m.invisible.slice(0, 5)) problems.push(`FAIL invisible after full scroll (stuck reveal?): ${s}`);
       if (m.invisible.length > 5) problems.push(`FAIL …and ${m.invisible.length - 5} more invisible texts`);
+      for (const f of m.fontNotLoaded) problems.push(`FAIL font not loaded (wrong name/link, or not installed): "${f}"`);
       for (const f of m.noCyrillic) problems.push(`FAIL font has no Cyrillic, text falls back: "${f}"`);
       for (const s of m.brokenImages) problems.push(`FAIL broken image: ${s}`);
+      for (const s of [...new Set(failedReqs)].filter((u) => !/favicon/i.test(u)).slice(0, 5)) problems.push(`FAIL request failed: ${s.slice(0, 160)}`);
+      for (const s of m.pendingImages) problems.push(`WARN image still not loaded after scroll: ${s}`);
       for (const e of [...new Set(jsErrors)].slice(0, 3)) problems.push(`FAIL JS error: ${e}`);
       for (const s of m.tiny.slice(0, 3)) problems.push(`WARN text under 12px on phone: ${s}`);
       if (m.overImage) problems.push(`NOTE ${m.overImage} text blocks sit on photos/video — contrast not computable, check those by eye`);
+      if (m.onGradient.length) problems.push(`NOTE ${m.onGradient.length} texts on a gradient pass on some stops and fail on others — check by eye (first: ${m.onGradient[0]})`);
       const failed = problems.some((p) => p.startsWith('FAIL'));
       if (failed) fails++;
       console.log(`${failed ? '✗' : '✓'} ${decodeURIComponent(basename(url))} @${width}`);
@@ -248,10 +296,14 @@ async function main() {
     }
   }
   if (jsonOut) writeFileSync(jsonOut, JSON.stringify(report, null, 2));
-  console.log(`\n${fails ? fails + ' page×width combinations FAILED' : 'All clean'} (${report.length} checked)`);
-  ws.close(); chrome.kill();
-  await sleep(300); try { rmSync(profile, { recursive: true, force: true }); } catch {}
-  process.exit(fails ? 1 : 0);
+  console.log(`\n${fails ? fails + ' page×width combinations FAILED' : 'Nothing found'} (${report.length} checked). ` +
+    'A clean run means only that these checks found nothing — still look at every page yourself.');
+  return fails ? 1 : 0;
+  } finally {
+    try { ws.close(); } catch {}
+    chrome.kill();
+    await sleep(300); try { rmSync(profile, { recursive: true, force: true }); } catch {}
+  }
 }
 
-main().catch((e) => { console.error(e.message); process.exit(2); });
+main().then((code) => process.exit(code)).catch((e) => { console.error(e.message); process.exit(2); });

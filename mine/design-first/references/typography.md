@@ -5,12 +5,13 @@ Typography is the #1 wow lever and the #1 slop tell. Two rules govern everything
 1. **Never** use Inter, Roboto, Arial, system-ui, Open Sans, or Lato as the *design* font.
 2. **For Russian/Cyrillic content, every font MUST be verified to support Cyrillic** — or the text silently falls back to a system font and the whole design breaks.
 
-## Expressive defaults
+## Expressive defaults (landings and brand pages)
 
 - **Weight extremes:** pair 200/300 against 700/800 — not 400 vs 600.
 - **Size jumps of 3x+:** a hero headline at 64-120px next to 14-16px body, not a timid 1.5x scale.
-- **Pairing with contrast:** high-contrast display serif + clean grotesk; or serif + mono. Sameness across prototypes (every variant = elegant serif + light sans) means the *concepts* aren't different enough.
-- **Choose the font from the concept**, not for diversity's sake. If the idea calls for a didone, use one even if another variant has a serif.
+- **Tools, dashboards, forms:** readability first — calm scale (1.25–1.5x steps), regular/medium body weights, tabular figures. Expressiveness goes into one display element at most. Extreme weights and giant sizes in a working interface make it tiring.
+- **Pairing with contrast:** high-contrast display serif + clean grotesk; or serif + mono. Sameness across prototypes (every variant = elegant serif + light sans) means the directions aren't different enough.
+- **Choose the font from the mood and the domain**, not for diversity's sake.
 
 ### ⚠️ Match the font to the DOMAIN — don't default to the "comfort serif"
 A recurring failure: reaching for **Cormorant Garamond / Playfair Display on every project** because they read as "elegant". An elegant book-serif on a **fintech / hardware / tech** product is tonally wrong — it looks like a wedding invitation on a spec sheet ("свадебный гарамонд"). Before picking, ask *what does THIS product's world actually look like?*

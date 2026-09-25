@@ -32,10 +32,12 @@ Zero dependencies (Node 22+, installed Chrome/Edge). Emulates the exact viewport
 | Line | Meaning | Action |
 |---|---|---|
 | `FAIL horizontal scroll` | page wider than the window; names the outermost culprit | fix: `min-width:0`, `max-width:100%`, wrap |
-| `FAIL unreadable, contrast < 3` | text nobody reads comfortably (layered backgrounds under the text are composited, semi-transparent veils and gradients included) | fix colour or background |
+| `FAIL unreadable, contrast < 3` | text nobody reads comfortably against every background layer under it (colours in any CSS format, semi-transparent veils composited) | fix colour or background |
+| `NOTE … on a gradient` | fails on some gradient stops but not all — depends on where the text sits | check by eye |
 | `FAIL invisible after full scroll` | text still at opacity 0 after scrolling and ~6s of waiting — a reveal that never fired (toggle states, carousel slides and looping demos are already excluded) | give reveals a fallback; never hide content by default without JS |
 | `FAIL font has no Cyrillic` | text silently falls back to another font | swap the font (typography.md) |
-| `FAIL broken image` / `JS error` | as named | fix |
+| `FAIL request failed` / `image not loaded` / `JS error` | an image, CSS background or font file failed (HTTP ≥400 or network), or a script threw | fix |
+| `FAIL font not loaded` | the font file never arrived — different from "no Cyrillic" | fix the link/name |
 | `WARN weak contrast 3–4.5` | fine for big text, weak for small | fix if it's body copy or a CTA |
 | `WARN text under 12px on phone` | tiny labels | raise if it carries meaning |
 | `NOTE … on photos/video` | contrast not computable over images | check those by eye; add a scrim if in doubt |
@@ -140,5 +142,8 @@ A tool said "no" → recheck by a **different mechanism**, not by rerunning the 
 
 ## What this doesn't do
 
-Composition, rhythm, air, "cheap vs expensive" — that's the eye and taste. Numbers first, then the
-screenshot for those; if the shot argues with the numbers, the numbers win.
+Composition, rhythm, air, "cheap vs expensive" — that's the eye and taste. **Numbers can be wrong
+too** (gradients, overlapping layers, pseudo-elements, fonts still loading). If the shot and the
+numbers disagree, find out why with a third probe before acting — don't let either win by default.
+A clean run means "found nothing it knows how to find"; looking at every variant at phone and
+desktop width stays mandatory.
