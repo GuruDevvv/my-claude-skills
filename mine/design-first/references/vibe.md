@@ -23,18 +23,23 @@ The previous version told each prototype to grab a bold metaphor from far outsid
   монолитность, скучно, без иконок, анимаций и классных фишек, характерных для темы". The look was
   fine; the pages lacked *behaviour from the topic*.
 
-Lesson: **stand on the genre, be excellent inside it, add one distinctive move on top.**
-Distinctiveness is a garnish, not the foundation.
+Lesson: **stand on the genre, be excellent inside it** — and next to that, offer bold concepts
+grown from the topic's own objects (concepts.md). The blind test of 25.09 showed that genre alone
+is reliable but forgettable; the far-away metaphor was the problem, not boldness.
 
 ## The six reads (do them in order, write the results into BRIEF.md)
 
 ### 1. Audience in one concrete line
-Who, age range, situation, where they arrive from, device. Not "women 30–45" but
+Who, age range, situation, where they arrive from, device. **If the buyer isn't the person the
+product is for** (parents buy a kids' camp, HR buys a training), name both: the tone of the page
+follows who it's *about* — a kids' robotics camp is bright and light even though parents pay;
+the buyer's needs (safety, schedule, price, trust) go into the content. Blind test 25.09: the
+"trust for parents" reading turned a kids' school dark — «темноват для детской школы». Not "women 30–45" but
 "a woman 35–45, married, reading an Instagram ad in bed at 1 a.m. on her phone, embarrassed
 to ask anyone about this". The moment and the place drive the look more than demographics.
 
 ### 2. Genre codes — what this audience already trusts for this kind of offer
-Look at **3–5 real, live pages of the same offer for the same audience** (competitors, the
+Look at **3 real, live pages of the same offer for the same audience** (more only if they disagree) (competitors, the
 leaders of the niche) — **with your eyes, not as text.** A text fetch hides exactly what matters:
 light, cropping, composition. Take first-screen screenshots
 (`node <skill-dir>/scripts/check.mjs <url> --widths 390,1440 --shots prototypes/_genre/` gives you
@@ -130,10 +135,10 @@ All variants stay **inside the topic and its genre**, spread across the 2–3 mo
 - **palette** within the vibe's temperature — never six shades of one palette;
 - **type** and **which topic interactive leads**.
 
-First round (light, see SKILL.md Step 3): **4 variants** — every mood hypothesis covered, at least
-one "genre done excellently" and one "genre + bold move". Variant 0 may step outside the mood
-hypotheses entirely (a fourth reading nobody wrote down) — that's its job. For a tool or dashboard:
-no decorative metaphors at all — variety comes from register and usability mechanics.
+First round (light, see SKILL.md Step 3): **4 variants — 2 genre + 2 concept** (concepts.md), every
+mood hypothesis covered. Variant 0 is the boldest concept and may step outside the hypotheses
+(a reading nobody wrote down) — that's its job. For a tool or dashboard: concepts only if they
+work (clock face = the day, board = the queue), never as decoration.
 
 ## Worked examples
 
