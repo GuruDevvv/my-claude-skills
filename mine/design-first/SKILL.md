@@ -31,6 +31,7 @@ Context → Read the vibe → Brief → Prototypes → Gates → Measure → Gal
 - `references/imagery.md` — how to source/generate real images (autonomous cascade), and when NOT to.
 - `references/motion.md` — dependency-free animation recipes (the visible kind).
 - `references/vibe.md` — **how to read the look from the topic**: audience, genre codes, feeling → visual properties, decoding the user's verdict words, topic interactives. Read before Step 2.
+- `references/concepts.md` — **concept variants**: a bold metaphor from the topic's own objects that also does a job on the page (receipt, clock face, dispatcher's board). Read before Step 3.
 - `references/ui-verify.md` — the numeric check (`scripts/check.mjs`) and manual probes; read at Step 3.6 and whenever the user complains about how something looks.
 - `references/interaction-patterns.md` — navigation patterns + non-standard, memorable elements.
 - `references/feel-polish.md` — the 16 micro-detail rules for the **final build** (Step 5), not prototypes.
@@ -113,8 +114,9 @@ Persist decisions to `prototypes/BRIEF.md` so a long session can't lose them and
 | # | Direction (one plain line, inside the vibe) | Register | Layout skeleton | Palette | Leading topic interactive |
 |---|---------------------------------------------|----------|-----------------|---------|---------------------------|
 | 0 (free) | AI's boldest bet for *this audience* — see 3b | — | — | — | — |
-| A | e.g. "genre done excellently: dark hero, warm back-lit photo" | dark cinematic | full-bleed + stacked | warm amber | search with suggestions |
-| B | … | light editorial | split | … | … |
+| A | genre: "done excellently, warm back-lit photo" | dark cinematic | full-bleed + stacked | warm amber | search with suggestions |
+| B | genre: … | light editorial | split | … | … |
+| C | concept: "a till receipt of an ordinary month" | receipt | single column | paper + ink | spending lines that print |
 ```
 
 **Show the vibe card in plain words and go straight on** — don't wait for approval of a text the user can only judge by eye: «Вот как я прочитал тему, собираю четыре первых экрана. Если где-то мимо — скажи, поправлю по ходу.» The real checkpoint is the round-1 gallery. (Wait only if the project files contradict each other in a way that changes what to build.)
@@ -129,13 +131,13 @@ Persist decisions to `prototypes/BRIEF.md` so a long session can't lose them and
 It contains the anti-slop directive to apply to **every** prototype. This is the single highest-impact rule in the skill.
 
 ### What & how many — a light first round, then depth
-- **Round 1: 4 light variants of equal scope** (variant 0 + 3), covering all mood hypotheses. Page → **first screen + the next section**, so the flow is visible; tool → one key screen with real hierarchy; component → in context. Each shows **one** topic interactive working. Cheap and fast: the user recognises their picture with their eyes, not from the brief.
+- **Round 1: 4 light variants of equal scope — 2 genre + 2 concept.** Two "genre done excellently" (vibe.md) and two **concept variants** (concepts.md: a metaphor from the topic's own world that does a job; variant 0 is one of them, the boldest). Together they cover all mood hypotheses. Blind test 25.09: genre-only sets were reliable but lost to sets with bold topic-born concepts, especially on work screens. Page → **first screen + the next section**, so the flow is visible; tool → one key screen with real hierarchy; component → in context. Each shows **one** topic interactive working. Cheap and fast: the user recognises their picture with their eyes, not from the brief.
 - **Round 2: develop the 1–2 picked** into a fuller page (3–4 sections, the full set of topic interactives, all breakpoints). This is where depth goes — not into variants nobody chose.
 - More than 4 only if the user asks; fewer only for simple components.
 - Each prototype is a **standalone HTML file**: opens in a browser, only Google Fonts CDN + local assets, inline CSS/JS, no build, no CDN libraries.
 
 ### 3a. Variants = different takes on one vibe
-Each prototype gets **one plain line of direction**: which mood hypothesis it carries and how ("hypothesis 1, genre done excellently, light editorial register", "hypothesis 2 + embers over the hero"). Round 1: every hypothesis covered, at least one "genre done excellently" and one "genre + bold move", plus variant 0. Colour, type, layout, motion and imagery follow from the vibe card, not from a metaphor. For tools and dashboards: **no decorative metaphors** (wheels, charts-as-ornament, metro maps) — variety comes from register and usability mechanics.
+Each prototype gets **one plain line of direction**: which mood hypothesis it carries and how ("hypothesis 1, genre done excellently, light editorial register", "hypothesis 2 + embers over the hero"). Round 1: 2 genre variants + 2 concept variants (variant 0 = the boldest concept), every mood hypothesis covered. Genre variants take colour, type, layout and motion from the vibe card; concept variants derive them from their concept (concepts.md) within the audience's tone. For tools and dashboards concepts are welcome **only if they work** — a clock face that shows the day, a board that is the queue; a wheel or chart used as ornament is «непрактичное творчество».
 
 The variants must differ **structurally**, not just visually: vary ≥2 structural axes (navigation, layout skeleton, density, interaction model, hierarchy) AND ≥1 visual axis. **Grayscale test:** strip all colour → they must STILL look different. Different metaphors on the same skeleton are the same prototype.
 
@@ -204,7 +206,11 @@ If the honest answer to a gate is "no", the direction is wrong — change it, do
 ```bash
 node <skill-dir>/scripts/check.mjs prototypes/ --widths 390,1440,1920
 ```
-Fix **every FAIL** (sideways scroll, unreadable text, content stuck invisible, font without Cyrillic or not loaded, failed images/fonts, JS errors), fix WARNs on body copy and CTAs, check NOTE items (text on photos, gradients) by eye. Rerun until clean. **Then look at every variant yourself at phone and desktop width** — a clean script only means it found nothing it knows how to find. Only then build the gallery, and tell the user the result in one line. Parallel builders don't exempt you: run it on their output too — two of five once shipped unreadable text. No Node/Chrome → run the manual probes from ui-verify.md through the browser tool.
+Fix **every FAIL** (sideways scroll, unreadable text, content stuck invisible, font without Cyrillic or not loaded, failed images/fonts, JS errors), fix WARNs on body copy and CTAs, check NOTE items (text on photos, gradients) by eye. Round 1: `--widths 390,1440` is enough; the final gets 390/1440/1920. Rerun until clean. **Then look at every variant's screenshots yourself at phone and desktop width** — a clean script only means it found nothing it knows how to find. The eye pass has a fixed list, because the script can't see these:
+- **seams:** a scrim/overlay/panel that ends in the middle of the text block, a hard edge where a photo meets a panel (the script only flags "text on photo — check by eye");
+- **empty or cramped first screen**, content hidden below the fold on 1440×900;
+- **overlaps:** portrait over headline, sticker over button, text over a busy part of the photo;
+- **tone vs audience:** would the person from the vibe card find it too dark / too childish / too corporate? Only then build the gallery, and tell the user the result in one line. Parallel builders don't exempt you: run it on their output too — two of five once shipped unreadable text. No Node/Chrome → run the manual probes from ui-verify.md through the browser tool.
 
 ---
 
@@ -257,6 +263,7 @@ Once the final direction is built into **real production code** (the component/p
 | Data dashboard / dense tool | Skip photos; wow via hierarchy + type + functional motion |
 | "minimal / safe / calm" | Probe: does it mean *plain*, or *trustworthy*? Calm can still be atmospheric |
 | No references, no time | Normal case — read the vibe yourself (vibe.md); never send them hunting |
+| Buyer ≠ user (parents buy a kids' camp) | The page's tone follows who it's *about*: kids → bright and light; trust signals for the buyer go into the content, not into a dark palette |
 | «мрачно / скучно / мало секса / сливается / одинаковые» | Decode with the verdict table in vibe.md; «не то» usually means you left the genre |
 | Complaint about one element | 2–3 variants of that element over the built page, not a new round |
 | "Looks broken / pale / shifted" | Measure first (ui-verify.md) — the screenshot may be lying |
