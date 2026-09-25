@@ -65,8 +65,8 @@ var t0=null;requestAnimationFrame(function s(ts){t0=t0||ts;var p=Math.min((ts-t0
 ### CTA sheen / light-sweep
 ```css
 .sheen{position:relative;overflow:hidden}
-.sheen::after{content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(110deg,transparent,rgba(255,255,255,.5),transparent);animation:sweep 5.5s ease-in-out infinite}
-@keyframes sweep{0%,100%{left:-120%}55%,70%{left:130%}}
+.sheen::after{content:'';position:absolute;top:0;left:0;width:60%;height:100%;background:linear-gradient(110deg,transparent,rgba(255,255,255,.5),transparent);transform:translateX(-200%);animation:sweep 5.5s ease-in-out infinite}
+@keyframes sweep{0%,100%{transform:translateX(-200%)}55%,70%{transform:translateX(220%)}}
 ```
 
 ### Atmospheric fog / breathing glow / floating motes (cinematic heroes)
@@ -85,8 +85,8 @@ addEventListener('scroll',()=>{requestAnimationFrame(()=>{img.style.transform='t
 function swap(fn){document.startViewTransition?document.startViewTransition(fn):fn();}
 ```
 
-### Canvas particle system (dramatic — for the 1 "cinematic" prototype)
-Inline `<canvas>` + `requestAnimationFrame` loop. Use for embers/snow/starfield/constellation/lightning. Template + effect recipes below.
+### Canvas particle system (dramatic — for a cinematic page)
+Inline `<canvas>` + `requestAnimationFrame` loop. **The CSS reduced-motion rule does not stop a JS loop:** start it only when `!matchMedia('(prefers-reduced-motion: reduce)').matches`. Use for embers/snow/starfield/constellation/lightning. Template + effect recipes below.
 ```html
 <canvas id="fx" style="position:fixed;inset:0;pointer-events:none;z-index:0;"></canvas>
 <script>(function(){var c=document.getElementById('fx'),x=c.getContext('2d'),P=[];

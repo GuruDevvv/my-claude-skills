@@ -32,7 +32,7 @@ Zero dependencies (Node 22+, installed Chrome/Edge). Emulates the exact viewport
 | Line | Meaning | Action |
 |---|---|---|
 | `FAIL horizontal scroll` | page wider than the window; names the outermost culprit | fix: `min-width:0`, `max-width:100%`, wrap |
-| `FAIL unreadable, contrast < 3` | text nobody reads comfortably against every background layer under it (colours in any CSS format, semi-transparent veils composited) | fix colour or background |
+| `FAIL unreadable, contrast < 3` | text nobody reads comfortably against every background layer under it (colours in any CSS format, semi-transparent veils composited, a panel faded together with its text by `opacity` counted as the browser paints it) | fix colour or background |
 | `NOTE … run partly over a photo` | the text line crosses the edge of a photo — often a fine gradient fade, sometimes a seam | check that edge by eye |
 | `NOTE … on a gradient` | fails on some gradient stops but not all — depends on where the text sits | check by eye |
 | `FAIL invisible after full scroll` | text still at opacity 0 after scrolling and ~6s of waiting — a reveal that never fired (toggle states, carousel slides and looping demos are already excluded) | give reveals a fallback; never hide content by default without JS |
@@ -147,11 +147,19 @@ A tool said "no" → recheck by a **different mechanism**, not by rerunning the 
   than its headline (a real case the user caught) passes clean. That is why "seams" is on the eye-pass list.
 - `mix-blend-mode`, `text-shadow`, `backdrop-filter` are ignored in contrast.
 - Text on photos is never scored, only counted.
+- Only elements with their own text of 2+ characters are read: input values, placeholders and single
+  digits are skipped. Only the widest line of each block is sampled.
+- "Invisible after scroll" is excused when a visible element overlaps the hidden one (built for
+  cross-fading slides) — an accidental overlap excuses it too.
+- The Cyrillic test probes the first family of each text, regular style; other weights and italics of
+  a web font are not proven by it.
+- After changing the script, run `scripts/controls/` (EXPECTED.md there): every `bad-*` page must fail,
+  every `good-*` page must pass.
 
 ## What this doesn't do
 
 Composition, rhythm, air, "cheap vs expensive" — that's the eye and taste. **Numbers can be wrong
 too** (gradients, overlapping layers, pseudo-elements, fonts still loading). If the shot and the
 numbers disagree, find out why with a third probe before acting — don't let either win by default.
-A clean run means "found nothing it knows how to find"; looking at every variant at phone and
+A clean run means "found nothing it knows how to find"; looking at every page at phone and
 desktop width stays mandatory.

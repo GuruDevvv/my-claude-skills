@@ -1,5 +1,8 @@
 # Frontend Aesthetics — the anti-"AI-slop" directive
 
+> **Fallback only.** The main path draws the look with an image model (mockups.md). Read this when no
+> image generator is available and the first screens have to be written as HTML directly.
+
 Read this **before generating any prototype** and apply it to each one. This is adapted from Anthropic's own "frontend aesthetics" guidance (Claude Cookbook) — the most battle-tested anti-slop prompt available. Models converge toward the average of their training data; in frontend that average is "AI slop". This directive pushes against it.
 
 ## The directive (apply to every prototype — levers are tools chosen by the vibe card, not quotas)
@@ -17,7 +20,7 @@ Read this **before generating any prototype** and apply it to each one. This is 
 - **Color:** purple→blue→cyan gradient text, purple-on-white, timid grey+blue palettes.
 - **Layout:** everything centered; the hero = headline + subtitle + two buttons; three identical feature cards in a row.
 - **Effects:** the same shadow on every element; glassmorphism everywhere (reads as "built from a Lovable preset"); blurred purple "orbs".
-- **Icons:** emoji bullets; stock icon sets sprinkled on everything. (A consistent own inline-SVG line set, ≥32px in cards, is wanted — see SKILL.md 3i.)
+- **Icons:** emoji bullets; stock icon sets sprinkled on everything. (A consistent own inline-SVG line set, ≥32px in cards, stroke ≥1.75, is wanted.)
 
 > Real example caught in testing: a production app's own CSS had the comment `/* Градиентный текст — главный маркер AI-дизайна */` above a purple gradient — they knew it was the slop marker and shipped it anyway. Don't.
 
