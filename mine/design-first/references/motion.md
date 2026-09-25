@@ -103,7 +103,7 @@ for(var i=0;i<N;i++)P.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:
 | Floating orbs | few large (10-30px), `sin/cos` motion, radial fill, blur |
 | Smoke/mist | large semi-transparent (30-80px), `vy:-0.3`, high blur |
 
-## Advanced / sophisticated motion (for the 1-2 "complex" prototypes)
+## Advanced / sophisticated motion (where the chosen direction calls for it)
 
 Use one of these as the centerpiece of a prototype — orchestrated, multi-step, scroll- or pointer-driven.
 

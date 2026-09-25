@@ -3,7 +3,7 @@
 > **Fallback only.** The main path draws the look with an image model (mockups.md). Read this when no
 > image generator is available and the first screens have to be written as HTML directly.
 
-Read this **before generating any prototype** and apply it to each one. This is adapted from Anthropic's own "frontend aesthetics" guidance (Claude Cookbook) — the most battle-tested anti-slop prompt available. Models converge toward the average of their training data; in frontend that average is "AI slop". This directive pushes against it.
+In that fallback, read it before writing the HTML screens and apply it to each one. This is adapted from Anthropic's own "frontend aesthetics" guidance (Claude Cookbook) — the most battle-tested anti-slop prompt available. Models converge toward the average of their training data; in frontend that average is "AI slop". This directive pushes against it.
 
 ## The directive (apply to every prototype — levers are tools chosen by the vibe card, not quotas)
 
@@ -36,7 +36,7 @@ Plus the project's own anti-references from the brief.
 1. **Distinctive type at weight + size extremes** — single biggest differentiator, zero perf cost.
 2. **Grain/noise overlay** — SVG `feTurbulence` at ~0.05-0.12 opacity. Kills sterile flatness. (snippet in `motion.md`/below)
 3. **Staggered page-load reveal** — `animation-delay` 0/120/240/360ms. "Designed", not "rendered".
-4. **One committed accent on a base chosen from the mood** — light or dark, but never timid purple-on-white. Across a round, don't let dark bases dominate: a set of mostly dark pages reads as «мрачно, монотонно».
+4. **One committed accent on a base chosen from the mood** — light or dark, but never timid purple-on-white. Across the six screens, don't let dark bases dominate: a set of mostly dark pages reads as «мрачно, монотонно».
 5. **A background that carries the mood** — layered gradients / real image / pattern when the mood wants depth; clean and light when it wants clarity.
 6. **Asymmetric or editorial layout** — non-centered, oversized type, content that breaks the grid.
 

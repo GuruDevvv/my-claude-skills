@@ -6,7 +6,7 @@ Two jobs: (1) make pages genuinely **navigable** when there's a lot of content, 
 
 ## Navigation — understand it, don't ignore it
 
-A long scroll with no wayfinding is a usability failure. **If content is list-heavy or multi-section (memo, docs, catalog, multi-section landing), ≥1-2 prototypes must include real navigation.** Vary the pattern across prototypes — navigation is a structural diversity axis.
+A long scroll with no wayfinding is a usability failure. **If content is list-heavy or multi-section (memo, docs, catalog, multi-section landing), the built page must include real navigation.** Pick the pattern that fits the chosen mockup.
 
 ### Patterns (pick per concept)
 | Pattern | When | Notes |
@@ -39,7 +39,7 @@ Always `scroll-margin-top` on anchored sections so sticky headers don't cover th
 
 ## Non-standard / memorable elements
 
-**≥1 prototype should feature one unconventional interaction** — the thing a stranger remembers. Don't overdo it (one strong move per prototype, not a circus). Pick what fits the concept:
+**The built page may feature one unconventional interaction** — the thing a stranger remembers. Don't overdo it (one strong move per page, not a circus). Pick what fits the concept:
 
 | Element | Effect | Dependency-free? |
 |---|---|---|

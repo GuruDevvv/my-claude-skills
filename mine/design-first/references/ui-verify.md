@@ -43,8 +43,8 @@ Zero dependencies (Node 22+, installed Chrome/Edge). Emulates the exact viewport
 | `WARN text under 12px on phone` | tiny labels | raise if it carries meaning |
 | `NOTE … on photos/video` | contrast not computable over images | check those by eye; add a scrim if in doubt |
 
-Exit code 1 if anything FAILs. **Fix every FAIL before the gallery**, rerun until clean, and give
-the user the numbers in one line ("6 макетов × 3 ширины, всё чисто; 2 слабых подписи поправил").
+Exit code 1 if anything FAILs. **Fix every FAIL before showing the page**, rerun until clean, and give
+the user the numbers in one line («страница × 3 ширины, всё чисто; 2 слабых подписи поправил»).
 
 ## Manual probes (for complaints and anything the script doesn't cover)
 
