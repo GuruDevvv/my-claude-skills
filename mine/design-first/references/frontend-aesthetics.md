@@ -17,7 +17,7 @@ Read this **before generating any prototype** and apply it to each one. This is 
 - **Color:** purple→blue→cyan gradient text, purple-on-white, timid grey+blue palettes.
 - **Layout:** everything centered; the hero = headline + subtitle + two buttons; three identical feature cards in a row.
 - **Effects:** the same shadow on every element; glassmorphism everywhere (reads as "built from a Lovable preset"); blurred purple "orbs".
-- **Icons:** emoji bullets; Lucide/Heroicons sprinkled on everything.
+- **Icons:** emoji bullets; stock icon sets sprinkled on everything. (A consistent own inline-SVG line set, ≥32px in cards, is wanted — see SKILL.md 3i.)
 
 > Real example caught in testing: a production app's own CSS had the comment `/* Градиентный текст — главный маркер AI-дизайна */` above a purple gradient — they knew it was the slop marker and shipped it anyway. Don't.
 
