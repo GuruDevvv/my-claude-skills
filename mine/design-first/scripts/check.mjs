@@ -116,7 +116,9 @@ const MEASURE = String.raw`(async () => {
           return +getComputedStyle(sib).opacity > 0.5 && sr.width && sr.height &&
             sr.left < nr.right && sr.right > nr.left && sr.top < nr.bottom && sr.bottom > nr.top; }); };
       const deliberate = (n && (collapsed || n.closest('[aria-hidden="true"],[hidden],[inert]'))) || offSlide() || crossFade();
-      if (!deliberate) invisible.push({ el, label: sel(el) + ' «' + sample + '»' });
+      // inside a fixed/sticky overlay (scroll hints, toasts) it is UI chrome, not page content — warn only
+      let overlay = false; for (let a = el; a && a !== document.body; a = a.parentElement) if (/fixed|sticky/.test(getComputedStyle(a).position)) { overlay = true; break; }
+      if (!deliberate) invisible.push({ el, overlay, label: sel(el) + ' «' + sample + '»' });
       continue;
     }
     const fs = parseFloat(cs.fontSize);
@@ -125,7 +127,7 @@ const MEASURE = String.raw`(async () => {
     if (!fill || fill[3] === 0) continue;                    // gradient/clip text — eye only
     // background layers: what is actually under the text's centre, top to bottom
     window.scrollTo(0, Math.max(0, r.top + scrollY - innerHeight / 2));
-    if (op < 0.999) { await new Promise((z) => setTimeout(z, 900)); op = effOpacity(el); }   // let a reveal finish
+    if (op < 0.999) { await new Promise((z) => setTimeout(z, 900)); op = effOpacity(el); if (op < 0.05) continue; }   // let a reveal finish; faded out meanwhile = transient
     const rr = el.getBoundingClientRect();
     let stack = document.elementsFromPoint(rr.left + Math.min(rr.width / 2, 20), rr.top + rr.height / 2);
     const i = stack.indexOf(el);
@@ -158,6 +160,8 @@ const MEASURE = String.raw`(async () => {
       bg: bgs.map((b) => 'rgb(' + b.slice(0, 3).map(Math.round).join(',') + ')').join(' | '), fontSize: fs, opacity: +op.toFixed(2) });
   }
   // looping animations (typing demos, carousels) hide text only part of the time: resample over ~6s
+  // back at the top first: scroll hints ("крутите вниз") hide on scroll and come back there
+  window.scrollTo(0, 0);
   let still = invisible;
   for (let k = 0; k < 4 && still.length; k++) {
     await new Promise((z) => setTimeout(z, 1500));
@@ -166,7 +170,8 @@ const MEASURE = String.raw`(async () => {
   window.scrollTo(0, 0);
   const dedup = (a) => [...new Map(a.map((x) => [typeof x === 'string' ? x : x.el + x.ratio, x])).values()];
   out.lowContrast = dedup(lowContrast).sort((a, b) => a.ratio - b.ratio);
-  out.invisible = dedup(still.map((x) => x.label));
+  out.invisible = dedup(still.filter((x) => !x.overlay).map((x) => x.label));
+  out.hiddenOverlay = dedup(still.filter((x) => x.overlay).map((x) => x.label));
   out.tiny = dedup(tiny);
   out.overImage = dedup(overImage).length;
   out.onGradient = dedup(onGradient);
@@ -279,6 +284,7 @@ async function main() {
       if (weak.length) problems.push(`WARN ${weak.length} small texts with weak contrast 3–4.5 (worst ${weak[0].ratio}: ${weak[0].el} «${weak[0].text}») — fix if it is body copy or a CTA`);
       for (const s of m.invisible.slice(0, 5)) problems.push(`FAIL invisible after full scroll (stuck reveal?): ${s}`);
       if (m.invisible.length > 5) problems.push(`FAIL …and ${m.invisible.length - 5} more invisible texts`);
+      for (const s of m.hiddenOverlay.slice(0, 3)) problems.push(`WARN hidden text in a fixed/sticky overlay (fine if it is a hint that goes away on purpose): ${s}`);
       for (const f of m.fontNotLoaded) problems.push(`FAIL font not loaded (wrong name/link, or not installed): "${f}"`);
       for (const f of m.noCyrillic) problems.push(`FAIL font has no Cyrillic, text falls back: "${f}"`);
       for (const s of m.brokenImages) problems.push(`FAIL broken image: ${s}`);
