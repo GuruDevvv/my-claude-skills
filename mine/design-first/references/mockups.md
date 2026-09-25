@@ -20,7 +20,7 @@ never assume a vendor. **No generator → use the fallback in SKILL.md (HTML fir
 
 Codex CLI recipe (Bash, one call per image, calls may run in parallel):
 ```bash
-cd prototypes/mockups && codex exec --skip-git-repo-check -o ../_logs/m1.txt \
+mkdir -p prototypes/mockups/_logs && cd prototypes/mockups && codex exec --skip-git-repo-check -o ../_logs/m1.txt \
   "ИСПОЛЬЗУЙ СВОЙ ВСТРОЕННЫЙ ИНСТРУМЕНТ image_gen (системный скилл imagegen, модель gpt-image-2, через подписку — OPENAI_API_KEY НЕ НУЖЕН). <prompt>. Сохрани как m1.png в текущей папке. В ответе только полный путь к файлу." < /dev/null
 ```
 If the file isn't in the folder, take the path Codex printed (`~/.codex/generated_images/...`) — that
@@ -65,7 +65,8 @@ showed it doesn't predict the user; drop only broken images.
 
 ## 2. Gallery → pick → mix
 
-Gallery page: the six images in a numbered grid, each opens large on click, a light neutral page.
+Gallery page `prototypes/mockups/gallery.html`: the six images in a numbered grid, each opens large on
+click, a light neutral page.
 Serve it locally (`python -m http.server <free port> --bind 127.0.0.1`), confirm with curl, give the
 link. Ask: "which one is closest, and what would you take from the others?" A mix ("as №3 but the
 palette of №5") is **one more edit call** with both files named in the prompt — not a new round.
@@ -83,13 +84,15 @@ From the chosen desktop file as reference:
 
 ## 4. Plates — the mockup without its text
 
-For each chosen mockup (desktop and phone) that has photo/texture art:
+For each chosen mockup (desktop and phone) that has raster art — photo, paper or stamp texture,
+illustration:
 ```
 Возьми файл <m>.png и отредактируй: убери ВЕСЬ текст, заголовки, подписи, кнопки, строку поиска и
 штрихи под заголовком — на их месте чистый фон той же фактуры и цвета. Всё остальное (фото, люди,
 бумага, пятна, растения, фигуры, свет, кадрирование, размер) оставь в точности как было.
 Сохрани как <m>-plate.png.
 ```
+Copy the plates into `prototypes/<scope>-assets/` for the build.
 Open the plate and compare with the mockup: composition must be unchanged. Small decorations the edit
 removed (a heart, a sprig, a squiggle) are redrawn as SVG in the build. A pure-interface mockup (tool,
 dashboard) needs no plate — it is built entirely in HTML/CSS; a decorative bit can be cropped out of the

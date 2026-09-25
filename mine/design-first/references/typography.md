@@ -10,7 +10,7 @@ Typography is the #1 wow lever and the #1 slop tell. Two rules govern everything
 - **Weight extremes:** pair 200/300 against 700/800 — not 400 vs 600.
 - **Size jumps of 3x+:** a hero headline at 64-120px next to 14-16px body, not a timid 1.5x scale.
 - **Tools, dashboards, forms:** readability first — calm scale (1.25–1.5x steps), regular/medium body weights, tabular figures. Expressiveness goes into one display element at most. Extreme weights and giant sizes in a working interface make it tiring.
-- **Pairing with contrast:** high-contrast display serif + clean grotesk; or serif + mono. Sameness across prototypes (every variant = elegant serif + light sans) means the directions aren't different enough.
+- **Pairing with contrast:** high-contrast display serif + clean grotesk; or serif + mono. In the fallback path, sameness across the HTML screens (every one = elegant serif + light sans) means the directions aren't different enough. In the main path, match the font the mockup shows.
 - **Choose the font from the mood and the domain**, not for diversity's sake.
 
 ### ⚠️ Match the font to the DOMAIN — don't default to the "comfort serif"
@@ -20,7 +20,7 @@ A recurring failure: reaching for **Cormorant Garamond / Playfair Display on eve
 | PC hardware / tech / performance / SaaS tools | precise grotesques + mono (Geologica, Onest, Manrope, Inter Tight, JetBrains Mono), or a confident geometric display (Unbounded) | delicate literary serifs (Cormorant, Playfair) |
 | Finance / B2B / trust | restrained modern grotesk, or a *sturdy* serif (Literata, Spectral) | dainty didones |
 | Editorial / emotional / lifestyle | expressive/contrast serifs (Cormorant, Prata, Alegreya) shine here | generic grotesks |
-**Anti-default check:** if Cormorant or Playfair shows up in more than one variant — or across more than one project — that's the comfort-zone tell. Reach into the full pool and pick for *this* domain.
+**Anti-default check:** if Cormorant or Playfair shows up in more than one fallback screen — or across more than one project — that's the comfort-zone tell. Reach into the full pool and pick for *this* domain.
 
 ## ⚠️ The Cyrillic gate (HARD rule for RU)
 

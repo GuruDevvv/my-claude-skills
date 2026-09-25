@@ -25,10 +25,10 @@ the buyer's needs (safety, schedule, price, trust) go into the content. Blind te
 to ask anyone about this". The moment and the place drive the look more than demographics.
 
 ### 2. Genre codes — what this audience already trusts for this kind of offer
-Look at **3 real, live pages of the same offer for the same audience** (more only if they disagree) (competitors, the
-leaders of the niche) — **with your eyes, not as text.** A text fetch hides exactly what matters:
+Look at **3 real, live pages of the same offer for the same audience** (more only if they disagree) —
+competitors, the leaders of the niche, found with the web search the environment has — **with your eyes, not as text.** A text fetch hides exactly what matters:
 light, cropping, composition. Take first-screen screenshots
-(`node <skill-dir>/scripts/check.mjs <url> --widths 390,1440 --shots prototypes/_genre/` gives you
+(`node <skill-dir>/scripts/check.mjs <url> --widths 1440 --shots prototypes/_genre/` gives you
 PNGs of any URL) and look at them. If you truly can't get pages, derive from knowledge and mark
 every such line in the brief as **assumption**. Write the genre DNA, keeping **seen** apart from
 **assumed**:
@@ -81,9 +81,9 @@ For each hypothesis translate the feeling into properties you can actually build
 
 ### 4. Topic props → interactive pieces
 List the objects and actions of the topic. For a landing plan **3–4 interactive pieces made from
-them** — each must say "here they do exactly this", otherwise the page fits anything. In the first
-(light) round each variant shows **one** of them working; the full set goes into the chosen
-direction. Every piece must earn its place by helping the visitor understand or decide — effects
+them** — each must say "here they do exactly this", otherwise the page fits anything. Mockups can't
+show them working; they go into the built page — one right below the first screen (SKILL.md Step 7),
+the full set in the full build. Every piece must earn its place by helping the visitor understand or decide — effects
 for their own sake replace "text wall" with "effect wall".
 Real examples: a search bar typing the visitor's secret question with live suggestions (intimacy
 webinar); a "how much is this about you" slider; a level slider A1→C2 and flip cards
@@ -106,10 +106,11 @@ its own colour character.
 Жанр и его коды (видел / предполагаю): <read 2, in 1–2 lines>
 Настроения-гипотезы: 1) <mood> → <properties>  2) …  3) …
 Фишки из темы: <read 4>
+Чья палитра: <read 5 — free, or whose it already is>
 Концепт из предметов темы: <concepts.md — for mockup 6>
 ```
-Show it with the brief. The user may correct it in one reply or just say "go" — never require
-them to supply references. If they volunteer a picture or a link, it overrides reads 2–3.
+Show it and go straight on (SKILL.md Step 2): the user may correct it in one reply while you draw —
+never wait for approval of a text, never require them to supply references. If they volunteer a picture or a link, it overrides reads 2–3.
 
 ## How the six mockups use this
 
