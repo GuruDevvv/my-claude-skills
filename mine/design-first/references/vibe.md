@@ -35,8 +35,12 @@ to ask anyone about this". The moment and the place drive the look more than dem
 
 ### 2. Genre codes — what this audience already trusts for this kind of offer
 Look at **3–5 real, live pages of the same offer for the same audience** (competitors, the
-leaders of the niche). If web search/fetch is available, actually open them; if not, derive
-from knowledge and say so in the brief. Write the genre DNA:
+leaders of the niche) — **with your eyes, not as text.** A text fetch hides exactly what matters:
+light, cropping, composition. Take first-screen screenshots
+(`node <skill-dir>/scripts/check.mjs <url> --widths 390,1440 --shots prototypes/_genre/` gives you
+PNGs of any URL) and look at them. If you truly can't get pages, derive from knowledge and mark
+every such line in the brief as **assumption**. Write the genre DNA, keeping **seen** apart from
+**assumed**:
 
 | Code | What to note |
 |---|---|
@@ -48,11 +52,22 @@ from knowledge and say so in the brief. Write the genre DNA:
 | Signature effects | glow, grain, big numbers, handwriting, stickers… |
 
 Genre codes are the **baseline, not an anti-reference.** You may break one code deliberately
-(that is the "distinctive move"), never all of them.
+(that is the "distinctive move"), never all of them. But popularity among competitors is a
+hypothesis about what the audience trusts, not proof — that's why read 3 produces several
+moods, not one.
 
-### 3. Emotional core → concrete visual properties
-Name what the visitor should feel right before clicking, then translate the feeling into
-properties you can actually build:
+### 3. Two or three mood hypotheses → concrete visual properties
+**One reading of the topic is a single point of failure:** if it's wrong, all the prototypes are
+wrong together. So name **2–3 different moods the topic could honestly carry** — e.g. intimacy can
+be *sensual*, *homely-tender* or *bold-provocative*; a finance course can be *calm-competent*,
+*ambitious* or *friendly-demystifying*. The prototypes are then spread across these hypotheses,
+and the user recognises their picture in one of them — which is how every past success happened.
+
+Explicit prohibitions from the user ("no nudity", "no faces") hold for all hypotheses. Vaguer
+anti-references ("not corporate", "not dark") are hypotheses too — cover at least one variant
+that respects them and don't let them veto the genre wholesale.
+
+For each hypothesis translate the feeling into properties you can actually build:
 
 | Feeling | Light | Colour | Human presence | Density | Motion |
 |---|---|---|---|---|---|
@@ -76,7 +91,10 @@ properties you can actually build:
 
 ### 4. Topic props → interactive pieces
 List the objects and actions of the topic. For a landing plan **3–4 interactive pieces made from
-them** — each must say "here they do exactly this", otherwise the page fits anything.
+them** — each must say "here they do exactly this", otherwise the page fits anything. In the first
+(light) round each variant shows **one** of them working; the full set goes into the chosen
+direction. Every piece must earn its place by helping the visitor understand or decide — effects
+for their own sake replace "text wall" with "effect wall".
 Real examples: a search bar typing the visitor's secret question with live suggestions (intimacy
 webinar); a "how much is this about you" slider; a level slider A1→C2 and flip cards
 "phrase in Russian / in English" with `speechSynthesis` (language tutor); a season deadline board
@@ -92,11 +110,11 @@ product** in the same project. A warm cream-terracotta palette once designed for
 a second speaker's product read as the first one's — "никуда не годится". Each author/product gets
 its own colour character.
 
-### 6. The vibe card — five plain lines in the brief
+### 6. The vibe card — a few plain lines in the brief
 ```
 Кто смотрит: <read 1>
-Жанр и его коды: <read 2, in 1–2 lines>
-Что должен почувствовать: <read 3> → <the 3–4 visual properties it implies>
+Жанр и его коды (видел / предполагаю): <read 2, in 1–2 lines>
+Настроения-гипотезы: 1) <mood> → <properties>  2) …  3) …
 Фишки из темы: <read 4>
 Один смелый ход поверх жанра: <what breaks one code, deliberately>
 ```
@@ -105,15 +123,17 @@ them to supply references. If they volunteer a picture or a link, it overrides r
 
 ## How the prototypes differ
 
-All variants stay **inside the read vibe**. They differ by:
+All variants stay **inside the topic and its genre**, spread across the 2–3 mood hypotheses
+(at least one variant per hypothesis). Within that they differ by:
 - **style register** — dark cinematic, light editorial magazine, poster, soft app, strict grid;
 - **layout skeleton** — the grayscale test still applies: strip colour, they must still differ;
 - **palette** within the vibe's temperature — never six shades of one palette;
 - **type** and **which topic interactive leads**.
 
-Default composition of 6: **3–4 "the genre done excellently"** (different registers and
-skeletons), **1–2 "genre + one bold move"**, plus **variant 0**, the free bet. For a tool or
-dashboard: no decorative metaphors at all — variety comes from register and usability mechanics.
+First round (light, see SKILL.md Step 3): **4 variants** — every mood hypothesis covered, at least
+one "genre done excellently" and one "genre + bold move". Variant 0 may step outside the mood
+hypotheses entirely (a fourth reading nobody wrote down) — that's its job. For a tool or dashboard:
+no decorative metaphors at all — variety comes from register and usability mechanics.
 
 ## Worked examples
 
