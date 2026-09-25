@@ -30,9 +30,9 @@ Two principles:
 - **Cyrillic safety gate** — verified distinctive RU font pool + a one-line checker; RU vs Latin font branching (`references/typography.md`).
 - **Autonomous image sourcing** — works with no account/key: a generator if present → Openverse (free) → Picsum → none; downloads locally; self-sufficient if images fail; knows when *not* to use images (`references/imagery.md`).
 - **Visible, dependency-free motion** matched to product type — atmospheric vs functional, incl. advanced scroll-driven/cursor-reactive recipes (`references/motion.md`).
-- **Real imagery is mandatory** (≥ half the prototypes) and sourced centrally before generation, so prototypes never ship image-less.
+- **Images when the direction calls for one** — then generated for the page from the vibe card (free stock only as fallback), sourced centrally before building.
 - **Navigation-aware + non-standard elements** — sticky TOC/scroll-spy for content-heavy pages; one memorable unconventional interaction per set (`references/interaction-patterns.md`).
-- **Vibe reading** — audience, genre codes, feeling → visual properties, decoding the client's verdict words («мрачно», «скучно», «всё сливается»), 3–4 topic interactives per landing (`references/vibe.md`).
+- **Vibe reading** — audience, genre codes, feeling → visual properties, decoding the client's verdict words («мрачно», «скучно», «всё сливается»), topic interactives (one per first-round variant, the full set in the chosen build) (`references/vibe.md`).
 - **Numeric check before the gallery** — zero-dependency headless Chrome script + manual probes for complaints (`references/ui-verify.md`, `scripts/check.mjs`).
 - **WOW-gate** — creative quality gates, not just technical checks.
 - **Feel pass** — after the final winner is built into real code, a default polish step applies 16 micro-detail rules (concentric radius, optical alignment, interruptible animation, tabular numbers, image outlines, scale-on-press…) and reports Before/After (`references/feel-polish.md`). Skippable with "skip polish".
