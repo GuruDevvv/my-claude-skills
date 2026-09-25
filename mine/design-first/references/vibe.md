@@ -4,28 +4,14 @@ Most people who ask for a design have **no reference at hand** and no time or wi
 They carry a picture in their head that they can't describe in words — but they recognise it
 instantly when they see it. The skill's job is to read that picture from the topic itself.
 
-## Why this replaced "invent a concept from outside the category"
+## Why
 
-The previous version told each prototype to grab a bold metaphor from far outside the niche
-("a telegram from 1920s Berlin"). On real projects that failed in a consistent way:
-
-- **A women's-marathon webinar landing:** nine prototypes over three rounds rejected —
-  "мрачные, монотонные, скучные", then "мало секса", then "смотрю на все это и плачу".
-  What finally landed at once: the *typical look of that genre* — a dark page, a big warmly
-  back-lit photo of a woman, glow and embers. The brief had listed exactly that genre as an
-  anti-reference. The audience recognises "this is for me" through genre codes; fleeing them
-  made the pages feel alien.
-- **An internal knowledge-base tool:** five prototypes with metaphors (a wheel, a chart,
-  a metro map) — "все очень похожи и мне не нравится… убрать это непрактичное творчество".
-  Different metaphors on the same layout skeleton read as identical; decoration that doesn't
-  speed up work is noise.
-- **A business-English tutor site:** four clean, correct prototypes — "перегруженность текстом,
-  монолитность, скучно, без иконок, анимаций и классных фишек, характерных для темы". The look was
-  fine; the pages lacked *behaviour from the topic*.
-
-Lesson: **stand on the genre, be excellent inside it** — and next to that, offer bold concepts
-grown from the topic's own objects (concepts.md). The blind test of 25.09 showed that genre alone
-is reliable but forgettable; the far-away metaphor was the problem, not boldness.
+Earlier versions invented a bold metaphor from far outside the niche for every prototype. On real
+projects that made pages feel alien to their audience (a webinar landing went through nine
+rejected prototypes before the genre's own look landed at once), decorative metaphors on a work
+tool were called «непрактичное творчество», and clean pages without topic behaviour were «скучно».
+So: stand on the genre, add concepts grown from the topic's own objects (concepts.md), and give
+the page behaviour from the topic.
 
 ## The six reads (do them in order, write the results into BRIEF.md)
 

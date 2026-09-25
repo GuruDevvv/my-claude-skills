@@ -1,10 +1,9 @@
 # Concept variants — a bold idea grown from the topic's own objects
 
-Two of the four round-1 variants are **concept variants**. They exist because the blind test of
-25.09.2026 showed that reading the genre alone makes pages reliable but forgettable: the variants
-the user picked on a work screen were the bold ones — a day drawn as a **clock face**, a
-**dispatcher's board**. On landings too, a **till receipt** of an ordinary month (money course) and
-an **assembly manual** of the summer (robotics school) held up next to the genre versions.
+Two of the four round-1 variants are **concept variants** (a trial rule). In the first blind round
+of 25.09.2026 a genre-only set lost on a work screen to bold ones — a day drawn as a **clock face**,
+a **dispatcher's board**; the next two rounds were ties. Across all rounds the user picked genre and
+concept variants about equally often, so the mix keeps both.
 
 ## What a good concept is
 

@@ -33,6 +33,7 @@ Zero dependencies (Node 22+, installed Chrome/Edge). Emulates the exact viewport
 |---|---|---|
 | `FAIL horizontal scroll` | page wider than the window; names the outermost culprit | fix: `min-width:0`, `max-width:100%`, wrap |
 | `FAIL unreadable, contrast < 3` | text nobody reads comfortably against every background layer under it (colours in any CSS format, semi-transparent veils composited) | fix colour or background |
+| `NOTE … run partly over a photo` | the text line crosses the edge of a photo — often a fine gradient fade, sometimes a seam | check that edge by eye |
 | `NOTE … on a gradient` | fails on some gradient stops but not all — depends on where the text sits | check by eye |
 | `FAIL invisible after full scroll` | text still at opacity 0 after scrolling and ~6s of waiting — a reveal that never fired (toggle states, carousel slides and looping demos are already excluded) | give reveals a fallback; never hide content by default without JS |
 | `FAIL font has no Cyrillic` | text silently falls back to another font | swap the font (typography.md) |
@@ -139,6 +140,13 @@ A tool said "no" → recheck by a **different mechanism**, not by rerunning the 
 - **Check the wide end too.** Elements positioned from the window edge (`right: calc(50% - 512px)`)
   instead of the content column drift apart on monitors wider than yours — hence 1920 in the widths.
 - **Rebuilt the source? Measure the rebuilt page.** Otherwise you argue with the old version.
+
+## Known blind spots of the script
+
+- Panels, scrims and overlays drawn with `::before` / `::after` are invisible to it — a dark panel narrower
+  than its headline (a real case the user caught) passes clean. That is why "seams" is on the eye-pass list.
+- `mix-blend-mode`, `text-shadow`, `backdrop-filter` are ignored in contrast.
+- Text on photos is never scored, only counted.
 
 ## What this doesn't do
 

@@ -95,7 +95,8 @@ const MEASURE = String.raw`(async () => {
   const effOpacity = (el) => { let o = 1; for (let n = el; n && n.nodeType === 1; n = n.parentElement) o *= +getComputedStyle(n).opacity; return o; };
 
   // 2. contrast, 3. stuck-invisible, 4. tiny text
-  const lowContrast = [], invisible = [], tiny = [], overImage = [], onGradient = [];
+  const lowContrast = [], invisible = [], tiny = [], overImage = [], onGradient = [], seams = [];
+  let waitBudget = 15000;   // ms of total waiting for running reveals per page
   for (const el of texts) {
     const r = el.getBoundingClientRect();
     const cs = getComputedStyle(el);
@@ -123,41 +124,64 @@ const MEASURE = String.raw`(async () => {
     }
     const fs = parseFloat(cs.fontSize);
     if (innerWidth < 768 && fs < 12) tiny.push(sel(el) + ' ' + fs + 'px «' + sample + '»');
-    const fill = rgba(cs.webkitTextFillColor) || rgba(cs.color);
+    // SVG <text> is painted with fill, HTML text with color / -webkit-text-fill-color
+    const fill = el instanceof SVGElement ? rgba(cs.fill) : (rgba(cs.webkitTextFillColor) || rgba(cs.color));
     if (!fill || fill[3] === 0) continue;                    // gradient/clip text — eye only
-    // background layers: what is actually under the text's centre, top to bottom
     window.scrollTo(0, Math.max(0, r.top + scrollY - innerHeight / 2));
-    if (op < 0.999) { await new Promise((z) => setTimeout(z, 900)); op = effOpacity(el); if (op < 0.05) continue; }   // let a reveal finish; faded out meanwhile = transient
-    const rr = el.getBoundingClientRect();
-    let stack = document.elementsFromPoint(rr.left + Math.min(rr.width / 2, 20), rr.top + rr.height / 2);
-    const i = stack.indexOf(el);
-    const below = i >= 0 ? stack.slice(i) : (() => { const a = []; for (let n = el; n; n = n.parentElement) a.push(n); return a; })();
-    const layers = []; let base = [255, 255, 255, 1], image = false, gradient = false;
-    for (const n of below) {
-      if (n !== el && /^(IMG|VIDEO|CANVAS|PICTURE|IFRAME)$/.test(n.tagName)) { image = true; break; }
-      const ns = getComputedStyle(n);
-      if (/url\(/.test(ns.backgroundImage)) { image = true; break; }
-      if (/gradient/.test(ns.backgroundImage)) {
-        const stops = (ns.backgroundImage.match(COLOR_RE) || []).map(rgba).filter(Boolean);
-        if (stops.length) { layers.push(stops); gradient = true; }
-      }
-      const bc = rgba(ns.backgroundColor);
-      if (bc && bc[3] > 0) { if (bc[3] >= 0.999) { base = bc; break; } layers.push([bc]); }
+    // wait only while an animation/transition is actually running on the element or an ancestor, within a total budget
+    if (op < 0.999 && waitBudget > 0) {
+      const running = () => document.getAnimations().some((an) => an.playState === 'running' && an.effect && an.effect.target &&
+        (an.effect.target === el || (an.effect.target.contains && an.effect.target.contains(el))));
+      for (let t = 0; t < 12 && running() && waitBudget > 0; t++) { await new Promise((z) => setTimeout(z, 100)); waitBudget -= 100; }
+      op = effOpacity(el); if (op < 0.05) continue;          // faded out meanwhile = transient
     }
-    if (image) { overImage.push(sel(el) + ' «' + sample + '»'); continue; }
-    let bgs = [base];
-    for (let k = layers.length - 1; k >= 0; k--) bgs = layers[k].flatMap((s) => bgs.map((u) => over(s, u)));
+    // sample three points along the widest line of text (left, middle, right): one point can't see a panel that ends mid-text
+    const range = document.createRange(); range.selectNodeContents(el);
+    const lines = [...range.getClientRects()].filter((q) => q.width > 2 && q.height > 2);
+    const line = lines.sort((x, y) => y.width - x.width)[0] || el.getBoundingClientRect();
+    const cy = line.top + line.height / 2;
+    const probe = (x) => {
+      const stack = document.elementsFromPoint(x, cy);
+      const i = stack.indexOf(el);
+      const below = i >= 0 ? stack.slice(i) : (() => { const q = []; for (let n = el; n; n = n.parentElement) q.push(n); return q; })();
+      const layers = []; let base = [255, 255, 255, 1], image = false, gradient = false;
+      for (const n of below) {
+        if (n !== el && /^(IMG|VIDEO|CANVAS|PICTURE|IFRAME)$/.test(n.tagName)) { image = true; break; }
+        const ns = getComputedStyle(n);
+        if (/url\(/.test(ns.backgroundImage)) { image = true; break; }
+        if (/gradient/.test(ns.backgroundImage)) {
+          const stops = (ns.backgroundImage.match(COLOR_RE) || []).map(rgba).filter(Boolean);
+          if (stops.length) { layers.push(stops); gradient = true; }
+        }
+        const bc = rgba(ns.backgroundColor);
+        if (bc && bc[3] > 0) { if (bc[3] >= 0.999) { base = bc; break; } layers.push([bc]); }
+      }
+      let bgs = [base];
+      for (let k = layers.length - 1; k >= 0; k--) bgs = layers[k].flatMap((st) => bgs.map((u) => over(st, u)));
+      return { image, gradient, bgs };
+    };
+    const pts = [0.08, 0.5, 0.92].map((f) => probe(line.left + line.width * f));
+    const onImg = pts.filter((q) => q.image).length;
+    if (onImg === pts.length) { overImage.push(sel(el) + ' «' + sample + '»'); continue; }
+    if (onImg > 0) seams.push(sel(el) + ' «' + sample + '»');   // part of the line on a panel, part on the photo
     const fg0 = [fill[0], fill[1], fill[2], fill[3] * op];
-    const ratios = bgs.map((b) => { const fg = fg0[3] < 1 ? over(fg0, b) : fg0;
-      const [hi, lo] = [lum(fg), lum(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); });
     const large = fs >= 24 || (fs >= 18.6 && +cs.fontWeight >= 700);
     const need = large ? 3 : 4.5;
-    // on a gradient the text sits on only part of it: fail only if it fails everywhere, otherwise ask for eyes
-    if (gradient && Math.max(...ratios) >= need) { if (Math.min(...ratios) < need) onGradient.push(sel(el) + ' «' + sample + '»'); continue; }
-    const ratio = gradient ? Math.max(...ratios) : Math.min(...ratios);
+    const ratioOf = (b) => { const fg = fg0[3] < 1 ? over(fg0, b) : fg0;
+      const [hi, lo] = [lum(fg), lum(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
+    let worst = Infinity, worstBg = null, gradNote = false;
+    for (const q of pts) {
+      if (q.image) continue;
+      const rs = q.bgs.map(ratioOf);
+      // on a gradient the text covers only part of it: count its best stop, and flag for eyes if others fail
+      const v = q.gradient ? Math.max(...rs) : Math.min(...rs);
+      if (q.gradient && Math.min(...rs) < need) gradNote = true;
+      if (v < worst) { worst = v; worstBg = q.bgs[rs.indexOf(v)]; }
+    }
+    if (gradNote && worst >= need) onGradient.push(sel(el) + ' «' + sample + '»');
     // below 3 nobody reads it comfortably (FAIL); 3..4.5 is weak for small text (WARN)
-    if (ratio < need) lowContrast.push({ el: sel(el), text: sample, ratio: +ratio.toFixed(2), need, color: cs.color,
-      bg: bgs.map((b) => 'rgb(' + b.slice(0, 3).map(Math.round).join(',') + ')').join(' | '), fontSize: fs, opacity: +op.toFixed(2) });
+    if (worst < need) lowContrast.push({ el: sel(el), text: sample, ratio: +worst.toFixed(2), need, color: el instanceof SVGElement ? cs.fill : cs.color,
+      bg: 'rgb(' + worstBg.slice(0, 3).map(Math.round).join(',') + ')', fontSize: fs, opacity: +op.toFixed(2) });
   }
   // looping animations (typing demos, carousels) hide text only part of the time: resample over ~6s
   // back at the top first: scroll hints ("крутите вниз") hide on scroll and come back there
@@ -175,6 +199,7 @@ const MEASURE = String.raw`(async () => {
   out.tiny = dedup(tiny);
   out.overImage = dedup(overImage).length;
   out.onGradient = dedup(onGradient);
+  out.seams = dedup(seams);
 
   // 5. fonts without Cyrillic (only families used on Cyrillic text)
   const generic = /^(serif|sans-serif|monospace|cursive|fantasy|system-ui|ui-\w+|-apple-system|inherit|initial)$/i;
@@ -236,13 +261,13 @@ async function main() {
     if (d.id && pending.has(d.id)) { const { res, rej } = pending.get(d.id); pending.delete(d.id); d.error ? rej(new Error(d.error.message)) : res(d.result); }
     else listeners.forEach((l) => l(d)); };
   const send = (method, params = {}) => new Promise((res, rej) => { const i = ++id;
-    const t = setTimeout(() => { pending.delete(i); rej(new Error(method + ' timed out')); }, 90000);
+    const t = setTimeout(() => { pending.delete(i); rej(new Error(method + ' timed out')); }, 300000);
     pending.set(i, { res: (v) => { clearTimeout(t); res(v); }, rej: (e) => { clearTimeout(t); rej(e); } });
     ws.send(JSON.stringify({ id: i, method, params })); });
   ws.onclose = () => { for (const { rej } of pending.values()) rej(new Error('Chrome connection closed')); pending.clear(); };
   const once = (method, ms = 15000) => new Promise((res) => { const t = setTimeout(res, ms);
     const l = (d) => { if (d.method === method) { clearTimeout(t); listeners.splice(listeners.indexOf(l), 1); res(d); } }; listeners.push(l); });
-  const evaluate = async (expr) => { const r = await send('Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true, timeout: 60000 });
+  const evaluate = async (expr) => { const r = await send('Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true, timeout: 240000 });
     if (r.exceptionDetails) throw new Error(r.exceptionDetails.exception?.description || r.exceptionDetails.text); return r.result.value; };
 
   await send('Page.enable'); await send('Runtime.enable'); await send('Network.enable');
@@ -267,11 +292,19 @@ async function main() {
       const loaded = once('Page.loadEventFired');
       await send('Page.navigate', { url });
       await loaded; await sleep(800);
-      await evaluate(SCROLL_THROUGH);
-      const m = await evaluate(MEASURE);
+      let m;
+      try { await evaluate(SCROLL_THROUGH); m = await evaluate(MEASURE); }
+      catch (e) {
+        fails++; console.log(`✗ ${decodeURIComponent(basename(url))} @${width}\n   FAIL check could not finish on this page: ${e.message}`);
+        report.push({ url, width, failed: true, problems: ['check could not finish: ' + e.message] }); continue;
+      }
       if (shotsDir) {
         const shot = await send('Page.captureScreenshot', { format: 'png' });
-        writeFileSync(join(shotsDir, `${basename(url).replace(/\.html$/, '')}-${width}.png`), Buffer.from(shot.data, 'base64'));
+        const stem = basename(url).replace(/\.html$/, '').replace(/[^\w.-]+/g, '_');
+        writeFileSync(join(shotsDir, `${stem}-${width}.png`), Buffer.from(shot.data, 'base64'));
+        await evaluate('window.scrollTo(0, innerHeight); new Promise((z) => setTimeout(z, 900))');   // the next section, after its reveal
+        const shot2 = await send('Page.captureScreenshot', { format: 'png' });
+        writeFileSync(join(shotsDir, `${stem}-${width}-next.png`), Buffer.from(shot2.data, 'base64'));
       }
       const problems = [];
       // a phone zooms out to fit an over-wide page, so innerWidth > width means overflow, not a broken gate
@@ -293,6 +326,7 @@ async function main() {
       for (const e of [...new Set(jsErrors)].slice(0, 3)) problems.push(`FAIL JS error: ${e}`);
       for (const s of m.tiny.slice(0, 3)) problems.push(`WARN text under 12px on phone: ${s}`);
       if (m.overImage) problems.push(`NOTE ${m.overImage} text blocks sit on photos/video — contrast not computable, check those by eye`);
+      if (m.seams.length) problems.push(`NOTE ${m.seams.length} text lines run partly over a photo — check that edge by eye (first: ${m.seams[0]})`);
       if (m.onGradient.length) problems.push(`NOTE ${m.onGradient.length} texts on a gradient pass on some stops and fail on others — check by eye (first: ${m.onGradient[0]})`);
       const failed = problems.some((p) => p.startsWith('FAIL'));
       if (failed) fails++;
