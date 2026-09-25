@@ -1,9 +1,9 @@
 # Concept variants — a bold idea grown from the topic's own objects
 
-Two of the four round-1 variants are **concept variants** (a trial rule). In the first blind round
-of 25.09.2026 a genre-only set lost on a work screen to bold ones — a day drawn as a **clock face**,
-a **dispatcher's board**; the next two rounds were ties. Across all rounds the user picked genre and
-concept variants about equally often, so the mix keeps both.
+Mockup 6 of the six is a **concept** (mockups.md). In the first blind round of 25.09.2026 a
+genre-only set lost on a work screen to bold ones — a day drawn as a **clock face**, a **dispatcher's
+board**; across the rounds the user picked genre and concept takes about equally often, so the set
+keeps both.
 
 ## What a good concept is
 

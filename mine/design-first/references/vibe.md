@@ -54,9 +54,8 @@ be *sensual*, *homely-tender* or *bold-provocative*; a finance course can be *ca
 *ambitious* or *friendly-demystifying*. The prototypes are then spread across these hypotheses,
 and the user recognises their picture in one of them — which is how every past success happened.
 
-Explicit prohibitions from the user ("no nudity", "no faces") hold for all hypotheses. Vaguer
-anti-references ("not corporate", "not dark") are hypotheses too — cover at least one variant
-that respects them and don't let them veto the genre wholesale.
+Explicit prohibitions from the user ("no nudity", "no faces") and an existing brand hold for all
+hypotheses — they outrank every reading below.
 
 For each hypothesis translate the feeling into properties you can actually build:
 
@@ -107,24 +106,18 @@ its own colour character.
 Жанр и его коды (видел / предполагаю): <read 2, in 1–2 lines>
 Настроения-гипотезы: 1) <mood> → <properties>  2) …  3) …
 Фишки из темы: <read 4>
-Один смелый ход поверх жанра: <what breaks one code, deliberately>
+Концепт из предметов темы: <concepts.md — for mockup 6>
 ```
 Show it with the brief. The user may correct it in one reply or just say "go" — never require
 them to supply references. If they volunteer a picture or a link, it overrides reads 2–3.
 
-## How the prototypes differ
+## How the six mockups use this
 
-All variants stay **inside the topic and its genre**, spread across the 2–3 mood hypotheses
-(at least one variant per hypothesis). Within that they differ by:
-- **style register** — dark cinematic, light editorial magazine, poster, soft app, strict grid;
-- **layout skeleton** — the grayscale test still applies: strip colour, they must still differ;
-- **palette** within the vibe's temperature — never six shades of one palette;
-- **type** and **which topic interactive leads**.
-
-First round (light, see SKILL.md Step 3): **4 variants — 2 genre + 2 concept** (concepts.md), every
-mood hypothesis covered. Variant 0 is the boldest concept and may step outside the hypotheses
-(a reading nobody wrote down) — that's its job. For a tool or dashboard: concepts only if they
-work (clock face = the day, board = the queue), never as decoration.
+Mockups 1–3 carry the three mood hypotheses (one each, the genre done excellently), 4 is a type-led
+poster, 5 a texture/collage screen, 6 the concept — see the diversity table in mockups.md. Genre codes
+are the baseline for 1–3; 4–6 may break one code deliberately, never all of them. Explicit bans and an
+existing brand hold for all six. Vaguer anti-references ("not corporate", "not dark") are hypotheses:
+at least one mockup respects them, they don't veto the genre wholesale.
 
 ## Worked examples
 

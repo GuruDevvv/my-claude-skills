@@ -1,6 +1,6 @@
 # Feel Polish — make the built UI feel right
 
-The prototype phase chose **what** to build. This is the pass that makes the *finished, real code* feel crafted instead of AI-default. Great polish is invisible: a collection of small details that compound. Run it on the **final build** (Step 5), not on throwaway prototypes — these rules reward real components, and forcing them onto concept prototypes brings back the "passes every check, moves no one" trap design-first fights.
+The prototype phase chose **what** to build. This is the pass that makes the *finished, real code* feel crafted instead of AI-default. Great polish is invisible: a collection of small details that compound. Run it on the **production build** (SKILL.md Step 10), not on mockups or the first prototype page — these rules reward real components, and forcing them onto concept prototypes brings back the "passes every check, moves no one" trap design-first fights.
 
 > Distilled from **"Details that make interfaces feel better"** by **Jakub Krehel** (`jakubkrehel/make-interfaces-feel-better`, MIT). Principles re-expressed here; credit and the canonical, deeper reference are his.
 

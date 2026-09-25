@@ -1,88 +1,73 @@
 # design-first
 
-**Structured design exploration before coding.** Read the look from the topic's vibe, generate diverse HTML prototypes inside it, measure them with numbers, compare side-by-side, pick the best, then build.
+**Design before code.** The look is read from the topic, six different first-screen mockups are drawn by an image model, you pick one, and it is built as a live page over the mockup — desktop and phone each from their own mockup — measured for readability before you see it.
 
 ## The Problem
 
-When AI generates a UI you get one design, and usually a generic one: Inter, purple gradients, glassmorphism, centered hero — "AI slop". You tweak it endlessly and never see the distinctive alternatives you're missing.
+When AI writes a UI you get one design, and usually a generic one. Adding rules about taste doesn't fix it: in blind tests two very different rule sets for HTML prototypes tied on taste and never produced a "wow". The ceiling is the coding model's own visual taste.
 
 ## The Solution
 
 ```
-Context (+ASK) → Read the vibe → Brief → Prototypes → Gates → Measure → Gallery → Pick & Mix → Build → Feel pass
+Context → Vibe → Words → 6 mockups → Gallery → Pick/mix → Phone mockup → Plates → Build → Check → Show
 ```
 
-Two principles:
-1. **Diverge, don't commit.** Round 1: 4 light first screens (2 genre + 2 concept), compared in a gallery; round 2 develops the picked one.
-2. **Read the vibe, then be excellent inside it.** Most people have no reference and can't describe the look they want — but recognise it instantly. The skill reads it from the topic: the audience, the genre's own visual codes, the feeling, the topic's objects. Next to genre versions go bold concepts grown from the topic's own objects (a till receipt for a money course, a clock face for a therapist's day) — not metaphors imported from outside the niche, which made pages feel alien to their audience.
-3. **Measure before showing.** `scripts/check.mjs` checks every prototype at 390/1440/1920: sideways scroll, unreadable text, content stuck invisible, fonts without Cyrillic, broken images, JS errors.
+1. **Always a real choice.** Six first screens that differ in composition — three mood readings of the topic, a type-led poster, a texture/collage screen, a concept grown from the topic's own objects.
+2. **The image model draws, the coding model builds.** Mockups drawn by an image model earned the only "wow" in six blind rounds. The text is removed from the chosen mockup (a background "plate"), and the page is built with live text on top — judged the same as the mockup on desktop, and on the phone once the phone has its own vertical mockup.
+3. **Measure before showing.** `scripts/check.mjs` checks every page at 390/1440/1920: sideways scroll, unreadable text (layers and opacity composited the way the browser paints them), content stuck invisible, fonts without Cyrillic, broken images, JS errors.
 
-## What It Generates
+The evidence — protocols, keys and scores of the blind rounds — is summarised in `references/mockups.md` ("Why this path").
 
-- **Variant 0 (Free)** — AI's *riskiest* bet (a bold idea, not the averaged safe shot), generated first.
-- **Variants A–E** — structured prototypes, each a different take on the vibe, varying on structural axes (nav, layout, density, interaction, hierarchy) — verified by a grayscale test.
-- **Gallery page** — side-by-side comparison with previews and direct links.
+## What It Produces
+
+- `prototypes/BRIEF.md` — vibe card, fixed words, the chosen direction.
+- `prototypes/mockups/` — six desktop mockups, the phone mockup, plates; a gallery page.
+- `prototypes/<scope>.html` — the live page (desktop + phone), checked.
 
 ## Key Features
 
-- Reads an **existing project's files first**, then asks only the gaps — and **surfaces contradictions/bugs** (e.g. spec says dark, code is light; a body font with no Cyrillic).
-- **Anti-AI-slop directive** applied to every prototype (`references/frontend-aesthetics.md`).
-- **Cyrillic safety gate** — verified distinctive RU font pool + a one-line checker; RU vs Latin font branching (`references/typography.md`).
-- **Autonomous image sourcing** — works with no account/key: a generator if present → Openverse (free) → Picsum → none; downloads locally; self-sufficient if images fail; knows when *not* to use images (`references/imagery.md`).
-- **Visible, dependency-free motion** matched to product type — atmospheric vs functional, incl. advanced scroll-driven/cursor-reactive recipes (`references/motion.md`).
-- **Images when the direction calls for one** — then generated for the page from the vibe card (free stock only as fallback), sourced centrally before building.
-- **Navigation-aware + non-standard elements** — sticky TOC/scroll-spy for content-heavy pages; one memorable unconventional interaction per set (`references/interaction-patterns.md`).
-- **Vibe reading** — audience, genre codes, feeling → visual properties, decoding the client's verdict words («мрачно», «скучно», «всё сливается»), topic interactives (one per first-round variant, the full set in the chosen build) (`references/vibe.md`).
-- **Numeric check before the gallery** — zero-dependency headless Chrome script + manual probes for complaints (`references/ui-verify.md`, `scripts/check.mjs`).
-- **WOW-gate** — creative quality gates, not just technical checks.
-- **Feel pass** — after the final winner is built into real code, a default polish step applies 16 micro-detail rules (concentric radius, optical alignment, interruptible animation, tabular numbers, image outlines, scale-on-press…) and reports Before/After (`references/feel-polish.md`). Skippable with "skip polish".
-- Mobile-first with desktop breakpoints; parallel prototype generation via subagents.
+- Reads an **existing project's files first**, asks only the gaps, surfaces contradictions and bugs.
+- **Vibe reading** — audience, genre codes from screenshots of live pages, 2–3 mood hypotheses, topic props, decoding verdict words («мрачно», «скучно», «всё сливается») (`references/vibe.md`, `concepts.md`).
+- **Mockup generation, gallery, phone mockup, plates** — prompts and recipes (`references/mockups.md`). Works with any image tool; with none, falls back to HTML first screens (`frontend-aesthetics.md`).
+- **Cyrillic safety gate** and font matching (`references/typography.md`).
+- **Numeric check** with control pages that must fail and pass (`scripts/check.mjs`, `scripts/controls/`, `references/ui-verify.md`).
+- **Feel pass** for the production build — 16 micro-detail rules (`references/feel-polish.md`).
 
 ## Install
 
 ```bash
 cp -r design-first/ ~/.claude/skills/design-first/
 ```
-The skill is a folder (`SKILL.md` + `references/`); copy the directory. Reference files load on demand, so the core stays light in context.
+Needs Node 22+ and Chrome/Edge for the check; an image generator (e.g. Codex CLI `image_gen`) for the main path.
 
 ## Usage
 
-Describe what you need — the skill triggers on design requests:
 - "Make a landing page for my bakery"
 - "Design a dashboard for analytics"
 - "Сделай дизайн для сайта психолога" / "редизайн дашборда"
 
-## Example Output
+## Layout
 
 ```
 design-first/
 ├── SKILL.md
-├── scripts/check.mjs            ← numeric check (Node 22+, Chrome/Edge)
+├── scripts/
+│   ├── check.mjs          ← numeric check (Node 22+, Chrome/Edge)
+│   └── controls/          ← pages that must fail / pass, EXPECTED.md
 └── references/
-    ├── frontend-aesthetics.md   ← anti-slop directive
-    ├── typography.md            ← fonts + Cyrillic gate
-    ├── imagery.md               ← image sourcing cascade
-    ├── motion.md                ← animation recipes (+ advanced)
-    ├── vibe.md                  ← reading the look from the topic
-    ├── ui-verify.md             ← measuring with numbers
-    ├── interaction-patterns.md  ← navigation + non-standard elements
-    └── feel-polish.md           ← 16 micro-detail rules for the final build
-
-prototypes/                      ← generated per project
-├── BRIEF.md
-├── gallery.html
-├── hero-0-free.html
-├── hero-A-[name].html  …  hero-E-[name].html
-└── assets/                      ← downloaded images (standalone)
+    ├── mockups.md         ← six mockups, gallery, phone mockup, plates
+    ├── vibe.md            ← reading the look from the topic
+    ├── concepts.md        ← concept from the topic's own objects
+    ├── typography.md      ← fonts + Cyrillic gate
+    ├── ui-verify.md       ← measuring with numbers, manual probes
+    ├── motion.md          ← animation recipes
+    ├── interaction-patterns.md
+    ├── feel-polish.md     ← 16 micro-detail rules for production code
+    └── frontend-aesthetics.md  ← fallback when no image generator exists
 ```
 
 ## Credits
 
 `references/ui-verify.md` and the contrast/overflow/glyph probes in `scripts/check.mjs` grew out of a `ui-verify` skill shared by a design-first user in September 2026.
 
-
-The Feel pass (`references/feel-polish.md`) distills principles from **["Details that make interfaces feel better"](https://jakub.kr/writing/details-that-make-interfaces-feel-better)** by **Jakub Krehel** — his standalone skill is [`jakubkrehel/make-interfaces-feel-better`](https://github.com/jakubkrehel/make-interfaces-feel-better) (MIT). For a deeper, code-heavy treatment, install his skill directly.
-
----
-
-*Part of [my-claude-skills](../README.md)*
+The Feel pass (`references/feel-polish.md`) distills principles from **["Details that make interfaces feel better"](https://jakub.kr/writing/details-that-make-interfaces-feel-better)** by **Jakub Krehel** — his standalone skill is [`jakubkrehel/make-interfaces-feel-better`](https://github.com/jakubkrehel/make-interfaces-feel-better) (MIT).
