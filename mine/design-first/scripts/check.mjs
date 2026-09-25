@@ -140,43 +140,54 @@ const MEASURE = String.raw`(async () => {
     const lines = [...range.getClientRects()].filter((q) => q.width > 2 && q.height > 2);
     const line = lines.sort((x, y) => y.width - x.width)[0] || el.getBoundingClientRect();
     const cy = line.top + line.height / 2;
+    // composite text and background pixels the way the browser does: premultiplied colours, and an
+    // ancestor's opacity fades its whole group (panel + text together), not the text alone
+    const pm = (c) => [c[0] * c[3], c[1] * c[3], c[2] * c[3], c[3]];
+    const overP = (a, b) => [a[0] + b[0] * (1 - a[3]), a[1] + b[1] * (1 - a[3]), a[2] + b[2] * (1 - a[3]), a[3] + b[3] * (1 - a[3])];
+    const scaleP = (p, o) => p.map((v) => v * o);
+    const unP = (p) => { const q = overP(p, [255, 255, 255, 1]); return [q[0], q[1], q[2], 1]; };
     const probe = (x) => {
       const stack = document.elementsFromPoint(x, cy);
       const i = stack.indexOf(el);
       const below = i >= 0 ? stack.slice(i) : (() => { const q = []; for (let n = el; n; n = n.parentElement) q.push(n); return q; })();
-      const layers = []; let base = [255, 255, 255, 1], image = false, gradient = false;
+      let states = [{ t: pm(fill), b: [0, 0, 0, 0] }], image = false, gradient = false;
       for (const n of below) {
         if (n !== el && /^(IMG|VIDEO|CANVAS|PICTURE|IFRAME)$/.test(n.tagName)) { image = true; break; }
         const ns = getComputedStyle(n);
         if (/url\(/.test(ns.backgroundImage)) { image = true; break; }
+        const own = n === el || n.contains(el);                  // an ancestor: its opacity wraps everything above
+        const layerOp = own ? 1 : effOpacity(n);                  // an unrelated element underneath: only its own fade
+        const addLayer = (stops) => { const next = [];
+          for (const st of states) for (const c of stops) { const l = scaleP(pm(c), layerOp); next.push({ t: overP(st.t, l), b: overP(st.b, l) }); }
+          states = next; };
+        // background-image paints above background-color: walking downwards, the gradient comes first
         if (/gradient/.test(ns.backgroundImage)) {
           const stops = (ns.backgroundImage.match(COLOR_RE) || []).map(rgba).filter(Boolean);
-          if (stops.length) { layers.push(stops); gradient = true; }
+          if (stops.length) { addLayer(stops); gradient = true; }
         }
         const bc = rgba(ns.backgroundColor);
-        if (bc && bc[3] > 0) { if (bc[3] >= 0.999) { base = bc; break; } layers.push([bc]); }
+        if (bc && bc[3] > 0) addLayer([bc]);
+        const o = own ? +ns.opacity : 1;
+        if (o < 0.999) states = states.map((st) => ({ t: scaleP(st.t, o), b: scaleP(st.b, o) }));
+        if (states.every((st) => st.b[3] >= 0.999)) break;
       }
-      let bgs = [base];
-      for (let k = layers.length - 1; k >= 0; k--) bgs = layers[k].flatMap((st) => bgs.map((u) => over(st, u)));
-      return { image, gradient, bgs };
+      return { image, gradient, pairs: states.map((st) => [unP(st.t), unP(st.b)]) };
     };
     const pts = [0.08, 0.5, 0.92].map((f) => probe(line.left + line.width * f));
     const onImg = pts.filter((q) => q.image).length;
     if (onImg === pts.length) { overImage.push(sel(el) + ' «' + sample + '»'); continue; }
     if (onImg > 0) seams.push(sel(el) + ' «' + sample + '»');   // part of the line on a panel, part on the photo
-    const fg0 = [fill[0], fill[1], fill[2], fill[3] * op];
     const large = fs >= 24 || (fs >= 18.6 && +cs.fontWeight >= 700);
     const need = large ? 3 : 4.5;
-    const ratioOf = (b) => { const fg = fg0[3] < 1 ? over(fg0, b) : fg0;
-      const [hi, lo] = [lum(fg), lum(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
+    const ratioOf = ([fg, b]) => { const [hi, lo] = [lum(fg), lum(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
     let worst = Infinity, worstBg = null, gradNote = false;
     for (const q of pts) {
       if (q.image) continue;
-      const rs = q.bgs.map(ratioOf);
+      const rs = q.pairs.map(ratioOf);
       // on a gradient the text covers only part of it: count its best stop, and flag for eyes if others fail
       const v = q.gradient ? Math.max(...rs) : Math.min(...rs);
       if (q.gradient && Math.min(...rs) < need) gradNote = true;
-      if (v < worst) { worst = v; worstBg = q.bgs[rs.indexOf(v)]; }
+      if (v < worst) { worst = v; worstBg = q.pairs[rs.indexOf(v)][1]; }
     }
     if (gradNote && worst >= need) onGradient.push(sel(el) + ' «' + sample + '»');
     // below 3 nobody reads it comfortably (FAIL); 3..4.5 is weak for small text (WARN)
@@ -300,7 +311,9 @@ async function main() {
       }
       if (shotsDir) {
         const shot = await send('Page.captureScreenshot', { format: 'png' });
-        const stem = basename(url).replace(/\.html$/, '').replace(/[^\w.-]+/g, '_');
+        // live URLs: host + path, so two sites that both end in /index.html don't overwrite each other's shots
+        const web = /^https?:/i.test(url) ? new URL(url) : null;
+        const stem = (web ? (web.hostname + web.pathname).replace(/\/+$/, '') : basename(url)).replace(/\.html$/, '').replace(/[^\w.-]+/g, '_');
         writeFileSync(join(shotsDir, `${stem}-${width}.png`), Buffer.from(shot.data, 'base64'));
         await evaluate('window.scrollTo(0, innerHeight); new Promise((z) => setTimeout(z, 900))');   // the next section, after its reveal
         const shot2 = await send('Page.captureScreenshot', { format: 'png' });
