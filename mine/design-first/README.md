@@ -1,6 +1,6 @@
 # design-first
 
-**Structured, art-directed design exploration before coding.** Generate diverse HTML prototypes — each led by a bold creative concept — compare them side-by-side, pick the best, then build.
+**Structured design exploration before coding.** Read the look from the topic's vibe, generate diverse HTML prototypes inside it, measure them with numbers, compare side-by-side, pick the best, then build.
 
 ## The Problem
 
@@ -9,17 +9,18 @@ When AI generates a UI you get one design, and usually a generic one: Inter, pur
 ## The Solution
 
 ```
-Context (+ASK) → References → Brief → Prototypes → WOW-gate → Gallery → Pick & Mix → Build → Feel pass
+Context (+ASK) → Read the vibe → Brief → Prototypes → Gates → Measure → Gallery → Pick & Mix → Build → Feel pass
 ```
 
 Two principles:
 1. **Diverge, don't commit.** 4–6 genuinely different directions as standalone HTML, compared in a gallery.
-2. **Concept-first, not template.** Each prototype is led by one bold idea ("a 1920s Berlin telegram", "a season command-board"); color, type, layout, motion, and imagery are *derived from the concept* — not picked from a safe default. This is what turns "6 skins of the same page" into 6 real designs.
+2. **Read the vibe, then be excellent inside it.** Most people have no reference and can't describe the look they want — but recognise it instantly. The skill reads it from the topic: the audience, the genre's own visual codes, the feeling, the topic's objects. Variants are different takes on that vibe (different registers and layouts), plus one deliberate bold move — not metaphors imported from outside the niche, which made pages feel alien to their audience.
+3. **Measure before showing.** `scripts/check.mjs` checks every prototype at 390/1440/1920: sideways scroll, unreadable text, content stuck invisible, fonts without Cyrillic, broken images, JS errors.
 
 ## What It Generates
 
 - **Variant 0 (Free)** — AI's *riskiest* bet (a bold idea, not the averaged safe shot), generated first.
-- **Variants A–E** — structured prototypes, each a different **concept**, varying on structural axes (nav, layout, density, interaction, hierarchy) — verified by a grayscale test.
+- **Variants A–E** — structured prototypes, each a different take on the vibe, varying on structural axes (nav, layout, density, interaction, hierarchy) — verified by a grayscale test.
 - **Gallery page** — side-by-side comparison with previews and direct links.
 
 ## Key Features
@@ -31,7 +32,8 @@ Two principles:
 - **Visible, dependency-free motion** matched to product type — atmospheric vs functional, incl. advanced scroll-driven/cursor-reactive recipes (`references/motion.md`).
 - **Real imagery is mandatory** (≥ half the prototypes) and sourced centrally before generation, so prototypes never ship image-less.
 - **Navigation-aware + non-standard elements** — sticky TOC/scroll-spy for content-heavy pages; one memorable unconventional interaction per set (`references/interaction-patterns.md`).
-- **Concept-derivation method** with worked examples (`references/art-direction.md`).
+- **Vibe reading** — audience, genre codes, feeling → visual properties, decoding the client's verdict words («мрачно», «скучно», «всё сливается»), 3–4 topic interactives per landing (`references/vibe.md`).
+- **Numeric check before the gallery** — zero-dependency headless Chrome script + manual probes for complaints (`references/ui-verify.md`, `scripts/check.mjs`).
 - **WOW-gate** — creative quality gates, not just technical checks.
 - **Feel pass** — after the final winner is built into real code, a default polish step applies 16 micro-detail rules (concentric radius, optical alignment, interruptible animation, tabular numbers, image outlines, scale-on-press…) and reports Before/After (`references/feel-polish.md`). Skippable with "skip polish".
 - Mobile-first with desktop breakpoints; parallel prototype generation via subagents.
@@ -55,12 +57,14 @@ Describe what you need — the skill triggers on design requests:
 ```
 design-first/
 ├── SKILL.md
+├── scripts/check.mjs            ← numeric check (Node 22+, Chrome/Edge)
 └── references/
     ├── frontend-aesthetics.md   ← anti-slop directive
     ├── typography.md            ← fonts + Cyrillic gate
     ├── imagery.md               ← image sourcing cascade
     ├── motion.md                ← animation recipes (+ advanced)
-    ├── art-direction.md         ← concept method + examples
+    ├── vibe.md                  ← reading the look from the topic
+    ├── ui-verify.md             ← measuring with numbers
     ├── interaction-patterns.md  ← navigation + non-standard elements
     └── feel-polish.md           ← 16 micro-detail rules for the final build
 
@@ -68,11 +72,14 @@ prototypes/                      ← generated per project
 ├── BRIEF.md
 ├── gallery.html
 ├── hero-0-free.html
-├── hero-A-[concept].html  …  hero-E-[concept].html
+├── hero-A-[name].html  …  hero-E-[name].html
 └── assets/                      ← downloaded images (standalone)
 ```
 
 ## Credits
+
+`references/ui-verify.md` and the contrast/overflow/glyph probes in `scripts/check.mjs` grew out of a `ui-verify` skill shared by a design-first user in September 2026.
+
 
 The Feel pass (`references/feel-polish.md`) distills principles from **["Details that make interfaces feel better"](https://jakub.kr/writing/details-that-make-interfaces-feel-better)** by **Jakub Krehel** — his standalone skill is [`jakubkrehel/make-interfaces-feel-better`](https://github.com/jakubkrehel/make-interfaces-feel-better) (MIT). For a deeper, code-heavy treatment, install his skill directly.
 

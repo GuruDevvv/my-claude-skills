@@ -1,6 +1,6 @@
 ---
 name: design-first
-description: Generate diverse, art-directed HTML design prototypes before coding — concept-led, not generic. Interview → references → parallel prototypes → gallery → pick → build. Use when: "сделай дизайн", "подготовь макет", "давай займёмся дизайном", "нарисуй страницу", "редизайн", "make a design", "design this", "prepare design", "how should this look", "visual direction", "prototypes", "варианты дизайна". Scope: landing pages, dashboards, portfolios, forms, apps, components — any visual/UI work. Do NOT use for: code review, debugging, backend logic, data processing, or non-visual tasks.
+description: Generate diverse HTML design prototypes before coding — the look is read from the topic's vibe and audience, not invented, and every prototype is measured for readability before the user sees it. Interview → read the vibe → parallel prototypes → numeric check → gallery → pick → build. Use when: "сделай дизайн", "подготовь макет", "давай займёмся дизайном", "нарисуй страницу", "редизайн", "make a design", "design this", "prepare design", "how should this look", "visual direction", "prototypes", "варианты дизайна". Scope: landing pages, dashboards, portfolios, forms, apps, components — any visual/UI work. Do NOT use for: code review, debugging, backend logic, data processing, or non-visual tasks.
 ---
 
 # Design First
@@ -10,18 +10,19 @@ A structured process for exploring visual direction before writing production co
 Two ideas drive everything:
 
 1. **Don't commit to one design.** Generate diverse options, compare, pick, then build. Eliminates the #1 vibe-coding trap — getting stuck with the first thing that came out.
-2. **Lead with a creative concept, not a template.** The reason AI prototypes feel samey ("6 skins of the same page") is that they optimize for *technically correct* instead of *memorable*. Each prototype here is led by one bold visual concept, and color/type/layout/motion/imagery are **derived from that concept** — not picked from a safe default palette.
+2. **Read the vibe, then be excellent inside it.** The user usually has no reference and can't describe the picture in their head — but recognises it instantly. That picture is mostly the *genre's own visual language* for this audience plus the feeling of the topic. So the look is **read from the topic** (audience, genre codes, emotional core, topic props), variants are different takes on that one vibe, and distinctiveness is one deliberate move on top — not a metaphor imported from far outside the niche.
+3. **Measure before showing.** Unreadable text, empty screens and sideways scroll are invisible in code and obvious to the user. Every prototype passes a numeric check before the gallery.
 
-> The failure mode this skill fights: a prototype that passes every technical checklist and still makes nobody feel anything. "Adequate" is the enemy.
+> Two failure modes this skill fights: a prototype that passes every checklist and makes nobody feel anything — and a prototype so "original" that the audience doesn't recognise it as meant for them.
 
 ---
 
 ## How it works
 
 ```
-Context → References → Brief → Prototypes → WOW-gate → Gallery → Pick → Refine & Build → Feel pass
- (gather    (in/out of  (concept   (parallel,   (creative   (compare)         (merge)      (polish the
-  + ASK)     category)   per proto)  art-directed) quality)                                 real build)
+Context → Read the vibe → Brief → Prototypes → Gates → Measure → Gallery → Pick → Refine & Build → Feel pass
+ (gather    (audience, genre, (vibe card  (parallel,  (quality) (numbers,  (compare)      (merge)         (polish the
+  + ASK)     feeling, props)   + plan)    in-vibe)              fix FAILs)                                 real build)
 ```
 
 **Reference files** (loaded on demand — read the one you need, don't inline everything):
@@ -29,7 +30,8 @@ Context → References → Brief → Prototypes → WOW-gate → Gallery → Pic
 - `references/typography.md` — distinctive font pools, the **Cyrillic safety gate**, weight/size rules.
 - `references/imagery.md` — how to source/generate real images (autonomous cascade), and when NOT to.
 - `references/motion.md` — dependency-free animation recipes (the visible kind).
-- `references/art-direction.md` — how to invent a concept per prototype, with worked examples.
+- `references/vibe.md` — **how to read the look from the topic**: audience, genre codes, feeling → visual properties, decoding the user's verdict words, topic interactives. Read before Step 2.
+- `references/ui-verify.md` — the numeric check (`scripts/check.mjs`) and manual probes; read at Step 3.6 and whenever the user complains about how something looks.
 - `references/interaction-patterns.md` — navigation patterns + non-standard, memorable elements.
 - `references/feel-polish.md` — the 16 micro-detail rules for the **final build** (Step 5), not prototypes.
 
@@ -56,25 +58,28 @@ Don't re-ask what the files already answered. Ask the gaps. Core questions (adap
 2. **Who uses it, on what device?** (mobile-first or desktop?)
 3. **What should the user FEEL?** (trust, calm, urgency, premium, playful…)
 4. **What should the user DO?** (buy, sign up, register, explore…)
-5. **Existing brand/style?** (colors, fonts, logo, a site they like)
+5. **Existing brand/style?** (colors, fonts, logo). If they *volunteer* a site or picture they like — gold, use it. **Never require references** and never block on them: most people have none, and reading the vibe is your job (Step 2).
 6. **How bold can the design be?** — from "консервативно, это серьёзно" ↔ "удиви меня, не бойся". This calibrates risk. (New, important: a non-designer often *says* "minimal/safe" meaning "trustworthy", not "visually plain". Probe that.)
-7. **Anti-references?** (what to avoid — "not corporate", "not generic SaaS")
+7. **Anti-references?** (what to avoid). Caution: users often name the genre's own codes as an anti-reference and then pick exactly them. Note it, don't obey it blindly — see vibe.md.
 8. **Language** of the UI? (drives the **font gate** — see typography.md)
+
+Keep it short: ask only what the files and the topic can't answer. Feeling, boldness and anti-references are **optional** — if the user shrugs, read them from the topic yourself (Step 2) and show your reading in the vibe card instead of asking again.
 
 **Why surface contradictions instead of silently choosing:** the user knows things the files don't, and a wrong assumption wastes 6 prototypes. A 30-second question beats a confident mistake.
 
 ---
 
-## Step 2 — Reference Analysis
+## Step 2 — Read the vibe → read `references/vibe.md`
 
-### If the user provided references (images, URLs, screenshots)
-Extract a **Design DNA profile** for each: Mood · Color strategy · Typography · Layout · **Signature moves** (what makes it unique — grain? bold type? glass? gradients?) · Animation vibe. Summarize back in 2-3 sentences to build shared vocabulary.
+Do the six reads and write them into the brief:
+1. **Audience in one concrete line** — who, situation, the moment and the device they meet the page on.
+2. **Genre codes** — open 3–5 live pages of the same offer for the same audience (web search/fetch if available; otherwise derive and say so). Note light, imagery, temperature, density, signature blocks and effects. These are the **baseline**, not something to flee.
+3. **Emotional core → visual properties** — translate the feeling into light, colour temperature, human presence, density, motion (table in vibe.md).
+4. **Topic props** — 3–4 interactive pieces made from the topic's own objects and actions (landings); usability mechanics (tools).
+5. **Whose palette** — make sure the palette isn't already bound to another author/product in this project.
+6. **The vibe card** — five plain lines that go into the brief.
 
-### Always — look OUTSIDE the product category
-The strongest source of surprise is not other websites in the same niche. Pull inspiration from **art movements, editorial/print, fashion, packaging, architecture, film**. "A telegram from 1920s Berlin", "wabi-sabi imperfection", "a departures board you can't miss" — these are concept seeds the average SaaS page never reaches for.
-
-### If no references
-Ask for 1-2 examples they like (even from a different industry). If none — derive direction from the emotional answers (Step 1) and maximize spread on the structural + concept axes.
+If the user supplied a reference, it overrides reads 2–3. If they didn't — never ask them to go find one.
 
 ---
 
@@ -91,23 +96,28 @@ Persist decisions to `prototypes/BRIEF.md` so a long session can't lose them and
 
 ## Brand & Style
 - Existing assets: [colors, fonts — or "none"]
-- References (in & out of category): [DNA one-liners]
 - Anti-references: [avoid]
-- **The boring version:** [what the obvious/generic take looks like] → AVOID it
+
+## Vibe card (vibe.md, read 6)
+- Кто смотрит: …
+- Жанр и его коды: …
+- Что должен почувствовать → свойства: …
+- Фишки из темы: …
+- Один смелый ход поверх жанра: …
 
 ## Content
 - Headline / Subheadline / CTA: [exact or "write plausible"]
 - Imagery: [tier from imagery.md — gen / Openverse / Picsum / none]
 
 ## Prototype Plan
-| # | Concept (one bold line, concept-first) | Structural axes | Type | Color from concept |
-|---|----------------------------------------|-----------------|------|--------------------|
-| 0 (free) | AI's riskiest bet — see Step 3 | — | — | — |
-| A | e.g. "telegram from 1920s Berlin" | nav + layout | display + body | derived |
-| B | … | … | … | … |
+| # | Direction (one plain line, inside the vibe) | Register | Layout skeleton | Palette | Leading topic interactive |
+|---|---------------------------------------------|----------|-----------------|---------|---------------------------|
+| 0 (free) | AI's boldest bet for *this audience* — see 3b | — | — | — | — |
+| A | e.g. "genre done excellently: dark hero, warm back-lit photo" | dark cinematic | full-bleed + stacked | warm amber | search with suggestions |
+| B | … | light editorial | split | … | … |
 ```
 
-**Show the brief and ask:** "This is what I'll build from. Anything to change before I generate?" Proceed only on an affirmative.
+**Show the brief — vibe card first, in plain words — and ask:** «Вот как я прочитал тему. Поправить что-то до макетов?» A one-word "go" is enough; don't turn it into a questionnaire.
 
 > **Interactive vs autonomous.** This skill is interactive by default — Steps 1 and 2.5 expect a human to answer and confirm. If you're running **autonomously / headless** (no human to ask), don't block: extract every answer you can from the project files, **write the gaps/assumptions you would have asked into `BRIEF.md`**, and proceed. (Sub-agents spawned for parallel generation in Step 3h are already given the finished brief and must NOT re-ask.)
 
@@ -123,45 +133,50 @@ It contains the anti-slop directive to apply to **every** prototype. This is the
 - **Scope:** full page → generate the Hero, **but at least 1-2 prototypes show a 2-3 section scroll narrative** (hero-only kills wow — the magic is in how sections flow). Component → in context. Dashboard → one key screen with real hierarchy.
 - Each prototype is a **standalone HTML file**: opens in a browser, only Google Fonts CDN + local assets, inline CSS/JS, no build, no CDN libraries.
 
-### 3a. Art Direction layer (the core of v3)
-Before writing a prototype, give it **one bold concept in a single line** (concept-first, not constraint-first). Not "warm earthy tones" — that's a color note. Rather "a telegram from 1920s Berlin", "wabi-sabi imperfection", "командное табло дедлайнов". From the concept, **derive** color, type, layout, motion, imagery. See `references/art-direction.md` for how to invent these and worked examples.
+### 3a. Variants = different takes on one vibe
+Each prototype gets **one plain line of direction inside the read vibe** ("the genre done excellently, light editorial register", "genre + embers over the hero"). Default mix of 6: **3–4 "genre done excellently"** in different registers and layout skeletons, **1–2 "genre + one bold move"**, plus variant 0. Colour, type, layout, motion and imagery follow from the vibe card, not from a metaphor. For tools and dashboards: **no decorative metaphors** (wheels, charts-as-ornament, metro maps) — variety comes from register and usability mechanics.
 
-The structured prototypes must differ **structurally**, not just visually. Vary ≥2 structural axes (navigation, layout architecture, information density, interaction model, content hierarchy) AND ≥1 visual axis. **Grayscale test:** strip all color → prototypes must STILL look different. If they don't, the diversity is fake.
+The variants must differ **structurally**, not just visually: vary ≥2 structural axes (navigation, layout skeleton, density, interaction model, hierarchy) AND ≥1 visual axis. **Grayscale test:** strip all colour → they must STILL look different. Different metaphors on the same skeleton are the same prototype.
 
 ### 3b. Free variant (variant 0) — generated FIRST, alone
 Don't prompt it to be "polished and distinctive" (that yields the averaged, safe default). Prompt it to **take a risk**:
-> "Decide on one visual idea you'd be *surprised* to see in this product category, and build the entire prototype around it. Use all the brief context. Make a bold bet, not a safe shot."
+> "Make the boldest version that this exact audience would still instantly recognise as meant for them. Use the vibe card. A bold bet, not a safe shot — and not an alien one."
 Generate it before the structured variants so it isn't contaminated by them. File: `[scope]-0-free.html`.
 
 ### 3c. Typography → read `references/typography.md`
 Hard rules: **never** Inter/Roboto/Arial/system/Open Sans/Lato. Use distinctive fonts with weight extremes (200 vs 800, not 400 vs 600) and size jumps of 3x+. **Cyrillic gate:** for Russian/Cyrillic content, every font MUST be verified to support Cyrillic — many distinctive American fonts (Fraunces, Clash, Bricolage, DM Sans…) don't, and text silently breaks. The reference file has the verified RU-safe pool and a one-line checker command.
 
-### 3d. Color from concept, NOT from a catalog
-Derive the palette from the concept/mood ("the colour of fog on a Baltic beach at dawn"), not from a SaaS palette generator — those converge on generic. One dominant color + a sharp accent beats a timid even palette. (`ui-ux-pro-max` may be used as an *optional reference* to widen your style vocabulary, but it is not the foundation and its catalog skews generic-SaaS.)
+### 3d. Color from the vibe, NOT from a catalog
+Derive the palette from the vibe card (light, temperature, feeling), not from a SaaS palette generator — those converge on generic. **Palettes must differ across prototypes** — six shades of one palette is no choice at all; brand consistency comes at the final, not here. Check the palette isn't already bound to another author/product (vibe.md, read 5). One dominant color + a sharp accent beats a timid even palette. (`ui-ux-pro-max` may be used as an *optional reference* to widen your style vocabulary, but it is not the foundation and its catalog skews generic-SaaS.)
 
 ### 3e. Imagery → read `references/imagery.md`
 **Real imagery is MANDATORY, not optional — unless the surface is a pure data dashboard/dense tool.** The #1 observed failure is prototypes shipping with *zero* images because fetching feels like friction and "decide if images belong" became an easy out. Don't let that happen:
 - **≥ half the prototypes (≥3 of 6) must use real images** — hero, full-bleed background, or section imagery. Only a genuine data dashboard is exempt (and even there, consider SVG diagrams / generated patterns / data-viz instead of nothing).
 - **Source images CENTRALLY before spawning prototype agents** (see 3h): fetch/generate into `prototypes/assets/` in the main flow and pass the **local paths** to each agent — so no sub-agent skips images for lack of tools or effort.
 - Autonomous cascade (no account/key): **image-gen tool if present → Openverse (free, no key) → Picsum → none**. Download to local `assets/`.
-- **Self-sufficiency rule:** a prototype must look finished even if an image fails — concept-palette background behind every image, never an empty placeholder panel.
+- **Self-sufficiency rule:** a prototype must look finished even if an image fails — palette-coloured background behind every image, never an empty placeholder panel.
 - **When a photo truly doesn't fit** (dashboards): use non-photographic imagery — SVG diagrams, generated/gradient patterns, textures, data-viz. "No stock photo" ≠ "no visual texture".
 
 ### 3f. Motion → read `references/motion.md`
-Static pages feel dead next to animated ones, and **the motion must be visible** (a 6-second-cycle Ken Burns reads as "nothing happening"). Match motion to product type: atmospheric (fog drift, breathing glow, floating motes, parallax) for emotional/editorial; functional (count-up numbers, urgency pulse, staggered reveal) for tools/dashboards. Dependency-free only; always include a `prefers-reduced-motion` path.
+Static pages feel dead next to animated ones, and **the motion must be visible** (a 6-second-cycle Ken Burns reads as "nothing happening"). Tie motion to the topic and the feeling (vibe card), matched to product type: atmospheric (fog drift, breathing glow, floating motes, parallax) for emotional/editorial; functional (count-up numbers, urgency pulse, staggered reveal) for tools/dashboards. Dependency-free only; always include a `prefers-reduced-motion` path.
 - **Raise the bar (observed gap: too little motion):** **most prototypes (≥4 of 6) must have clearly visible motion**, and **at least 1-2 must use *sophisticated* motion** — scroll-driven sequences, sticky-stack reveals, multi-layer parallax, or cursor-reactive effects (see motion.md "Advanced"). At most 1-2 may be static-but-elegant.
 
 ### 3g. Layout & responsive (carry-over rules that still matter)
 - **Mobile-first.** Base CSS = phone; `@media (min-width:768px)` and `(min-width:1440px)`.
 - **Don't waste desktop space** (the #1 AI visual flaw): heading 56-80px at 1440px+, body max-width ≥500px, hero wrapper 1100-1400px for multi-column. At least 2 of 6 use a non-centered layout (split/editorial/asymmetric). Atmospheric ≠ empty — content must anchor and fill.
+- **Check the wide end too:** position things relative to the content column, never the window edge (`right: calc(50% - 512px)` drifts on monitors wider than yours).
+- **Phone traps:** no `100vh` hero wrapped around small text (empty screen on a phone); reveal-on-scroll must never leave content hidden if the observer doesn't fire — hide via a `.js` class and time out to visible.
+- **Cut text on the page:** one line of substance + tags per card, the rest behind a toggle. Walls of text read as «монолитно».
 - Real content, never lorem ipsum. Mark placeholder text in `<!-- PLACEHOLDER -->` comments.
 
 ### 3i. Navigation & non-standard elements → read `references/interaction-patterns.md`
 - **Understand navigation, don't ignore it.** If the content is list-heavy or has multiple sections (memo, docs, multi-section page, catalog), **≥1-2 prototypes must include real navigation** — a sticky table-of-contents / scroll-spy sidebar, sub-nav, or anchor rail — so the page is actually navigable, not just a long scroll. Vary the nav pattern across prototypes (it's a structural axis).
+- **Topic interactives (landings): 3–4 per prototype**, from vibe.md read 4 — each says "here they do exactly this". A beautiful page without them gets called «скучно».
+- **Icons:** own inline-SVG line set, ≥32px in cards, stroke ≥1.75. Emoji banned; "no emoji" ≠ "no icons".
 - **Reach for non-standard elements.** **≥1 prototype should feature one unconventional, memorable interaction/element** — bento grid, horizontal scroll-snap section, sticky-stacking cards, before/after slider, draggable cards, scroll-spy TOC, custom cursor, hover-reveal. The reference file has a dependency-free palette.
 
 ### 3h. Generation order & parallelization
-**First, in the main flow: source imagery centrally** (3e) into `prototypes/assets/` so every agent gets working local paths. Then generate variant 0 alone. Then generate structured variants **in parallel** — one Agent per prototype, each given the full `BRIEF.md`, its concept row, the local asset paths, and the relevant reference files. If parallel isn't available, generate sequentially and **re-read BRIEF.md before each** to avoid drift toward repetition.
+**First, in the main flow: source imagery centrally** (3e) into `prototypes/assets/` so every agent gets working local paths. Then generate variant 0 alone. Then generate structured variants **in parallel** — one Agent per prototype, each given the full `BRIEF.md`, its direction row, the vibe card, the local asset paths, and the relevant reference files (always `vibe.md`). If parallel isn't available, generate sequentially and **re-read BRIEF.md before each** to avoid drift toward repetition.
 
 ---
 
@@ -169,15 +184,25 @@ Static pages feel dead next to animated ones, and **the motion must be visible**
 
 The old checklist was 13 technical items and 0 creative ones — a forgettable prototype passed 13/13. Keep the technical checks (mobile-first, two breakpoints, Cyrillic verified, real content, perf, `prefers-reduced-motion`, standalone) **and** add these creative gates:
 
-- [ ] **One bold concept** — can you name this prototype's idea in one line?
-- [ ] **Stranger test** — someone seeing only this, no context, feels *something* (curiosity, desire, calm, awe)?
-- [ ] **Novelty** — is there one move you haven't seen a hundred times?
+- [ ] **Recognition** — would someone from the audience see "this is for me" in 3 seconds? (genre codes present)
+- [ ] **Feeling** — does it produce the feeling from the vibe card, not just "look nice"?
+- [ ] **One distinctive move** — is there one thing you haven't seen a hundred times in this niche?
+- [ ] **Topic behaviour** — are the 3–4 topic interactives there and actually working (landings)?
 - [ ] **Grayscale test** — different from the others with color removed?
 - [ ] **Designed vs generated** — does it read as crafted, or as AI-default?
 - [ ] **Image self-sufficiency** — looks finished even if images fail?
 - [ ] **Motion is visible** — would a person notice movement in the first 3 seconds?
 
-If the honest answer to a creative gate is "no", the concept is too weak — change it, don't just polish.
+If the honest answer to a gate is "no", the direction is wrong — change it, don't just polish.
+
+---
+
+## Step 3.6 — Measure before showing (mandatory) → `references/ui-verify.md`
+
+```bash
+node <skill-dir>/scripts/check.mjs prototypes/ --widths 390,1440,1920
+```
+Fix **every FAIL** (sideways scroll, unreadable text, content stuck invisible, font without Cyrillic, broken images, JS errors), fix WARNs on body copy and CTAs, look at NOTE items (text on photos) by eye. Rerun until clean. Only then build the gallery, and tell the user the result in one line. Parallel builders don't exempt you: run it on their output too — two of five once shipped unreadable text. No Node/Chrome → run the manual probes from ui-verify.md through the browser tool.
 
 ---
 
@@ -192,7 +217,6 @@ Create `gallery.html` (variant 0 shown first as "AI's Best Shot", structured var
 Give the user a simple frame:
 > - Does it FEEL right for my audience? (not "do I like it" — "would my users trust/want this?")
 > - Is the key action obvious?
-> - Which one could you imagine as a full-page ad in a design magazine?
 > - What grabs you / what repels you?
 
 Don't ask "which is best?" — ask **"which 1-2 are closest, and what would you change?"** Then ask the **mixing question**: "Anything to borrow from the others — a font, color, motion, layout idea?" (How non-designers reach a unique result.)
@@ -205,6 +229,11 @@ Don't ask "which is best?" — ask **"which 1-2 are closest, and what would you 
 2. Apply changes one category at a time (type → color → layout → effects); visual conflicts appear when you merge all at once.
 3. Save as `prototypes/[scope]-FINAL-[name].html`; iterate in place (don't spawn v2, v3…).
 4. On approval, add a **"Final Direction"** section to `BRIEF.md` (locked palette, fonts, layout) as the source of truth for the full build.
+5. Run `scripts/check.mjs` on the FINAL file too, at 390/1440/1920.
+
+**Point complaints on the built page** («слева пусто», «кнопка теряется», «тест некрасивый»): show **2–3 variants of that one element on top of the built page**, not a new round of prototypes — this has resolved every such complaint in one reply. A complaint about readability or «всё сливается» — **measure first** (ui-verify.md), then fix.
+
+**Redesigning an existing screen:** list every action the old one had (including hover-only buttons) before you start, and check each one exists after — hidden actions disappear silently.
 
 ### 5.5 — Feel pass (default; runs on the real build, not prototypes)
 
@@ -225,7 +254,11 @@ Once the final direction is built into **real production code** (the component/p
 | Russian/Cyrillic UI | Verify every font for Cyrillic (typography.md) — this is non-negotiable |
 | Data dashboard / dense tool | Skip photos; wow via hierarchy + type + functional motion |
 | "minimal / safe / calm" | Probe: does it mean *plain*, or *trustworthy*? Calm can still be atmospheric |
+| No references, no time | Normal case — read the vibe yourself (vibe.md); never send them hunting |
+| «мрачно / скучно / мало секса / сливается / одинаковые» | Decode with the verdict table in vibe.md; «не то» usually means you left the genre |
+| Complaint about one element | 2–3 variants of that element over the built page, not a new round |
+| "Looks broken / pale / shifted" | Measure first (ui-verify.md) — the screenshot may be lying |
 | Wants to skip prototypes | "15 min of prototypes saves hours of rework" — hold the line at 4 minimum |
 | Can't choose | Ask the eval questions; if stuck, combine top 2 |
-| Time pressure | 4 instead of 6, skip anti-references question — never skip Step 1 |
+| Time pressure | 4 instead of 6, skip anti-references question — never skip Step 1 or the Step 3.6 check |
 | Final build is done | Run the Feel pass (Step 5.5, feel-polish.md) by default — unless user says "skip polish" |
