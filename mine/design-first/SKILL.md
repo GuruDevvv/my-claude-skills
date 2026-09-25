@@ -81,6 +81,7 @@ concept from the topic's objects — `concepts.md`); for a tool, six organising 
 parallel. Look at each: mood matches its row, nothing broken; regenerate a broken one once. Don't
 drop a mockup for taste — your taste doesn't predict the user's.
 
+**Generator hit its usage limit** → say when it resets and wait, or ask before using the fallback.
 **No image generator available** → fallback: six standalone HTML first screens along the same six
 rows (read `frontend-aesthetics.md` and `typography.md` first), then Step 8 on each, then the gallery.
 Say once that this path is weaker on taste.

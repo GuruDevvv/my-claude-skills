@@ -20,12 +20,19 @@ never assume a vendor. **No generator → use the fallback in SKILL.md (HTML fir
 
 Codex CLI recipe (Bash, one call per image, calls may run in parallel):
 ```bash
-mkdir -p prototypes/mockups/_logs && cd prototypes/mockups && codex exec --skip-git-repo-check -o ../_logs/m1.txt \
+mkdir -p prototypes/mockups/_logs/m1 && cd prototypes/mockups/_logs/m1 && codex exec --skip-git-repo-check -o ../m1.txt \
   "ИСПОЛЬЗУЙ СВОЙ ВСТРОЕННЫЙ ИНСТРУМЕНТ image_gen (системный скилл imagegen, модель gpt-image-2, через подписку — OPENAI_API_KEY НЕ НУЖЕН). <prompt>. Сохрани как m1.png в текущей папке. В ответе только полный путь к файлу." < /dev/null
 ```
-If the file isn't in the folder, take the path Codex printed (`~/.codex/generated_images/...`) — that
-exact path, never "the newest file" (parallel calls collide). Delete any `.agents`/`.git` Codex leaves.
+Then move `m1.png` up into `prototypes/mockups/`. **Each parallel call runs in its own folder** — in a
+shared folder Codex itself sometimes grabs the newest image, and two mockups came out identical
+(round 7). If the file isn't there, take the path Codex printed (`~/.codex/generated_images/...`) —
+that exact path, never "the newest file". Delete any `.agents`/`.git` Codex leaves. After the batch,
+compare checksums: identical files mean a collision.
 Cost: ~20–25k tokens per image on a Plus plan; a full run is ~9 images (6 + phone + 2 plates).
+**Usage limit hit** ("You've hit your usage limit… try again at <time>") → don't fall back silently:
+tell the user the reset time and wait for it, or ask whether to go on with the HTML fallback — it is
+measurably weaker on taste, so it is their call. Three parallel projects × 6 mockups exhausted a Plus
+window in one night.
 
 ## 1. Six different mockups
 
