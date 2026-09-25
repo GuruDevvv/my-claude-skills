@@ -13,8 +13,8 @@ Context (+ASK) → Read the vibe → Brief → Prototypes → Gates → Measure 
 ```
 
 Two principles:
-1. **Diverge, don't commit.** 4–6 genuinely different directions as standalone HTML, compared in a gallery.
-2. **Read the vibe, then be excellent inside it.** Most people have no reference and can't describe the look they want — but recognise it instantly. The skill reads it from the topic: the audience, the genre's own visual codes, the feeling, the topic's objects. Variants are different takes on that vibe (different registers and layouts), plus one deliberate bold move — not metaphors imported from outside the niche, which made pages feel alien to their audience.
+1. **Diverge, don't commit.** Round 1: 4 light first screens (2 genre + 2 concept), compared in a gallery; round 2 develops the picked one.
+2. **Read the vibe, then be excellent inside it.** Most people have no reference and can't describe the look they want — but recognise it instantly. The skill reads it from the topic: the audience, the genre's own visual codes, the feeling, the topic's objects. Next to genre versions go bold concepts grown from the topic's own objects (a till receipt for a money course, a clock face for a therapist's day) — not metaphors imported from outside the niche, which made pages feel alien to their audience.
 3. **Measure before showing.** `scripts/check.mjs` checks every prototype at 390/1440/1920: sideways scroll, unreadable text, content stuck invisible, fonts without Cyrillic, broken images, JS errors.
 
 ## What It Generates

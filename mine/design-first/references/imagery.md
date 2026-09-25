@@ -10,16 +10,24 @@ Real images are a major wow lever. But two hard constraints:
 - **Data dashboards, dense tools, admin panels** → no hero photos. Stock images look pasted-on. Do the work with typography, color, data hierarchy, and functional motion.
 - **When a photo would dilute a pure-type/editorial concept.**
 
-If imagery fits (landings, hero sections, atmospheric/editorial pages), use the cascade.
+Whether a variant has an image at all is decided by its direction (a type-led poster or a concept screen may need none). If it does, use the cascade.
 
 ## The autonomous cascade (pick the highest tier available)
 
 ### Tier A — bespoke generation (best quality, only if a generator is present)
-If the environment exposes an image-gen tool/MCP (Higgsfield, DALL·E, Replicate, a local SD, etc.) **and you've confirmed it's available**, generate a concept-matched image, then **download it locally** to `assets/` so the prototype stays standalone. This is optional and vendor-agnostic — never assume a specific one.
-Pattern: generate → poll for the result URL → `curl -L "<url>" -o assets/hero.png` → reference `./assets/hero.png`.
-(Example: Higgsfield `generate_image` → `job_status(sync:true)` → download `rawUrl`. ~2 credits/image. But treat as "if present", not required.)
+**The default whenever a direction calls for an image.** Use whatever image tool the environment has (Codex CLI `image_gen`, an image MCP, DALL·E…) — confirm it works with one call, never assume a specific vendor. Save the file locally to `assets/` so the prototype stays standalone.
 
-### Tier B — Openverse (free, no key, keyword search) — the portable default ✓ tested
+**Build the prompt from the vibe card**, not from a generic subject:
+```
+<subject and action>, <who: age, look — from the audience read>, <light: source, warmth>,
+<palette of the variant>, <crop, and empty area on the LEFT/RIGHT/TOP for the headline>,
+photographic | illustration in <manner>. NO text, letters, logos or watermarks.
+```
+Look at the result before using it: light, pose, crop and text space must match the direction; a
+wrong mood is worse than no image.
+*Codex CLI specifics:* start the prompt with "ИСПОЛЬЗУЙ СВОЙ ВСТРОЕННЫЙ ИНСТРУМЕНТ image_gen … Сгенерируй изображение: …"; it may fail to copy the file and print a path under `~/.codex/generated_images/` instead — take **that exact path**, never "the newest file" (parallel runs collide).
+
+### Tier B — Openverse (free, no key, keyword search) — fallback when no generator is present
 Real Creative-Commons photos, searchable by keyword, **no account/key**:
 ```bash
 curl -s -A "Mozilla/5.0" "https://api.openverse.org/v1/images/?q=foggy+lake+dawn&page_size=4"
@@ -27,7 +35,7 @@ curl -s -A "Mozilla/5.0" "https://api.openverse.org/v1/images/?q=foggy+lake+dawn
 ```
 Download the chosen `url` to `assets/` (Tier-B images are real photos; quality varies — pick from a few results). Record `creator`/`license` for attribution (CC-BY etc.). Verified working anonymously: HTTP 200, downloadable JPEG.
 
-### Tier C — Lorem Picsum (free, no key, random/texture)
+### Tier C — Lorem Picsum (placeholder only — never counts as "has imagery")
 For texture, abstract, or when the exact subject doesn't matter:
 ```
 https://picsum.photos/seed/{slug}/1600/900            (stable per seed)

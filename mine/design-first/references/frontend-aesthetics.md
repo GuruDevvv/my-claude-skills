@@ -7,7 +7,7 @@ Read this **before generating any prototype** and apply it to each one. This is 
 > You tend to converge toward generic, "on-distribution" outputs. In frontend design this creates the "AI slop" aesthetic. Avoid it — make creative, distinctive frontends that surprise and delight.
 >
 > - **Typography.** Choose beautiful, unusual, intentional fonts. Avoid generic ones (Inter, Roboto, Arial, system). Distinctive type elevates everything. (See `typography.md` — and respect the Cyrillic gate.)
-> - **Color & theme.** Commit to one cohesive aesthetic. Use CSS variables. A dominant colour with sharp accents beats a timid, evenly-distributed palette. Draw from IDE themes, film, and cultural aesthetics — not from SaaS palette generators.
+> - **Color & theme.** Commit to one cohesive aesthetic. Use CSS variables. A dominant colour with sharp accents beats a timid, evenly-distributed palette. Draw it from the vibe card and the topic's own world — not from SaaS palette generators.
 > - **Motion.** Use animation for high-impact moments. One well-orchestrated page-load with staggered reveals (`animation-delay`) delivers more delight than scattered micro-interactions. (See `motion.md`.)
 > - **Backgrounds.** Choose them from the mood: atmosphere and depth (layered gradients, grain, patterns) where the mood wants it; a clean light or flat background is a legitimate choice when the mood is calm, clear or practical. What's banned is the *unchosen* default, not light or flat as such.
 

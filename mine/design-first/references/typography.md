@@ -25,7 +25,7 @@ A recurring failure: reaching for **Cormorant Garamond / Playfair Display on eve
 ## ⚠️ The Cyrillic gate (HARD rule for RU)
 
 Many distinctive "American-standard" fonts have **no Cyrillic** and are unusable for Russian:
-**Fraunces, Clash Display, Bricolage Grotesque, Cabinet Grotesque, Satoshi, DM Sans, DM Serif, Space Grotesk, Playfair (check), Fraunces, Cinzel, Libre Baskerville.**
+**Fraunces, Clash Display, Bricolage Grotesque, Cabinet Grotesque, Satoshi, DM Sans, DM Serif, Space Grotesk, Cinzel, Libre Baskerville.**
 
 > Caught in real testing twice: (1) a brief that wanted "distinctive fonts" kept reaching for Fraunces/Clash — broken for RU. (2) A live production app shipped **DM Sans** as its body font on a Russian site — no Cyrillic, so all body text was rendering in a system fallback. The gate catches both.
 
