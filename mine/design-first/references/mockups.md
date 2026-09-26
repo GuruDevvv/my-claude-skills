@@ -2,7 +2,7 @@
 
 ## Why this path
 
-Six blind rounds with the owner (Sept 2026, scores kept in the test protocol):
+Seven blind rounds with the owner (Sept 2026, scores kept in the test protocol):
 - HTML prototypes written by the coding model — never a "wow" in three rounds; two quite different
   rule sets tied on taste (12:12). The ceiling was the coding model's own visual taste, not the rules.
 - First-screen **mockups drawn by an image model** from the same brief — mean 1.67 vs 1.33, and the
@@ -10,6 +10,8 @@ Six blind rounds with the owner (Sept 2026, scores kept in the test protocol):
 - Transfer: a live page built over the mockup (text removed → background plate, live text on top) was
   judged **"the same" as the mockup in all three pairs** on desktop. On the phone the same page dropped
   to 0–1 — until the phone got **its own vertical mockup**; then phone = mockup (2 = 2) in all three.
+- Acceptance round, three new topics, old skill (4 HTML screens) vs this path (6 mockups): this path
+  won all three (best screen 3 vs 2, 2 vs 2 with more good ones, 3 vs 1); both new "wow"s were mockups.
 - A vision "critic" agent ranking prototypes did **not** track the owner (rank correlation −0.07) —
   so there is no automatic pre-selection: the user picks from the gallery.
 
