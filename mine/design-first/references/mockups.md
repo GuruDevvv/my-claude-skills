@@ -84,10 +84,16 @@ From the chosen desktop file as reference:
 ```
 Файл <chosen>.png — макет десктопной версии. Сгенерируй по нему вертикальный макет 1024x1536 той же
 страницы для ТЕЛЕФОНА (экран 390px, чистый скриншот без рамки телефона): тот же стиль, палитра, шрифты,
-фактуры, те же тексты. <Landing: заголовок, подзаголовок и кнопка видны без прокрутки, изображение и
+фактуры, те же тексты. Размеры для телефона: основной текст не мельче 36 px, подписи не мельче 30 px,
+кнопка не ниже 115 px в этой картинке шириной 1024 (это 14 px, 11 px и 44 px на экране 390).
+<Landing: заголовок, подзаголовок и кнопка видны без прокрутки, изображение и
 фактуры собраны в вертикальную композицию так же сильно, как в образце, а не фото под текстом.>
 <Tool: одна колонка — переключатель (мастер/день/раздел) сверху, список ниже, главное действие рядом.>
 ```
+
+Why the sizes: in round 7 the builder had to enlarge 8–11 px mockup text to the readability floor, the
+composition shifted, and the owner preferred the mockup on 2 of 3 phones (desktop stayed "the same" 3/3).
+A phone mockup drawn at readable sizes needs no enlarging.
 
 ## 4. Plates — the mockup without its text
 
