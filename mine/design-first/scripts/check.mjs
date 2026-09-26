@@ -241,6 +241,9 @@ const MEASURE = String.raw`(async () => {
   return out;
 })()`;
 
+const NO_SMOOTH = `(() => { const st = document.createElement('style'); st.textContent = '*,html,body{scroll-behavior:auto!important}';
+  document.head.appendChild(st); return true; })()`;
+
 const SCROLL_THROUGH = String.raw`(async () => {
   const step = Math.max(200, innerHeight * 0.7);
   for (let y = 0; y < document.documentElement.scrollHeight; y += step) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 120)); }
@@ -304,7 +307,8 @@ async function main() {
       await send('Page.navigate', { url });
       await loaded; await sleep(800);
       let m;
-      try { await evaluate(SCROLL_THROUGH); m = await evaluate(MEASURE); }
+      // smooth scrolling would make our own scrollTo animate — shots and probes would catch the page mid-scroll
+      try { await evaluate(NO_SMOOTH); await evaluate(SCROLL_THROUGH); m = await evaluate(MEASURE); }
       catch (e) {
         fails++; console.log(`✗ ${decodeURIComponent(basename(url))} @${width}\n   FAIL check could not finish on this page: ${e.message}`);
         report.push({ url, width, failed: true, problems: ['check could not finish: ' + e.message] }); continue;
