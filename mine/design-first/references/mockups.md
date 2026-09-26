@@ -93,7 +93,10 @@ From the chosen desktop file as reference:
 
 Why the sizes: in round 7 the builder had to enlarge 8–11 px mockup text to the readability floor, the
 composition shifted, and the owner preferred the mockup on 2 of 3 phones (desktop stayed "the same" 3/3).
-A phone mockup drawn at readable sizes needs no enlarging.
+A phone mockup drawn at readable sizes needs no enlarging. Redrawn that way (and compared at the
+mockup's own height, not a taller frame): both phones judged "the same" as their mockups; where the
+image model still drew below the floor and the builder enlarged, the owner still judged it "the same"
+— the readability floor wins over pixel faithfulness.
 
 ## 4. Plates — the mockup without its text
 
