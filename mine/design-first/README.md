@@ -13,7 +13,7 @@ Context → Vibe → Words → 6 mockups → Gallery → Pick/mix → Phone mock
 ```
 
 1. **Always a real choice.** Six first screens that differ in composition — three mood readings of the topic, a type-led poster, a texture/collage screen, a concept grown from the topic's own objects.
-2. **The image model draws, the coding model builds.** Mockups drawn by an image model earned the only "wow" in six blind rounds. The text is removed from the chosen mockup (a background "plate"), and the page is built with live text on top — judged the same as the mockup on desktop, and on the phone once the phone has its own vertical mockup.
+2. **The image model draws, the coding model builds.** Mockups drawn by an image model earned every "wow" in seven blind rounds; in the acceptance round the new path beat the old one on all three topics. The text is removed from the chosen mockup (a background "plate"), and the page is built with live text on top — judged the same as the mockup on desktop, and on the phone once the phone has its own vertical mockup.
 3. **Measure before showing.** `scripts/check.mjs` checks every page at 390/1440/1920: sideways scroll, unreadable text (layers and opacity composited the way the browser paints them), content stuck invisible, fonts without Cyrillic, broken images, JS errors.
 
 The evidence — protocols, keys and scores of the blind rounds — is summarised in `references/mockups.md` ("Why this path").
@@ -71,3 +71,7 @@ design-first/
 `references/ui-verify.md` and the contrast/overflow/glyph probes in `scripts/check.mjs` grew out of a `ui-verify` skill shared by a design-first user in September 2026.
 
 The Feel pass (`references/feel-polish.md`) distills principles from **["Details that make interfaces feel better"](https://jakub.kr/writing/details-that-make-interfaces-feel-better)** by **Jakub Krehel** — his standalone skill is [`jakubkrehel/make-interfaces-feel-better`](https://github.com/jakubkrehel/make-interfaces-feel-better) (MIT).
+
+---
+
+🇷🇺 Дизайн до кода: вид страницы читается из темы, модель картинок рисует шесть разных первых экранов, вы выбираете один, и по нему верстается живая страница — для компьютера и телефона по своим макетам, с проверкой читаемости цифрами. В слепых сравнениях с прежней версией выиграла три темы из трёх.
