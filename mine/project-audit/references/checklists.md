@@ -99,24 +99,26 @@ Flag these in root (they belong in subdirectories):
 
 ### MEMORY.md index
 - Is it well-organized (by topic, not chronologically)?
-- Does it stay under ~200 lines? (Longer gets truncated by Claude Code)
+- Does it stay within Claude Code's load limit (~200 lines / ~25k chars)? Longer gets truncated.
 - Are descriptions brief and useful for future relevance matching?
+- **Script-built index:** if the folder has `MEMORY.head.md` or `INDEX.md`, MEMORY.md is assembled by `memory_index.py` (budget-limited; overflow goes to `INDEX.md`). Do not suggest hand edits to MEMORY.md — an entry is fixed through the file's `metadata.index_line` / `metadata.moment`, permanent text through `MEMORY.head.md`.
 
 ### Individual memory files
-- **Frontmatter** — must have `name`, `description`, `type` fields:
+- **Frontmatter** — must have `name`, `description` and a type — top-level `type` or, in the current format, `metadata.type`:
   ```yaml
   ---
   name: example-memory
   description: One-line description used for relevance matching
-  type: user|feedback|project|reference
+  metadata:
+    type: user|feedback|project|reference
   ---
   ```
 - **Content** — is it still accurate? Check key claims against current project state.
 - **References** — if the memory mentions specific files, do those files still exist?
 
 ### Cross-checks
-- **Orphans**: files in `memory/` not linked from MEMORY.md
-- **Broken links**: MEMORY.md links to files that don't exist
+- **Orphans**: rule/reference files linked from neither MEMORY.md nor `INDEX.md` (index files themselves and journals/archives in `projects/`, `reviews/`, `plans/`, `research/` are not orphans)
+- **Broken links**: MEMORY.md or `INDEX.md` links to files that don't exist
 - **Duplicates**: same information in multiple memory files
 - **CLAUDE.md overlap**: information that's both in CLAUDE.md and memory
 

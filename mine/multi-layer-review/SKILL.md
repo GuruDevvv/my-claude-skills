@@ -258,31 +258,18 @@ Be proportional — distinguish real architectural problems from stylistic prefe
 
 **Role:** Code-level critique — what breaks in real implementation.
 
-**Call via (safe — cross-platform, UTF-8-safe, auto-cleanup on crash):**
+**Call via — the whole spec, through stdin:**
+
+1. Write the full spec to a file with the **Write tool** (scratchpad or the project's `docs/reviews/`), e.g. `<spec-file>`. Not `echo` and not a Bash heredoc: apostrophes ("Devil's") and backticks break `echo`, and a heredoc in the Bash tool can eat backslashes.
+2. Run codex with the instruction as the argument and the spec on stdin:
+
 ```bash
-# Cross-platform temp file (works on Windows/Mac/Linux)
-SPEC_TMPFILE="$(python3 -c "import tempfile; f=tempfile.NamedTemporaryFile(delete=False,suffix='.txt',prefix='spec-review-'); print(f.name); f.close()")"
-trap "rm -f \"$SPEC_TMPFILE\"" EXIT
-
-cat > "$SPEC_TMPFILE" << 'SPECEOF'
-[paste spec content here]
-SPECEOF
-
-# UTF-8-safe size check and truncation (characters, not bytes)
-SPEC_CHARS=$(python3 -c "print(len(open('$SPEC_TMPFILE',encoding='utf-8').read()))")
-if [ "$SPEC_CHARS" -gt 4000 ]; then
-    echo "⚠️ Спек $SPEC_CHARS символов — усечён до 4000 для Codex (без разрыва символов)"
-fi
-SPEC_FOR_CODEX=$(python3 -c "print(open('$SPEC_TMPFILE',encoding='utf-8').read()[:4000])")
-
-codex exec --skip-git-repo-check "$SPEC_FOR_CODEX
-
-Ты технический рецензент. Найди: риски реализации, противоречия, небезопасные паттерны. Будь краток."
+codex exec --skip-git-repo-check "Ты технический рецензент. ТЗ — в блоке <stdin>. Найди: риски реализации, противоречия, небезопасные паттерны. Будь краток." < "<spec-file>" > "<codex-out-file>" 2>&1
 ```
 
-⚠️ Do NOT use `echo "$SPEC_CONTENT" > file` — apostrophes (e.g. "Devil's") and backticks in the spec will break single-quoted strings or be evaluated by the shell.
+3. Read `<codex-out-file>` with the Read tool — the answer is at the end, after codex's own log. Don't pipe through `| tail`: it silently cuts the start of a long answer.
 
-Why Python for temp/truncation: `python3` is available everywhere this skill runs (Windows/Mac/Linux), avoids `/tmp` path issues on Windows, and truncates at character boundaries instead of bytes — which prevents Cyrillic characters from being sliced mid-byte.
+Why this shape: `codex exec` appends piped stdin to the prompt as a `<stdin>` block, so the spec goes in whole, with no command-line length limit and no shell quoting of its text. Stdin from a file also keeps codex from hanging on a missing terminal (same rule as `< /dev/null` elsewhere).
 
 Use default model (no `--model` flag — avoids incompatibility with ChatGPT accounts).
 
