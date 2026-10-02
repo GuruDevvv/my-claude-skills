@@ -155,9 +155,9 @@ Key checks:
 Use fallback checklist from `references/checklists.md`, section "Memory checklist".
 
 Checks:
-1. **Broken links** — does each link in MEMORY.md point to a file that actually exists? Check with Glob or `ls`.
-2. **Orphan files** — `.md` files in memory folder not referenced by MEMORY.md. List all `.md` files, cross-reference with MEMORY.md links.
-3. **Frontmatter** — each memory file should have `name`, `description`, `type` in YAML frontmatter. Missing fields = Warning.
+1. **Broken links** — does each link in MEMORY.md (and in `INDEX.md`, if present) point to a file that actually exists? Check with Glob or `ls`.
+2. **Orphan files** — rule/reference files (`feedback/`, `ref/`, top-level `user_*.md` and the like) referenced by neither MEMORY.md nor `INDEX.md`. If the folder has `MEMORY.head.md` or `INDEX.md`, the index is assembled by a script (`memory_index.py`) and what did not fit the budget lives in `INDEX.md` — a file listed only there is not an orphan, and the fix for a missing entry is the file's `metadata.index_line`, never a hand edit of MEMORY.md. Not orphans either: the index files themselves (`MEMORY.md`, `MEMORY.head.md`, `INDEX.md`, `PROJECT_INDEX.md`) and journals/archives in `projects/`, `reviews/`, `plans/`, `research/`.
+3. **Frontmatter** — each memory file should have `name`, `description` and a type — either top-level `type` or `metadata.type` (the current format nests it under `metadata`). Missing fields = Warning.
 4. **Zombie references** — memory files that mention specific project files, paths, or URLs that no longer exist. Read each linked memory file (don't recurse deeper) and verify key references.
 5. **CLAUDE.md overlap** — same information maintained in both MEMORY.md and CLAUDE.md leads to drift. Flag overlapping content.
 6. **Stale entries** — entries with dates >6 months old, or statuses like "В процессе" / "In progress" for clearly finished work.
