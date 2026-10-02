@@ -3,7 +3,7 @@ name: spec-first
 description: >
   Start a new project with a spec before code. Two phases: Vision (what/why) then Blueprint (how/order).
   Use when: user describes a new project idea ("I want to build a bot", "need a site for...",
-  "I want to build", "need a site for", "new project", "start a project", "plan the project",
+  "new project", "start a project", "plan the project",
   "build me", "let's make"), says /spec-first, or when existing code has no docs/vision/blueprint.
   Also triggers on Russian: "хочу сделать", "нужен сайт для", "новый проект", "начинаем",
   "давай спеку", "запускаем".

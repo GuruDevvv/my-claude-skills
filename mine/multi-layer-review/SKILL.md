@@ -15,13 +15,11 @@ description: >
 
 Run a spec or ТЗ through up to five **independent blind reviewers** in parallel. Each reviewer has a distinct role, works independently (no shared findings), and grounds analysis in actual project files. Together they cover what one reviewer misses — and independent convergence on the same issue is a strong signal.
 
-**The session that produced this skill:** User asked to review a PDF→MD converter spec. Without the skill, Claude used only an internal Plan agent. After adding Codex CLI, 9 new issues were found. Four-layer review is the correct default.
-
 ---
 
-## Step 0 — Always Ask First
+## Step 0 — Ask which reviewers to run
 
-**MANDATORY:** Before running any reviewer, ask the user which ones to use via `AskUserQuestion` with `multiSelect: true`.
+Before running any reviewer, ask the user which ones to use via `AskUserQuestion` with `multiSelect: true`.
 
 ```
 AskUserQuestion(questions=[{
@@ -46,7 +44,7 @@ AskUserQuestion(questions=[{
 
 ## Step 0.5 — Получить и проверить спек
 
-**MANDATORY перед запуском ревьюеров.**
+Перед запуском ревьюеров.
 
 1. Определить источник спека:
    - Файл приложен к сообщению → прочитать через Read tool
@@ -236,7 +234,7 @@ You are a technical architect.
 
 [COMMON PROMPT BLOCK]
 
-MANDATORY: Before reviewing, examine the project structure and existing code.
+Before reviewing, examine the project structure and existing code.
 Check how existing modules are organized, what patterns are used, what dependencies
 are already in place.
 
@@ -418,9 +416,9 @@ independently with only the spec + project context. This is by design:
 
 ---
 
-## Step 7 — Save to Disk (MANDATORY)
+## Step 7 — Save to Disk
 
-After presenting the synthesis, ALWAYS save results to disk. Do not skip this step.
+After presenting the synthesis, save the results to disk — the next session finds past reviews only there.
 
 ### Path derivation (dynamic — never hardcode)
 
@@ -430,10 +428,10 @@ After presenting the synthesis, ALWAYS save results to disk. Do not skip this st
    - Result path: `<HOME>/.claude/projects/<project-slug>/memory/reviews/`
 
 2. Determine active project slug:
-   - Derive from current working directory: convert path to slug (replace `/`, `\`, `:`, spaces with `-`, lowercase)
+   - Match the current working directory against folders in `<HOME>/.claude/projects/` case-insensitively (Claude Code replaces every character that is not a letter or digit with `-` and keeps the case)
      - Example: `E:\VibeCoding\MyProject` → `e--VibeCoding-MyProject`
    - If unsure which project — ask the user: "Сохранить в memory какого проекта?"
-   - Default fallback: derive slug from `$PWD` automatically
+   - No folder matched — ask the user; do not create a new slug folder
 
 3. Create the folder if it doesn't exist:
    ```bash

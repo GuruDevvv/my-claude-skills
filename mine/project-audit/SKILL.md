@@ -43,7 +43,7 @@ Diagnose organizational health of any project: CLAUDE.md, memory, file structure
 
 ## Mode selection
 
-**MANDATORY:** Always ask the user which mode they want before proceeding.
+Ask the user which mode they want, unless the arguments already name it (below).
 
 **Args shortcut:** When invoked as `/project-audit full` or `/project-audit полный`, the skill receives the argument via the `args` parameter. If args contain "full" or "полный" — skip the question and go straight to Full mode. Same for "quick" or "быстрый" → Quick mode.
 
@@ -107,7 +107,7 @@ find . -type f -not -path '*/.git/*' -not -path '*/node_modules/*' -not -path '*
 
 ### Previous audit check
 
-Derive memory slug from CWD: replace `/`, `\`, `:`, spaces with `-`, lowercase. Example: `E:\VibeCoding\MyProject` → `e--vibecoding-myproject`.
+Find the memory folder by listing `~/.claude/projects/` and matching the CWD case-insensitively: Claude Code replaces every character that is not a letter or digit (`\`, `/`, `:`, `_`, spaces) with `-` and keeps the case (`E:\VibeCoding\My_Project` → `E--VibeCoding-My-Project`; the drive letter may be `E` or `e`). Never build the name from `pwd` in Git Bash — it returns `/e/...`. Call the matched folder `<slug>` below.
 
 Check `~/.claude/projects/<slug>/memory/audits/` for existing reports. If found:
 > Предыдущий аудит: [date]. Показать что изменилось?
@@ -397,14 +397,13 @@ The report is a **detailed document with analysis per area**, not a summary tabl
 
 ### Path derivation
 
-1. Derive slug from CWD: replace `/`, `\`, `:`, spaces with `-`, lowercase
-   - `E:\VibeCoding\MyProject` → `e--vibecoding-myproject`
+1. Use the memory folder matched in "Previous audit check". If none matched, say so and ask where to save — do not create a new slug folder.
 2. Target: `~/.claude/projects/<slug>/memory/audits/YYYY-MM-DD-audit.md`
 
 ### Steps
 
 ```bash
-SLUG=$(pwd | tr '[:upper:]' '[:lower:]' | sed 's/[\/\\: ]/-/g')
+SLUG="<matched-slug>"   # the existing folder name from ~/.claude/projects/, case kept
 AUDIT_DIR="$HOME/.claude/projects/$SLUG/memory/audits"
 mkdir -p "$AUDIT_DIR"
 ```
