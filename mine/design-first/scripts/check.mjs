@@ -195,7 +195,7 @@ const MEASURE = String.raw`(async () => {
       bg: 'rgb(' + worstBg.slice(0, 3).map(Math.round).join(',') + ')', fontSize: fs, opacity: +op.toFixed(2) });
   }
   // looping animations (typing demos, carousels) hide text only part of the time: resample over ~6s
-  // back at the top first: scroll hints ("крутите вниз") hide on scroll and come back there
+  // back at the top first: scroll hints ("scroll down") hide on scroll and come back there
   window.scrollTo(0, 0);
   let still = invisible;
   for (let k = 0; k < 4 && still.length; k++) {
@@ -285,8 +285,9 @@ async function main() {
     if (r.exceptionDetails) throw new Error(r.exceptionDetails.exception?.description || r.exceptionDetails.text); return r.result.value; };
 
   await send('Page.enable'); await send('Runtime.enable'); await send('Network.enable');
-  let failedReqs = []; const reqUrl = new Map();
+  let failedReqs = []; const reqUrl = new Map(); let docStatus = null;
   listeners.push((d) => {
+    if (d.method === 'Network.responseReceived' && d.params.type === 'Document' && docStatus === null) docStatus = d.params.response.status;
     if (d.method === 'Network.requestWillBeSent') reqUrl.set(d.params.requestId, d.params.request.url);
     if (d.method === 'Network.responseReceived' && d.params.response.status >= 400)
       failedReqs.push(d.params.response.status + ' ' + d.params.response.url);
@@ -303,9 +304,27 @@ async function main() {
       jsErrors = []; failedReqs = [];
       const height = width < 768 ? 844 : 900;
       await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 768 });
-      const loaded = once('Page.loadEventFired');
-      await send('Page.navigate', { url });
-      await loaded; await sleep(800);
+      const isWeb = /^https?:/i.test(url);
+      docStatus = null;
+      const loaded = once('Page.loadEventFired', isWeb ? 20000 : 15000);
+      const nav = await Promise.race([send('Page.navigate', { url }), sleep(20000).then(() => ({ errorText: 'no answer in 20 s' }))]);
+      const fired = await loaded; await sleep(isWeb ? 1500 : 800);
+      if (isWeb) {
+        // someone else's live page: we only want to look at it. No measurements, no FAILs, never a hang.
+        const host = new URL(url).hostname;
+        if (!fired) { try { await send('Page.stopLoading'); } catch {} }
+        const dead = nav.errorText || (docStatus !== null && docStatus >= 400) || (!fired && docStatus === null);
+        let file = null;
+        if (shotsDir && !dead) {
+          const shot = await send('Page.captureScreenshot', { format: 'png' });
+          const stem = (host + new URL(url).pathname).replace(/\/+$/, '').replace(/[^\w.-]+/g, '_');
+          file = join(shotsDir, `${stem}-${width}.png`); writeFileSync(file, Buffer.from(shot.data, 'base64'));
+        }
+        console.log(dead
+          ? `✗ ${host} @${width} — not usable: ${nav.errorText || (docStatus ? 'HTTP ' + docStatus + ' (blocked or missing)' : 'did not load')}. Take another site.`
+          : `✓ ${host} @${width} — ${file ? 'shot saved: ' + file : 'loaded (add --shots <dir> to save a picture)'}. Look at it: a popup or cookie banner may cover the page, and an error page can look like a real one.`);
+        report.push({ url, width, failed: false, web: true, usable: !dead, shot: file, problems: [] }); continue;
+      }
       let m;
       // smooth scrolling would make our own scrollTo animate — shots and probes would catch the page mid-scroll
       try { await evaluate(NO_SMOOTH); await evaluate(SCROLL_THROUGH); m = await evaluate(MEASURE); }
