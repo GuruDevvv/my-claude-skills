@@ -29,9 +29,17 @@ Look at **3 real, live pages of the same offer for the same audience** (more onl
 competitors, the leaders of the niche, found with the web search the environment has — **with your eyes, not as text.** A text fetch hides exactly what matters:
 light, cropping, composition. Take first-screen screenshots
 (`node <skill-dir>/scripts/check.mjs <url> --widths 1440 --shots prototypes/_genre/` gives you
-PNGs of any URL) and look at them. If you truly can't get pages, derive from knowledge and mark
-every such line in the brief as **assumption**. Write the genre DNA, keeping **seen** apart from
-**assumed**:
+PNGs of any URL) and look at them.
+
+Getting three that work: search for the offer the way a customer would, in the audience's language
+and with a city; take the sites of the providers themselves — not maps, aggregators, marketplaces
+or directories — and take the address from the search result, never a guessed domain. The script
+says `✗ … not usable` for a dead address, a bot wall or a page that doesn't answer in 20 seconds:
+take the next result. Open every saved PNG: a popup or cookie banner may cover the page, and an
+error page can look like a real one — such a shot counts as not seen. **Two good pages are enough
+to go on; don't spend more than five addresses on this.** For what you could not see, derive from
+knowledge and mark every such line in the brief as **assumption**. Write the genre DNA, keeping
+**seen** apart from **assumed**:
 
 | Code | What to note |
 |---|---|
