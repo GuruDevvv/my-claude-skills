@@ -1,7 +1,7 @@
 ---
 name: design-first
 description: >-
-  Design before code: the look is read from the topic's vibe and audience, six different first-screen mockups are drawn by an image model, the user picks one, and it is built as a live page over the mockup — desktop and phone each from their own mockup — measured for readability before the user sees it. Interview → read the vibe → fixed words → 6 mockups → gallery → pick → phone mockup → plates → build → numeric check. Use when: "сделай дизайн", "подготовь макет", "давай займёмся дизайном", "нарисуй страницу", "редизайн", "make a design", "design this", "prepare design", "how should this look", "visual direction", "prototypes", "варианты дизайна". Scope: landing pages, dashboards, portfolios, forms, apps, components — any visual/UI work. Do NOT use for: code review, debugging, backend logic, data processing, or non-visual tasks.
+  Design before code: the look is read from the topic's vibe and audience, six different directions are drawn by an image model as mockups — three screens each — the user picks one, and it is built as a live page over the mockup — desktop and phone each from their own mockup — measured for readability before the user sees it. Interview → read the vibe → fixed words → 6 directions × 3 screens → gallery → pick → phone mockup → plates → build → numeric check. Use when: "сделай дизайн", "подготовь макет", "давай займёмся дизайном", "нарисуй страницу", "редизайн", "make a design", "design this", "prepare design", "how should this look", "visual direction", "prototypes", "варианты дизайна". Scope: landing pages, dashboards, portfolios, forms, apps, components — any visual/UI work. Do NOT use for: code review, debugging, backend logic, data processing, or non-visual tasks.
 ---
 
 # Design First
@@ -11,8 +11,9 @@ distinctive result.
 
 Three ideas; the first two measured in blind rounds with the owner (`references/mockups.md` → "Why"), the third paid for in earlier rounds (`ui-verify.md`):
 
-1. **Always a real choice.** Six first screens that differ in composition, not just colour. The user
-   recognises their picture with their eyes; nobody can describe it in words beforehand.
+1. **Always a real choice.** Six directions that differ in composition, not just colour, each shown on
+   three screens — a direction that wins on the first screen can fall apart on a list or a form. The
+   user recognises their picture with their eyes; nobody can describe it in words beforehand.
 2. **The image model draws, the coding model builds.** HTML prototypes written by the coding model
    never earned a "wow"; mockups drawn by an image model did, and a live page built over the mockup
    was judged the same as the mockup — on the phone too, when the phone has its own mockup.
@@ -20,12 +21,13 @@ Three ideas; the first two measured in blind rounds with the owner (`references/
    in code and obvious to the user. `scripts/check.mjs` runs before anything is shown.
 
 ```
-Context → Vibe → Words → 6 mockups → Gallery → Pick/mix → Phone mockup → Plates → Build → Check → Show
+Context → Vibe → Words → 6 directions × 3 screens → Gallery → Pick/mix → Phone mockup → Plates → Build → Check → Show
 ```
 
-**Files:** `prototypes/BRIEF.md`; `prototypes/mockups/` — `m1.png … m6.png`, `gallery.html`,
+**Files:** `prototypes/BRIEF.md`; `prototypes/mockups/` — `m1.png … m6.png` (first screens), `m1-2.png`, `m1-3.png` … (screens 2 and 3), `gallery.html`,
 `phone.png`, `*-plate.png`, `_logs/` (create the folders); `prototypes/<scope>.html` +
 `prototypes/<scope>-assets/` (plates copied here); `prototypes/_check/` for screenshots.
+Gallery template: `assets/gallery-template.html` in the skill folder.
 
 **References** (read the one a step names, when it names it):
 `vibe.md` (reading the topic) · `concepts.md` (mockup 6) · `mockups.md` (generation, gallery, phone,
@@ -69,11 +71,18 @@ temperature, human presence, density; topic props; whose palette; the vibe card.
 
 ## Step 3 — The words
 
-Write into BRIEF.md the exact headline, subheadline and CTA (a tool: the realistic data — names,
-times, statuses, counts). Identical in all six mockups, so the user compares design, not copy.
+Every direction is shown on **three screens that test different things** — name them in BRIEF.md:
+1. the first screen (emotion): headline, subheadline, CTA;
+2. a content screen (how the style carries a list): the topic prop from the vibe card — "is this about
+   you" cards, a programme, steps, a price table — three to five short items;
+3. an action screen (the moment of decision): a form, a slot picker, a pricing choice with its button.
+
+A tool: the main view, one item opened, the adding/editing action — with realistic data (names, times,
+statuses, counts). Write the exact words of all three screens; they are identical in all six
+directions, so the user compares design, not copy. Short — long copy garbles in generated images.
 Real content, never lorem ipsum.
 
-## Step 4 — Six mockups → `references/mockups.md`
+## Step 4 — Six directions, three screens each → `references/mockups.md`
 
 Check the image generator with one call. Then six desktop first-screen mockups, one per row of the
 diversity table in mockups.md (three mood hypotheses, a type-led poster, a texture/collage screen, a
@@ -81,27 +90,35 @@ concept from the topic's objects — `concepts.md`); for a tool, six organising 
 parallel. Look at each: mood matches its row, nothing broken; regenerate a broken one once. Don't
 drop a mockup for taste — your taste doesn't predict the user's.
 
+Then screens 2 and 3 of every direction, each drawn **from that direction's first screen as the style
+reference** (mockups.md §1a) — twelve more calls, in parallel. First screens first: a broken first
+screen is fixed before two more are drawn in its style.
+
 **Generator hit its usage limit** → say when it resets and wait, or ask before using the fallback.
 **No image generator available** → fallback: six standalone HTML first screens along the same six
-rows (read `frontend-aesthetics.md` and `typography.md` first), then Step 8 on each, then the gallery.
+rows, three screens per direction (read `frontend-aesthetics.md` and `typography.md` first), then
+Step 8 on each, then the gallery.
 Say once that this path is weaker on taste.
 
 ## Step 5 — Gallery, pick, mix
 
-A light gallery page with the six images numbered, each opening large; served over
-`http://127.0.0.1:<free port>`, confirmed with curl, link given. Ask: **"which one is closest, and what
+The gallery page is `assets/gallery-template.html` with its data block filled (mockups.md §2): two
+modes — every direction with its three screens, and one screen in all six directions side by side —
+each image opening large, a short passport per direction (name, idea, palette, fonts,
+feeling — described, never ranked); served over `http://127.0.0.1:<free port>`, confirmed with curl,
+link given. Ask: **"which one is closest, and what
 would you take from the others?"** — not "which is best". A mix is one edit call with both images,
 not a new round; give its link in one line and go on unless they object. If none is close, decode the
 verdict words with vibe.md and draw a new six — don't start building a "least bad" one.
 **Autonomous / headless:** stop here and report the gallery — picking is the user's; if the task
-explicitly demands a finished page, take mockup 1 and write that choice into BRIEF.md as an assumption.
+explicitly demands a finished page, take direction 1 and write that choice into BRIEF.md as an assumption.
 
 ## Step 6 — Phone mockup and plates → `references/mockups.md`
 
-1. Draw the **vertical phone mockup** from the chosen desktop one (always — shrinking the desktop
+1. Draw the **vertical phone mockup** from the chosen direction's first screen (always — shrinking the desktop
    composition was the one measured failure of this path).
-2. Make **plates** when the mockup has raster art (photo, paper or stamp texture, illustration): the
-   desktop and phone mockups with all text removed, composition untouched; compare each plate with its
+2. Make **plates** when a mockup has raster art (photo, paper or stamp texture, illustration): the
+   chosen direction's three desktop screens and the phone mockup with all text removed, composition untouched; compare each plate with its
    mockup. A flat type-and-colour poster or an interface needs no plate — it is built in HTML/CSS.
 3. Show the phone mockup in one line with a link — it is part of the chosen direction, not a new vote.
 
@@ -120,8 +137,9 @@ Faithfulness first, own ideas never.
   text ≥14px, labels ≥11px, buttons ≥44px tall — if the mockup is smaller, scale up and keep the
   composition. Grow the bottom of a 2:3 mockup to the taller screen with its background, never by
   stretching a photo.
-- **Below the first screen:** the next section in the same style (the topic prop from the vibe card:
-  slot picker, "is this about you" cards, a form). Landings may add topic interactives
+- **Below the first screen:** screens 2 and 3 of the chosen direction, each built over its own mockup
+  the same way; on the phone they follow the phone mockup's type, spacing and colour in one column.
+  Landings may add topic interactives
   (`interaction-patterns.md`), motion that serves the mood (`motion.md`, always with
   `prefers-reduced-motion`). Page → 1–2 sections at this stage; the full page comes after approval.
 - Standalone HTML, inline CSS/JS, Google Fonts only. Files: `prototypes/<scope>.html`,
@@ -176,4 +194,4 @@ before you start, and check each one exists after.
 | Wants to skip the gallery | Say once that six pictures cost minutes and save rework; then draw one mockup of the best reading and build it |
 | Page fine on desktop, weak on phone | The phone needs its own mockup (Step 6), not a squeezed layout |
 | "Looks broken / pale / shifted" | Measure first (ui-verify.md) — the screenshot may lie |
-| Time pressure | Fewer questions — never skip the phone mockup or Step 8 |
+| Time pressure, or the image generator is near its limit | Say it once and show one screen per direction (first screens only); the gallery template then drops its mode switch by itself. Never skip the phone mockup or Step 8 |

@@ -1,6 +1,6 @@
 # design-first
 
-**Design before code.** The look is read from the topic, six different first-screen mockups are drawn by an image model, you pick one, and it is built as a live page over the mockup — desktop and phone each from their own mockup — measured for readability before you see it.
+**Design before code.** The look is read from the topic, six different directions are drawn by an image model as mockups, three screens each, you pick one, and it is built as a live page over the mockup — desktop and phone each from their own mockup — measured for readability before you see it.
 
 ## The Problem
 
@@ -9,10 +9,10 @@ When AI writes a UI you get one design, and usually a generic one. Adding rules 
 ## The Solution
 
 ```
-Context → Vibe → Words → 6 mockups → Gallery → Pick/mix → Phone mockup → Plates → Build → Check → Show
+Context → Vibe → Words → 6 directions × 3 screens → Gallery → Pick/mix → Phone mockup → Plates → Build → Check → Show
 ```
 
-1. **Always a real choice.** Six first screens that differ in composition — three mood readings of the topic, a type-led poster, a texture/collage screen, a concept grown from the topic's own objects.
+1. **Always a real choice.** Six directions, each shown on three screens (the first screen, a content screen, an action screen), that differ in composition — three mood readings of the topic, a type-led poster, a texture/collage screen, a concept grown from the topic's own objects.
 2. **The image model draws, the coding model builds.** Mockups drawn by an image model earned every "wow" in seven blind rounds; in the acceptance round the new path beat the old one on all three topics. The text is removed from the chosen mockup (a background "plate"), and the page is built with live text on top — judged the same as the mockup on desktop, and on the phone once the phone has its own vertical mockup.
 3. **Measure before showing.** `scripts/check.mjs` checks every page at 390/1440/1920: sideways scroll, unreadable text (layers and opacity composited the way the browser paints them), content stuck invisible, fonts without Cyrillic, broken images, JS errors.
 
@@ -21,7 +21,7 @@ The evidence — protocols, keys and scores of the blind rounds — is summarise
 ## What It Produces
 
 - `prototypes/BRIEF.md` — vibe card, fixed words, the chosen direction.
-- `prototypes/mockups/` — six desktop mockups, the phone mockup, plates; a gallery page.
+- `prototypes/mockups/` — six directions of three desktop mockups each, the phone mockup, plates; a gallery page.
 - `prototypes/<scope>.html` — the live page (desktop + phone), checked.
 
 ## Key Features
@@ -51,11 +51,13 @@ Needs Node 22+ and Chrome/Edge for the check; an image generator (e.g. Codex CLI
 ```
 design-first/
 ├── SKILL.md
+├── assets/
+│   └── gallery-template.html  ← gallery page, filled through its data block
 ├── scripts/
 │   ├── check.mjs          ← numeric check (Node 22+, Chrome/Edge)
 │   └── controls/          ← pages that must fail / pass, EXPECTED.md
 └── references/
-    ├── mockups.md         ← six mockups, gallery, phone mockup, plates
+    ├── mockups.md         ← six directions × three screens, gallery, phone mockup, plates
     ├── vibe.md            ← reading the look from the topic
     ├── concepts.md        ← concept from the topic's own objects
     ├── typography.md      ← fonts + Cyrillic gate
