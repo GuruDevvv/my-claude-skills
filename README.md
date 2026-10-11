@@ -7,6 +7,9 @@ I actually use, kept in one place so my setup is reproducible.
 
 **Install any of them:** copy the folder into `~/.claude/skills/<skill-name>/` and restart Claude Code.
 
+**Licence:** everything in `mine/` is MIT, see [LICENSE](LICENSE). The skills in `external/` keep their
+authors' own licences.
+
 Two folders, and the distinction is not cosmetic:
 
 - **[`mine/`](mine/)** — written by me, maintained here. See [mine/README.md](mine/README.md).
@@ -24,7 +27,7 @@ Two folders, and the distinction is not cosmetic:
 | [spec-first](mine/spec-first/) | Project kickoff in two passes: Vision (what and why), then Blueprint (how and in what order) | A new project exists as an idea and nothing is written down yet |
 | [product-check](mine/product-check/) | Five jobs-to-be-done questions, then a readiness score with risks | The idea exists and the real question is whether to build it at all |
 | [deep-research](mine/deep-research/) | Multi-agent research with web search, confidence ratings, saved artifact | The answer is worth several sources and being wrong is expensive |
-| [design-first](mine/design-first/) | Reads the look from the topic, six first-screen mockups drawn by an image model, you pick one, then a live page is built over it — desktop and phone each from their own mockup, checked with numbers | Visual work is starting and "make it look good" is not a brief |
+| [design-first](mine/design-first/) | Reads the look from the topic, six directions drawn by an image model as mockups (three screens each), you pick one, then a live page is built over it — desktop and phone each from their own mockup, checked with numbers | Visual work is starting and "make it look good" is not a brief |
 | [multi-layer-review](mine/multi-layer-review/) | Up to 5 blind parallel reviewers: architecture, code, user POV, robustness, requirements | A spec is finished and you want it attacked before code exists |
 | [project-audit](mine/project-audit/) | Audits CLAUDE.md quality, memory consistency, file structure, git hygiene | A project has grown messy, or before handing it to someone |
 | [human-text](mine/human-text/) | Russian copy that reads as human-written — rhythm, honest hedging, no AI clichés | Anything a person will read: posts, articles, landing copy, letters |

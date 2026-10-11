@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Варианты оформления</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Prata&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#14131A; --bg2:#1C1A23; --line:rgba(255,255,255,.11);
+  --tx:#EDEAE4; --tx2:rgba(237,234,228,.66); --tx3:rgba(237,234,228,.5); --ac:#E0A04A; --ink:#17140F;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'Golos Text',system-ui,sans-serif;
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1360px;margin:0 auto;padding:0 24px}
+
+header{padding-block:72px 40px;border-bottom:1px solid var(--line);
+  background:radial-gradient(90% 140% at 12% 0%,rgba(224,160,74,.13),transparent 62%)}
+.eyebrow{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--ac);margin-bottom:22px}
+h1{font-family:'Prata',serif;font-weight:400;font-size:clamp(32px,5.4vw,58px);line-height:1.12;letter-spacing:-.015em;max-width:20ch}
+.sub{margin-top:24px;max-width:62ch;color:var(--tx2);font-size:clamp(16px,2.1vw,19px)}
+.how{margin-top:30px;padding:20px 24px;border-left:2px solid var(--ac);background:rgba(224,160,74,.07);
+  max-width:70ch;font-size:15px;color:var(--tx2);border-radius:0 8px 8px 0}
+.how b{color:var(--tx);font-weight:500}
+
+.status{background:var(--bg2);border-bottom:1px solid var(--line);padding-block:34px 36px}
+.status .lab{font-size:13px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--ac)}
+.status p{color:var(--tx2);font-size:17px;max-width:70ch;margin-top:14px}
+.status .links{margin-top:20px;display:flex;gap:14px;flex-wrap:wrap}
+
+.tabs{position:sticky;top:0;z-index:40;background:rgba(20,19,26,.93);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);padding-block:14px;margin-bottom:8px}
+.tabrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tabrow .lab{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--tx3);margin-right:6px}
+.tabrow .push{margin-left:auto}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--tx2);
+  padding:9px 17px;border-radius:999px;font-size:14px;transition:.18s;white-space:nowrap;min-height:44px}
+button:hover{border-color:rgba(224,160,74,.55);color:var(--tx)}
+button.on{background:var(--ac);border-color:var(--ac);color:var(--ink);font-weight:500}
+#screenBtns button{margin-left:6px}
+
+section{padding-block:64px;border-bottom:1px solid var(--line)}
+.vhead{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+.vhead + .grid{margin-top:30px}
+.vmark{flex:none;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;
+  font-family:'Prata',serif;font-size:26px;color:var(--ink);background:var(--ac)}
+.vtitle{flex:1;min-width:260px}
+.vtitle h2,.lead h2{font-family:'Prata',serif;font-weight:400;font-size:clamp(26px,3.6vw,38px);line-height:1.15;letter-spacing:-.01em}
+.vtitle .idea{margin-top:12px;color:var(--tx2);max-width:70ch}
+.note{margin-top:10px;display:inline-block;background:rgba(224,160,74,.16);color:var(--ac);
+  border:1px solid rgba(224,160,74,.4);border-radius:999px;padding:6px 14px;font-size:13px}
+.vmeta{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px;font-size:14px;color:var(--tx3)}
+.vmeta b{color:var(--tx2);font-weight:500}
+.open{flex:none;align-self:center}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;background:var(--tx);color:var(--ink);
+  padding:13px 24px;border-radius:999px;font-weight:500;font-size:15px;transition:.18s}
+.btn:hover{background:var(--ac)}
+.btn.ghost{background:transparent;color:var(--tx);border:1px solid var(--line)}
+
+.lead{margin-bottom:26px}
+.lead p{color:var(--tx2);max-width:70ch;margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.shot{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg2);
+  cursor:zoom-in;transition:.2s;display:block}
+.shot:hover{border-color:rgba(224,160,74,.6);transform:translateY(-2px)}
+.shot img{width:100%;display:block;aspect-ratio:var(--ratio,3/2);object-fit:cover;object-position:top}
+.shot .n{position:absolute;left:8px;top:8px;background:rgba(10,9,12,.72);color:#fff;font-size:12px;
+  padding:3px 10px;border-radius:999px;letter-spacing:.06em}
+.shot .n.mark{background:var(--ac);color:var(--ink);font-weight:600}
+.shot .who{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(10,9,12,.9));
+  color:#fff;font-size:14px;padding:22px 12px 10px;font-weight:500}
+
+footer{padding-block:56px 90px;color:var(--tx3);font-size:14px}
+footer p{max-width:74ch;margin-bottom:12px}
+
+.lb{position:fixed;inset:0;z-index:100;background:rgba(8,7,10,.96);display:none;place-items:center;padding:20px;cursor:zoom-out}
+.lb.on{display:grid}
+.lb img{max-width:100%;max-height:88vh;border-radius:6px;box-shadow:0 30px 90px rgba(0,0,0,.7)}
+.lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:var(--tx2);font-size:14px}
+.hidden{display:none!important}
+
+@media (max-width:900px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  header{padding-block:44px 30px}
+  section{padding-block:40px}
+}
+@media (max-width:560px){
+  .grid{grid-template-columns:1fr}
+  .open,.open .btn{width:100%;justify-content:center}
+  .tabrow .push{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <div class="eyebrow" id="eyebrow"></div>
+  <h1 id="title"></h1>
+  <div class="sub" id="sub"></div>
+  <div class="how" id="how"></div>
+</div></header>
+
+<div id="status"></div>
+
+<div class="tabs hidden" id="tabs"><div class="wrap tabrow">
+  <span class="lab" id="modeLab"></span>
+  <button id="mVar" class="on"></button>
+  <button id="mScreen"></button>
+  <span class="lab push" id="screenLab"></span>
+  <span id="screenBtns"></span>
+</div></div>
+
+<main class="wrap">
+  <div id="compare"></div>
+  <div id="byVariant"></div>
+</main>
+
+<footer class="wrap" id="foot"></footer>
+
+<div class="lb" id="lb"><img id="lbImg" alt=""><div class="cap" id="lbCap"></div></div>
+
+<script>
+/* ====== ДАННЫЕ: меняется только этот блок ====== */
+var PAGE={
+  eyebrow:"<чей проект>",
+  title:"<что выбираем>",
+  sub:"Шесть вариантов оформления. В каждом одни и те же три экрана с одними и теми же словами, чтобы сравнивать оформление, а не текст.",
+  how:"Наверху два режима. «По вариантам» показывает каждый вариант целиком. «По экранам» ставит один и тот же экран в шести видах рядом, так выбирать удобнее. Любую картинку можно нажать и увеличить. Скажите, какой вариант ближе и что взять из остальных.",
+  ratio:"3/2",              // пропорция картинок: макет 3/2, скриншот 1440×900 — 16/10, слайд — 16/9
+  status:null,              // после выбора: {label:"Статус на 14 сентября", text:["…","…"], links:[{t:"Открыть страницу",href:"../landing.html"}]}
+  oldTitle:"Первый заход",  // показывается, только если есть варианты с round:"old"
+  oldText:"<почему эти варианты отклонены — словами того, кто выбирал>",
+  foot:["<что стоит знать, глядя на варианты: откуда картинки, что проверено>"]
+};
+/* Экраны, на которых показан каждый вариант, — три разных по задаче (BRIEF.md).
+   Оставить один — переключатель режимов исчезнет, шесть картинок встанут одной сеткой. */
+var SCREENS=[{n:1,t:"<первый экран>"},{n:2,t:"<экран со списком>"},{n:3,t:"<экран действия>"}];
+/* shots идут в том же порядке, что SCREENS. Необязательные поля: pal, font, move, feel, note, live, color, round. */
+var VARIANTS=[
+  {mark:"1",name:"<имя варианта>",shots:["m1.png","m1-2.png","m1-3.png"],
+   idea:"<одна-две фразы: на чём держится вариант, что в нём видит человек>",
+   pal:"<цвета словами>",font:"<пара шрифтов>",feel:"<три слова ощущения>"},
+  {mark:"2",name:"<имя варианта>",shots:["m2.png","m2-2.png","m2-3.png"],idea:"<…>",pal:"<…>",font:"<…>",feel:"<…>",
+   live:"../s2.html"}       // live — только если у варианта уже есть живая страница
+  /* … до шести; отклонённый заход оставить с round:"old" */
+];
+/* Подписи интерфейса — на языке того, кто будет смотреть. */
+var T={mode:"Режим",byVar:"По вариантам",byScreen:"По экранам",screen:"Экран",how:"Как смотреть.",
+  pal:"Цвет",font:"Шрифты",move:"Движение",feel:"Ощущение",live:"Открыть живьём →",
+  same:"Один и тот же экран во всех вариантах, рядом."};
+/* ====== дальше не трогать ====== */
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
+function $(id){return document.getElementById(id)}
+var multi=SCREENS.length>1, cur=SCREENS[0].n;
+var NOW=VARIANTS.filter(function(v){return v.round!=="old"}), OLD=VARIANTS.filter(function(v){return v.round==="old"});
+document.documentElement.style.setProperty("--ratio",PAGE.ratio||"3/2");
+document.title=PAGE.title;
+$("eyebrow").textContent=PAGE.eyebrow||""; $("title").textContent=PAGE.title; $("sub").textContent=PAGE.sub||"";
+$("how").innerHTML="<b>"+esc(T.how)+"</b> "+esc(PAGE.how||"");
+$("modeLab").textContent=T.mode; $("mVar").textContent=T.byVar; $("mScreen").textContent=T.byScreen; $("screenLab").textContent=T.screen;
+$("foot").innerHTML=(PAGE.foot||[]).map(function(p){return "<p>"+esc(p)+"</p>"}).join("");
+if(PAGE.status){var st=PAGE.status;
+  $("status").innerHTML='<div class="status"><div class="wrap"><div class="lab">'+esc(st.label)+'</div>'+
+    (st.text||[]).map(function(p){return "<p>"+esc(p)+"</p>"}).join("")+
+    '<div class="links">'+(st.links||[]).map(function(l,i){
+      return '<a class="btn'+(i?" ghost":"")+'" href="'+esc(l.href)+'">'+esc(l.t)+'</a>'}).join("")+'</div></div></div>';
+}
+
+function shot(v,i,label,asMark){
+  var s=SCREENS[i], src=v.shots&&v.shots[i]; if(!src)return "";
+  return '<a class="shot" href="'+esc(src)+'" data-src="'+esc(src)+'" data-cap="'+esc(v.mark+" · "+v.name+(multi?" — "+s.t:""))+'">'+
+    '<img loading="lazy" src="'+esc(src)+'" alt="'+esc(v.name+(multi?", "+s.t:""))+'">'+
+    '<span class="n'+(asMark?" mark":"")+'"'+(asMark&&v.color?' style="background:'+esc(v.color)+'"':"")+'>'+esc(asMark?v.mark:s.n)+'</span>'+
+    '<span class="who">'+esc(label)+'</span></a>';
+}
+function meta(v){
+  var m=[[T.pal,v.pal],[T.font,v.font],[T.move,v.move],[T.feel,v.feel]].filter(function(x){return x[1]});
+  return m.length?'<div class="vmeta">'+m.map(function(x){return "<span><b>"+x[0]+":</b> "+esc(x[1])+"</span>"}).join("")+"</div>":"";
+}
+function block(v,withShots){
+  var shots=withShots?SCREENS.map(function(s,i){return shot(v,i,s.t,false)}).join(""):"";
+  return '<section><div class="vhead">'+
+    '<div class="vmark"'+(v.color?' style="background:'+esc(v.color)+'"':"")+'>'+esc(v.mark)+'</div>'+
+    '<div class="vtitle"><h2>'+esc(v.name)+'</h2>'+(v.idea?'<div class="idea">'+esc(v.idea)+'</div>':"")+
+      (v.note?'<div class="note">'+esc(v.note)+'</div>':"")+meta(v)+'</div>'+
+    (v.live?'<div class="open"><a class="btn" href="'+esc(v.live)+'" target="_blank" rel="noopener">'+esc(T.live)+'</a></div>':"")+
+    '</div>'+(shots?'<div class="grid">'+shots+'</div>':"")+'</section>';
+}
+function renderCompare(){
+  var i=SCREENS.map(function(s){return s.n}).indexOf(cur), s=SCREENS[i];
+  $("compare").innerHTML='<section>'+(multi?'<div class="lead"><h2>'+esc(s.n+" — "+s.t)+'</h2>'+
+    '<p>'+esc(T.same)+'</p></div>':"")+
+    '<div class="grid">'+NOW.map(function(v){return shot(v,i,v.name,true)}).join("")+'</div></section>';
+}
+function renderVariants(){
+  var h=NOW.map(function(v){return block(v,multi)}).join("");
+  if(OLD.length)h+='<section style="border-bottom:0;padding-bottom:0"><div class="lead"><h2>'+esc(PAGE.oldTitle)+'</h2>'+
+    '<p>'+esc(PAGE.oldText)+'</p></div></section>'+OLD.map(function(v){return block(v,true)}).join("");
+  $("byVariant").innerHTML=h;
+}
+renderCompare(); renderVariants();
+
+/* один экран: сетка сравнения сверху, описания вариантов под ней; несколько экранов: два режима */
+if(multi){
+  var sb=$("screenBtns"), mV=$("mVar"), mS=$("mScreen");
+  $("tabs").classList.remove("hidden");
+  SCREENS.forEach(function(s){
+    var b=document.createElement("button"); b.textContent=s.n; b.title=s.t;
+    b.onclick=function(){cur=s.n;mode("screen")}; sb.appendChild(b);
+  });
+  function mode(m){
+    var scr=m==="screen";
+    mS.classList.toggle("on",scr); mV.classList.toggle("on",!scr);
+    $("compare").classList.toggle("hidden",!scr); $("byVariant").classList.toggle("hidden",scr);
+    sb.classList.toggle("hidden",!scr); $("screenLab").classList.toggle("hidden",!scr);
+    if(scr)renderCompare(); else $("compare").innerHTML="";
+    [].forEach.call(sb.children,function(b,i){b.classList.toggle("on",scr&&SCREENS[i].n===cur)});
+  }
+  mV.onclick=function(){mode("variant")}; mS.onclick=function(){mode("screen")};
+  mode("variant");
+}
+
+var lb=$("lb"), lbI=$("lbImg"), lbC=$("lbCap");
+document.addEventListener("click",function(e){
+  var a=e.target.closest(".shot"); if(!a)return; e.preventDefault();
+  lbI.src=a.dataset.src; lbC.textContent=a.dataset.cap; lb.classList.add("on");
+});
+lb.onclick=function(){lb.classList.remove("on");lbI.removeAttribute("src")};
+document.addEventListener("keydown",function(e){if(e.key==="Escape")lb.click()});
+</script>
+</body>
+</html>

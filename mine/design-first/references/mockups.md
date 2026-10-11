@@ -30,7 +30,9 @@ shared folder Codex itself sometimes grabs the newest image, and two mockups cam
 (round 7). If the file isn't there, take the path Codex printed (`~/.codex/generated_images/...`) —
 that exact path, never "the newest file". Delete any `.agents`/`.git` Codex leaves. After the batch,
 compare checksums: identical files mean a collision.
-Cost: ~20–25k tokens per image on a Plus plan; a full run is ~9 images (6 + phone + 2 plates).
+Cost: ~20–25k tokens per image on a Plus plan; a full run is ~23 images (6 directions × 3 screens +
+phone + up to 4 plates) — about one whole Plus window. Before the twelve follow-up screens, if the
+window is already partly spent, tell the user and offer first screens only.
 **Usage limit hit** ("You've hit your usage limit… try again at <time>") → don't fall back silently:
 tell the user the reset time and wait for it, or ask whether to go on with the HTML fallback — it is
 measurably weaker on taste, so it is their call. Three parallel projects × 6 mockups exhausted a Plus
@@ -72,13 +74,58 @@ natural. Misspelled Cyrillic doesn't matter for the build (all text becomes live
 the gallery — regenerate once if it is glaring. **Don't curate by your own taste** — the critic test
 showed it doesn't predict the user; drop only broken images.
 
+## 1a. Screens 2 and 3 of every direction
+
+Why three: the owner's reference gallery showed every variant on the same six slides, picked because
+they test different things (emotion, a list, a path, complex graphics, a pause, cards), and the owner
+confirmed (Oct 2026) that choosing is easier from several screens than from one. Three is the smallest
+set that still tests different things; it has not been measured in a blind round yet.
+
+Each follow-up is one call with the direction's first screen as the reference:
+```
+Файл m<N>.png — первый экран страницы. Сгенерируй изображение 1536x1024: <второй | третий> экран ТОЙ ЖЕ
+страницы, чистый скриншот без рамки браузера. Тот же стиль в точности: палитра, шрифты, фактуры, свет,
+манера изображений, толщина линий, скругления. Весь текст на русском, только строки из задания.
+Что на экране: <the screen's content from BRIEF.md, word for word>.
+Сохрани как m<N>-2.png | m<N>-3.png.
+```
+Look at each next to its first screen: the same hand, not a new direction; a follow-up that drifted is
+regenerated once. The diversity rule holds across directions on every screen — if the six content
+screens all came out as the same three-card row, the skeleton hint was lost: say in the prompt how
+this direction lays a list out (a ledger, a staircase, stamps on paper, one long line).
+
 ## 2. Gallery → pick → mix
 
-Gallery page `prototypes/mockups/gallery.html`: the six images in a numbered grid, each opens large on
-click, a light neutral page.
+Gallery page `prototypes/mockups/gallery.html`: copy `<skill-dir>/assets/gallery-template.html` and
+fill only its data block (`PAGE`, `SCREENS`, `VARIANTS`) — don't write a gallery from scratch. The
+template is the owner's reference gallery (a deck choice made for a client in September 2026) with the
+client's content taken out. What it carries and why:
+
+- **Every image opens large on click.** Directions carry numbers, not letters: the user answers "№3
+  with the palette of №5".
+- **A passport for every direction:** a name, the idea in one or two plain sentences (what
+  the person sees, not design terms), palette in words, font pair, the feeling in three words. Taken
+  from the mockup's row and the vibe card. It describes; it never ranks or recommends — no "the
+  strongest", no order by your taste (the critic test: your ranking doesn't predict the user's).
+- **"How to look" in the header** — one or two sentences, and the question to answer.
+- **"Open live" button** only on a variant that already has a live page (the HTML fallback path, or a
+  built page after the pick). A drawn mockup has none — leave `live` out.
+- **A rejected round stays on the page** (`round:"old"`), under a heading with the user's own reason —
+  "none is close → new six" must show what was left behind.
+- **Status block** (`PAGE.status`) once a direction is picked: what was chosen, what was changed, the
+  link to the built page. The gallery then doubles as the record of the choice.
+- **Two modes.** "By variant": each direction whole, its three screens in a row. "By screen": one
+  screen in all six directions side by side — the mode people actually choose in. Fill `SCREENS` with
+  the three screen names from BRIEF.md and each variant's `shots` in the same order
+  (`["m1.png","m1-2.png","m1-3.png"]`). With one screen per direction (the time-pressure path) the
+  switch disappears and the six images sit in one grid.
+
+`PAGE.ratio`: `3/2` for drawn mockups, `16/10` for 1440×900 screenshots, `16/9` for slides. The
+page's own look (dark, quiet, one amber accent) stays as it is — it frames the mockups and must not
+compete with them; don't restyle it per project.
 Serve it locally (`python -m http.server <free port> --bind 127.0.0.1`), confirm with curl, give the
 link. Ask: "which one is closest, and what would you take from the others?" A mix ("as №3 but the
-palette of №5") is **one more edit call** with both files named in the prompt — not a new round.
+palette of №5") is **one more edit call per screen** with both files named in the prompt — not a new round.
 
 ## 3. Phone mockup (always — never shrink the desktop one)
 
