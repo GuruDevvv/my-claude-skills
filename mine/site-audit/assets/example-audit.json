@@ -1,0 +1,81 @@
+{
+ "lang": "en",
+ "site": "Clay Studio landing",
+ "address": "https://claystudio.example",
+ "date": "14 October 2026",
+ "mode": "Live site",
+ "verdict": "Fast and safe; the link preview and the legal pages are missing",
+ "headline": { "title": "Booking form loses phone numbers", "text": "The phone field opens a letter keyboard and has no label for screen readers", "ok": false },
+ "screenshot": "example-screenshot.jpg",
+ "kpis": [
+  { "title": "Main content on a phone", "value": "0.9", "unit": "s", "sub": "2.1 s on slow internet", "good": true, "note": "Target: under 2.5 seconds" },
+  { "title": "Page weight without video", "value": "1.1", "unit": "MB", "sub": "1.1 MB in total", "good": true, "note": "Target: under 1.5 MB" },
+  { "title": "Certificate valid for", "value": "61", "unit": "days", "sub": "renewed 29 days ago", "good": true, "note": "Renews automatically" },
+  { "title": "Tasks in the fix plan", "value": "11", "unit": "", "sub": "1 breaks the booking form", "good": false, "note": "Start with the red one: it costs bookings" }
+ ],
+ "weight": [
+  { "label": "Images", "mb": 0.82 }, { "label": "Fonts", "mb": 0.12 }, { "label": "Scripts", "mb": 0.09 },
+  { "label": "Styles", "mb": 0.04 }, { "label": "Page", "mb": 0.03 }
+ ],
+ "speed": [ { "label": "Phone", "s": 0.9 }, { "label": "Desktop", "s": 0.7 }, { "label": "Slow internet", "s": 2.1 } ],
+ "speed_norm": 2.5,
+ "server": [
+  { "label": "Secure connection (HTTPS)", "ok": true },
+  { "label": "Certificate renews itself", "ok": true },
+  { "label": "Project files are closed", "ok": true },
+  { "label": "Booking backend answers", "ok": true },
+  { "label": "Preview for Telegram and WhatsApp", "ok": false },
+  { "label": "Browser security settings", "ok": false },
+  { "label": "Server version hidden", "ok": false },
+  { "label": "Old drafts removed", "ok": false }
+ ],
+ "blocks": [
+  { "id": "form", "name": "Booking form", "short": "Form", "score": 3, "summary": "Phone numbers come in with mistakes",
+    "items": [
+     { "level": "broken", "text": "The phone field opens a letter keyboard on phones", "fix": "Make the phone field a phone-number field so the digit keypad opens", "time": "5 minutes", "minutes": 5 },
+     { "level": "important", "text": "The fields have no labels, only grey hints inside them", "fix": "Give every field a visible label above it", "time": "20 minutes", "minutes": 20 }
+    ] },
+  { "id": "preview", "name": "Link preview in messengers", "short": "Preview", "score": 3, "summary": "A shared link arrives without a picture or title",
+    "items": [
+     { "level": "important", "text": "The page has no preview card for Telegram, WhatsApp and VK", "fix": "Add a 1200×630 picture and a title for link previews", "time": "1 hour", "minutes": 60 }
+    ] },
+  { "id": "law", "name": "Documents and law", "short": "Law", "score": 4, "summary": "Classes are sold without terms or a privacy policy",
+    "items": [
+     { "level": "important", "text": "No privacy policy next to the booking form", "fix": "Publish a privacy policy and link it under the form", "time": "1 day", "minutes": 480 },
+     { "level": "minor", "text": "No public terms with the refund rules", "fix": "Publish the class terms with a fair refund rule", "time": "1 day", "minutes": 480 }
+    ] },
+  { "id": "security", "name": "Protection", "short": "Security", "score": 6, "summary": "Nothing leaks, but standard protection is off",
+    "items": [
+     { "level": "minor", "text": "The server does not switch on browser security settings", "fix": "Turn on six standard security headers in the server config", "time": "15 minutes", "minutes": 15 },
+     { "level": "minor", "text": "The server tells everyone its version", "fix": "Hide the server version with one config line", "time": "1 minute", "minutes": 1 },
+     { "level": "minor", "text": "An old draft page is still open at /old-index.html", "fix": "Delete the old draft page from the server", "time": "1 minute", "minutes": 1 },
+     { "level": "ok", "text": "Project files, backups and settings are not reachable from outside" }
+    ] },
+  { "id": "search", "name": "Visible to search engines", "short": "Search", "score": 6, "summary": "Indexed, with small gaps",
+    "items": [
+     { "level": "minor", "text": "The same page opens at two addresses, with and without www", "fix": "Redirect the www address to the main one", "time": "15 minutes", "minutes": 15 },
+     { "level": "ok", "text": "Search robots are allowed in, the sitemap is valid" }
+    ] },
+  { "id": "a11y", "name": "Usable by everyone", "short": "Usability", "score": 7, "summary": "Works from a phone and a keyboard",
+    "items": [
+     { "level": "minor", "text": "Footer links are smaller than a fingertip", "fix": "Make the footer links taller, at least 24 pixels", "time": "10 minutes", "minutes": 10 },
+     { "level": "ok", "text": "Zoom is allowed, the whole page works with the Tab key" }
+    ] },
+  { "id": "delivery", "name": "How the server delivers files", "short": "Delivery", "score": 7, "summary": "Compressed and cached, images could be lighter",
+    "items": [
+     { "level": "minor", "text": "Gallery photos are twice the size they are shown at", "fix": "Export gallery photos at the size they are shown", "time": "1 hour", "minutes": 60 },
+     { "level": "ok", "text": "Files are compressed and cached for 30 days" }
+    ] },
+  { "id": "seo", "name": "Labels for search engines", "short": "Labels", "score": 8, "summary": "Title and description are in order",
+    "items": [
+     { "level": "minor", "text": "No note for search engines about the studio's address and hours", "fix": "Add a local-business block with address and opening hours", "time": "30 minutes", "minutes": 30 },
+     { "level": "ok", "text": "Title 46 characters, description 132, one main heading" }
+    ] },
+  { "id": "speed", "name": "How fast it opens", "short": "Speed", "score": 8, "summary": "Main content appears in 0.9 seconds on a phone",
+    "items": [ { "level": "ok", "text": "Phone 0.9 s, desktop 0.7 s, slow internet 2.1 s" } ] },
+  { "id": "code", "name": "Code cleanliness", "short": "Code", "score": 9, "summary": "Almost no unused code",
+    "items": [ { "level": "ok", "text": "No debug lines, about 6 KB of unused code" } ] },
+  { "id": "weight", "name": "Page weight", "short": "Weight", "score": 9, "summary": "1.1 MB with a 1.5 MB target",
+    "items": [ { "level": "ok", "text": "First screen 0.4 MB, the whole page 1.1 MB on a phone" } ] }
+ ]
+}

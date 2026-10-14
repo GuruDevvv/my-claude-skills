@@ -19,6 +19,7 @@ as not mine.
 | [project-audit](project-audit/) | Audits CLAUDE.md quality, memory consistency, file structure, git hygiene | A project has grown messy, or before handing it to someone |
 | [human-text](human-text/) | Russian copy that reads as human-written — rhythm, honest hedging, no AI clichés | Anything a person will read: posts, articles, landing copy, letters |
 | [reels-console](reels-console/) | A vertical reel cut from one static take: pauses gone, crop levels anchored to the face, word-timed captions, music ducked | You filmed yourself talking to camera and need it edited without opening CapCut |
+| [site-audit](site-audit/) | Read-only outside audit of a site: speed, security headers, exposed files, indexing, Telegram previews, accessibility, Russian law basics — numbers from scripts, result as an interactive dashboard with a 1–10 score per section | A site is about to launch, or it is live and you want to know what a visitor, a crawler and a lawyer would see |
 
 Each folder has its own `README.md` with the detail: what is inside, what it will not do, and where it
 gets awkward.
