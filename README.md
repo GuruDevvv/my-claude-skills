@@ -1,6 +1,6 @@
 # my-claude-skills
 
-<img src=".github/cover.jpg" width="100%" alt="Claude Skills. Nine skills I wrote. Twelve I use.">
+<img src=".github/cover.jpg" width="100%" alt="Claude Skills. Ten skills I wrote. Twelve I use.">
 
 Skills for [Claude Code](https://claude.ai/claude-code) — the ones I wrote, and the third-party ones
 I actually use, kept in one place so my setup is reproducible.
