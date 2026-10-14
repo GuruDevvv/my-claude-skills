@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Site audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#232840; --side:#1c2034; --panel:#2c3150; --panel-2:#343a5c; --grid:#3d4468; --track:#4a5175;
+  --ink:#f3f5fb; --muted:#b9bfd6; --blue:#5873ff; --teal:#3fd6a8; --yellow:#f8d23f; --purple:#8a5cff;
+  --bad:#ff5d6e; --mid:#f8b13f; --good:#3fd6a8; --great:#2ee08a;
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Golos Text",system-ui,sans-serif;display:grid;grid-template-columns:64px 1fr;min-height:100vh}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.side{background:var(--side);display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 0;position:sticky;top:0;height:100vh}
+.side a{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;color:var(--muted);position:relative}
+.side a:hover,.side a.on{background:var(--panel);color:var(--ink)}
+.side a .badge{position:absolute;top:4px;right:3px;min-width:17px;height:17px;border-radius:9px;background:var(--bad);color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center;padding:0 4px}
+.side svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.side .sp{flex:1}
+main{padding:22px 26px 60px;max-width:1500px;width:100%;margin:0 auto}
+.topline{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.topline h1{font-size:21px;font-weight:700}
+.topline span{color:var(--muted);font-size:15px}
+.panel{background:var(--panel);border-radius:6px;position:relative}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px 0}
+.ph h2{font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.ph p{color:var(--muted);font-size:14px;margin-top:2px}
+.r1{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,1.05fr);gap:14px;margin-bottom:14px}
+.r1.solo{grid-template-columns:1fr}
+.tabs{display:flex;gap:28px;padding:0 18px;border-bottom:1px solid var(--grid)}
+.tab{background:none;border:0;padding:16px 0 13px;font-size:14px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab.on{color:var(--ink);border-color:var(--teal)}
+.chartbox{display:grid;grid-template-columns:1fr 230px;gap:10px;align-items:center;padding:6px 18px 16px}
+.chart-title{text-align:center;font-size:16px;font-weight:600;margin:12px 0 2px}
+#chart{width:100%;height:auto;display:block}
+#chart text{fill:var(--muted);font-size:13px;font-weight:500;font-family:inherit}
+#chart .gl{stroke:var(--grid)}
+#chart .bar{transition:height .9s cubic-bezier(.2,.8,.2,1),y .9s cubic-bezier(.2,.8,.2,1);cursor:pointer}
+#chart .trk{fill:var(--track);opacity:.55}
+#chart .val{fill:var(--ink);font-weight:700;font-size:15px}
+#chart g.col:hover .trk{opacity:.85}
+#chart .norm{stroke:var(--yellow);stroke-dasharray:5 5}
+.donut{display:grid;place-items:center;text-align:center}
+.donut svg{display:block}
+.donut .big{font-family:Manrope,sans-serif;font-size:60px;font-weight:300;line-height:1}
+.donut .big sup{font-size:20px;font-weight:300;vertical-align:28px;margin-left:2px}
+.donut small{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.donut .cap{margin-top:12px;color:var(--muted);font-size:15px;max-width:230px}
+.hero{display:flex;flex-direction:column;overflow:hidden}
+.hero .hp{padding:16px 18px}
+.hero .when{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.hero .dot{width:28px;height:16px;border-radius:9px;background:var(--bad);position:relative;flex:none}
+.hero .dot.ok{background:var(--good)}
+.hero .dot::after{content:"";position:absolute;right:2px;top:2px;width:12px;height:12px;border-radius:50%;background:#fff}
+.hero h3{font-size:27px;line-height:1.1;font-weight:800;text-transform:uppercase;margin:10px 0 8px}
+.hero p{color:var(--muted);font-size:16px}
+.hero .shot{flex:1;min-height:150px;background:center top/cover no-repeat;position:relative}
+.hero .shot::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--panel) 0%,transparent 35%)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+.kpi{padding:16px 18px 18px;min-height:178px;display:flex;flex-direction:column}
+.kpi .kh{font-size:16px;font-weight:600;line-height:1.35;max-width:22ch}
+.kpi .kv{font-family:Manrope,sans-serif;font-size:58px;font-weight:300;line-height:1;margin-top:18px;display:flex;align-items:center;gap:10px}
+.kpi .kv .u{font-size:20px;font-weight:300;color:var(--muted);align-self:flex-start;margin-top:6px}
+.kpi .arr{font-size:26px;font-weight:600}
+.kpi .k2{font-size:21px;font-weight:400;color:var(--muted);margin-top:4px}
+.kpi .kn{color:var(--muted);font-size:14px;margin-top:auto;padding-top:14px}
+.r3{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.r3.solo{grid-template-columns:1fr}
+.funnel{padding:22px 18px 22px}
+.fr{display:grid;grid-template-columns:120px 1fr 52px;gap:14px;align-items:center;margin:14px 0}
+.fr .fl{font-size:16px;font-weight:500}
+.ftrack{height:26px;background:var(--track);border-radius:2px;position:relative;cursor:pointer}
+.ffill{position:absolute;top:0;bottom:0;left:50%;width:0;transform:translateX(-50%);display:grid;place-items:center;font-size:14px;font-weight:700;color:#232840;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.fr .fp{font-size:15px;text-align:right;color:var(--muted)}
+.checks{padding:16px 18px 18px;display:grid;grid-template-columns:1fr 1fr;gap:8px 18px}
+.ck{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--grid);font-size:16px}
+.ck i{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:800;color:#232840}
+.ck.y i{background:var(--good)} .ck.n i{background:var(--bad)}
+.ck.n span{color:var(--ink);font-weight:500} .ck.y span{color:var(--muted)}
+.tbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:26px 0 10px;flex-wrap:wrap}
+.tbar h2{font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.tbar .ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+select{background:var(--panel);color:var(--ink);border:1px solid var(--track);border-radius:4px;padding:7px 10px;font:inherit;font-size:14px}
+.reset{background:none;border:0;color:var(--blue);cursor:pointer;font-size:14px;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:15px}
+thead th{background:var(--panel-2);color:var(--ink);font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;text-align:left;padding:12px 14px;cursor:pointer;user-select:none;white-space:nowrap}
+thead th[aria-sort=ascending]::after{content:" ▲";color:var(--teal)} thead th[aria-sort=descending]::after{content:" ▼";color:var(--teal)}
+tbody tr{border-bottom:1px solid var(--grid)}
+tbody tr:nth-child(odd){background:rgba(255,255,255,.015)}
+tbody tr:hover{background:var(--panel)}
+td{padding:11px 14px;vertical-align:top}
+td.sc{font-weight:700;font-size:17px}
+td:nth-child(5){white-space:nowrap} td:first-child{min-width:170px}
+td .t2{color:var(--muted);font-size:14px;margin-top:2px}
+.lv{display:inline-block;font-size:13px;font-weight:700;padding:2px 9px;border-radius:99px;white-space:nowrap}
+.lv.broken{background:var(--bad);color:#fff} .lv.important{background:var(--mid);color:#232840}
+.lv.minor{background:var(--track);color:var(--ink)} .lv.ok{background:var(--good);color:#232840}
+td input{width:18px;height:18px;accent-color:var(--teal);cursor:pointer}
+tr.done td:not(:last-child){opacity:.4;text-decoration:line-through}
+.bad{color:var(--bad)} .mid{color:var(--mid)} .good{color:var(--good)} .great{color:var(--great)}
+.tip{position:fixed;z-index:9;pointer-events:none;background:#11142a;border:1px solid var(--grid);border-radius:6px;padding:9px 12px;font-size:14px;max-width:260px;opacity:0;transition:opacity .12s}
+.foot{color:var(--muted);font-size:14px;margin-top:10px}
+.hidden{display:none !important}
+@media (max-width:1200px){ .r1{grid-template-columns:1fr} .kpis{grid-template-columns:repeat(2,1fr)} .hero .shot{min-height:220px} }
+@media (max-width:760px){
+  body{grid-template-columns:1fr} .side{display:none} main{padding:14px 10px 50px}
+  .chartbox{grid-template-columns:1fr} .r3{grid-template-columns:1fr} .kpis{grid-template-columns:1fr} .checks{grid-template-columns:1fr}
+  .tabs{gap:16px;overflow-x:auto} table thead{display:none} table,tbody,tr,td{display:block} tr{padding:8px 0} td{padding:4px 10px}
+}
+@media print{ body{display:block} .side,.tabs,.tbar .ctl{display:none} .panel{break-inside:avoid} }
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<nav class="side" aria-label="Dashboard sections">
+  <a href="#top" class="on" data-t="navOverview"><svg viewBox="0 0 24 24"><path d="M3 12l9-8 9 8M5 10v10h14V10"/></svg></a>
+  <a href="#kpi" data-t="navKpi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></a>
+  <a href="#findings" data-t="navFindings"><svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg></a>
+  <a href="#server" data-t="navServer" id="navServer"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="7" rx="1"/><rect x="4" y="13" width="16" height="7" rx="1"/><path d="M8 7.5h.01M8 16.5h.01"/></svg></a>
+  <a href="#table" data-t="navTable"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M20 12v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1h11"/></svg><span class="badge" id="badge"></span></a>
+  <span class="sp"></span>
+  <a href="#" id="print" data-t="navPrint"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M8 14h8v7H8z"/></svg></a>
+</nav>
+<main id="top">
+  <div class="topline"><h1 id="site"></h1><span id="meta"></span></div>
+  <section class="r1" id="r1">
+    <div class="panel">
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div class="chart-title" id="ctitle"></div>
+      <div class="chartbox"><svg id="chart" viewBox="0 0 760 280" role="img"></svg><div class="donut" id="donut"></div></div>
+    </div>
+    <article class="panel hero" id="hero">
+      <div class="hp"><div class="when"><span id="when"></span><span class="dot" id="hdot" aria-hidden="true"></span></div>
+        <h3 id="hTitle"></h3><p id="hText"></p></div>
+      <div class="shot" id="shot" role="img"></div>
+    </article>
+  </section>
+  <section class="kpis" id="kpi"></section>
+  <section class="r3" id="r3">
+    <div class="panel" id="findings"><div class="ph"><div><h2 data-t="bySeverity"></h2><p data-t="bySeverityHint"></p></div></div><div class="funnel" id="funnel"></div></div>
+    <div class="panel" id="server"><div class="ph"><div><h2 data-t="liveDomain"></h2><p id="srvNote"></p></div></div><div class="checks" id="checks"></div></div>
+  </section>
+  <div class="tbar" id="table"><h2 data-t="allFindings"></h2>
+    <div class="ctl"><select id="fBlock"></select><select id="fLevel"></select><button class="reset" id="reset" data-t="reset"></button></div></div>
+  <div class="panel" style="overflow:hidden"><table>
+    <thead><tr><th data-k="block" aria-sort="none" data-t="thSection"></th><th data-k="score" aria-sort="ascending" data-t="thScore"></th>
+      <th data-k="level" aria-sort="none" data-t="thSeverity"></th><th data-k="text" aria-sort="none" data-t="thWhat"></th>
+      <th data-k="time" aria-sort="none" data-t="thTime"></th><th data-t="thDone"></th></tr></thead>
+    <tbody id="rows"></tbody></table></div>
+  <p class="foot" id="foot"></p>
+</main>
+<div class="tip" id="tip"></div>
+
+<!-- build_dashboard.py replaces the content of this tag with the audit JSON -->
+<script id="audit-data" type="application/json">__AUDIT_JSON__</script>
+<script>
+const A = JSON.parse(document.getElementById("audit-data").textContent), $ = id => document.getElementById(id);
+const I18N = {
+  en: { navOverview:"Overview", navKpi:"Key numbers", navFindings:"Findings by severity", navServer:"Live domain", navTable:"All findings", navPrint:"Save as PDF",
+    tabScores:"Scores", tabWeight:"Page weight", tabSpeed:"Speed", tScores:"Score of each section, out of 10", tWeight:"What the page weight is made of, MB",
+    tSpeed:"When the main content appears, seconds", norm:"target", avg:"average score", cap:(n,w)=>`out of 10 across ${n} sections. Weakest: “${w}”`,
+    bySeverity:"Findings by severity", bySeverityHint:"Click a bar to show those findings in the table", liveDomain:"Live domain", srv:(o,n)=>`${o} of ${n} OK`,
+    allFindings:"All findings", reset:"Reset", allSections:"All sections", anySeverity:"Any severity", thSection:"Section", thScore:"Score", thSeverity:"Severity",
+    thWhat:"What is wrong and what to do", thTime:"Time", thDone:"Done", doPrefix:"Do:", foot:(r,a,d,t)=>`Showing ${r} of ${a}. Done ${d} of ${t} tasks; ticks are saved in this browser.`,
+    of10:"out of 10", screenshot:"Screenshot of the page", levels:{broken:"Broken", important:"Important", minor:"Minor", ok:"OK"} },
+  ru: { navOverview:"Обзор", navKpi:"Главные цифры", navFindings:"Находки по важности", navServer:"Боевой домен", navTable:"Все находки", navPrint:"Сохранить в PDF",
+    tabScores:"Оценки", tabWeight:"Вес страницы", tabSpeed:"Скорость", tScores:"Оценка каждого раздела, из 10", tWeight:"Из чего складывается вес страницы, МБ",
+    tSpeed:"Когда появляется главный кадр, секунды", norm:"норма", avg:"средняя оценка", cap:(n,w)=>`из 10 по ${n} разделам. Самый слабый — «${w}»`,
+    bySeverity:"Находки по важности", bySeverityHint:"Нажмите на полосу, чтобы показать эти находки в таблице", liveDomain:"Боевой домен", srv:(o,n)=>`${o} из ${n} в порядке`,
+    allFindings:"Все находки", reset:"Сбросить", allSections:"Все разделы", anySeverity:"Любая важность", thSection:"Раздел", thScore:"Оценка", thSeverity:"Важность",
+    thWhat:"Что не так и что сделать", thTime:"Время", thDone:"Готово", doPrefix:"Сделать:", foot:(r,a,d,t)=>`Показано ${r} из ${a}. Сделано ${d} из ${t} дел, отметки сохраняются в этом браузере.`,
+    of10:"из 10", screenshot:"Снимок страницы", levels:{broken:"Сломано", important:"Важно", minor:"Мелочь", ok:"В порядке"} }
+};
+const T = I18N[A.lang] || I18N.en;
+document.documentElement.lang = A.lang || "en";
+document.querySelectorAll("[data-t]").forEach(el => { const v = T[el.dataset.t]; if (typeof v !== "string") return; el.tagName === "A" ? el.title = v : el.textContent = v; });
+const LEVELS = {broken:0, important:1, minor:2, ok:3};
+const band = s => s <= 3 ? "bad" : s <= 6 ? "mid" : s <= 8 ? "good" : "great";
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dec = A.lang === "ru" ? "," : ".";
+const fmt = (n, d=1) => n.toFixed(d).replace(".", dec);
+const COL = {bad:"var(--bad)", mid:"var(--mid)", good:"var(--good)", great:"var(--great)"};
+const tip = $("tip");
+const showTip = (e, html) => { tip.innerHTML = html; tip.style.left = Math.min(e.clientX + 14, innerWidth - 280) + "px"; tip.style.top = e.clientY + 14 + "px"; tip.style.opacity = 1; };
+const hideTip = () => tip.style.opacity = 0;
+document.title = `${A.site} — ${T.navOverview}`;
+$("site").textContent = A.site; $("meta").textContent = [A.date, A.mode, A.address].filter(Boolean).join(" · ");
+
+// main chart
+const sorted = [...A.blocks].sort((a,b)=>a.score-b.score);
+const VIEWS = { scores: { tab:T.tabScores, title:T.tScores, ticks:[0,2,4,6,8,10],
+  rows: () => sorted.map(b=>({id:b.id, label:b.short||b.name, v:b.score, txt:String(b.score), color:COL[band(b.score)],
+    tip:`<b class="${band(b.score)}">${b.score} ${T.of10}</b> · ${esc(b.name)}<br><span style="color:var(--muted)">${esc(b.summary)}</span>`})) } };
+if (A.weight && A.weight.length) { const mx = Math.max(...A.weight.map(w=>w.mb)), top = Math.max(0.5, Math.ceil(mx*2)/2);
+  VIEWS.weight = { tab:T.tabWeight, title:T.tWeight, ticks:Array.from({length:5},(_,i)=>+(top*i/4).toFixed(2)),
+    rows: () => A.weight.map(w=>({label:w.label, v:w.mb, txt:fmt(w.mb, w.mb<0.1?2:1), color:"var(--teal)", tip:`${esc(w.label)}: ${fmt(w.mb,2)} MB`})) }; }
+if (A.speed && A.speed.length) { const norm = A.speed_norm || 2.5, top = Math.max(4, Math.ceil(Math.max(...A.speed.map(s=>s.s))));
+  VIEWS.speed = { tab:T.tabSpeed, title:T.tSpeed, norm, ticks:Array.from({length:top+1},(_,i)=>i),
+    rows: () => A.speed.map(s=>({label:s.label, v:s.s, txt:fmt(s.s), color: s.s<=norm ? "var(--teal)" : "var(--mid)", tip:`${esc(s.label)}: ${fmt(s.s)} s`})) }; }
+let view = "scores";
+$("tabs").innerHTML = Object.entries(VIEWS).map(([k,v])=>`<button class="tab ${k===view?"on":""}" role="tab" aria-selected="${k===view}" data-v="${k}">${v.tab}</button>`).join("");
+$("tabs").addEventListener("click", e => { const t = e.target.closest(".tab"); if (!t) return; view = t.dataset.v;
+  document.querySelectorAll(".tab").forEach(x => { x.classList.toggle("on", x===t); x.setAttribute("aria-selected", String(x===t)); }); drawChart(); });
+function drawChart(){
+  const V = VIEWS[view], rows = V.rows(), svg = $("chart"), W = 760, H = 280, L = 38, B = 34, Tp = 14, ch = H - B - Tp;
+  const max = V.ticks[V.ticks.length-1], step = (W - L - 10) / rows.length, bw = Math.min(46, step * 0.56), y = v => Tp + ch * (1 - v / max);
+  let s = "";
+  for (const t of V.ticks) s += `<line class="gl" x1="${L}" x2="${W-6}" y1="${y(t)}" y2="${y(t)}"/><text x="${L-8}" y="${y(t)+4}" text-anchor="end">${String(t).replace(".",dec)}</text>`;
+  rows.forEach((r,i) => { const x = L + step*i + (step-bw)/2, v = Math.min(r.v, max);
+    s += `<g class="col" data-i="${i}"><rect class="trk" x="${x}" y="${Tp}" width="${bw}" height="${ch}" rx="2"/>
+      <rect class="bar" x="${x}" y="${y(0)}" width="${bw}" height="0" rx="2" fill="${r.color}" data-y="${y(v)}" data-h="${ch*v/max}"/>
+      <text class="val" x="${x+bw/2}" y="${y(v)-7}" text-anchor="middle">${r.txt}</text>
+      <text x="${x+bw/2}" y="${H-12}" text-anchor="middle" style="font-size:${step < 66 ? 11.5 : 13}px">${esc(r.label)}</text></g>`; });
+  if (V.norm) s += `<line class="norm" x1="${L}" x2="${W-6}" y1="${y(V.norm)}" y2="${y(V.norm)}"/><text x="${W-8}" y="${y(V.norm)-6}" text-anchor="end" style="fill:var(--yellow)">${T.norm}</text>`;
+  svg.innerHTML = s; svg.setAttribute("aria-label", V.title); $("ctitle").textContent = V.title;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>svg.querySelectorAll(".bar").forEach(b=>{ b.setAttribute("y", b.dataset.y); b.setAttribute("height", b.dataset.h); })));
+  svg.onmousemove = e => { const g = e.target.closest(".col"); g ? showTip(e, rows[g.dataset.i].tip) : hideTip(); };
+  svg.onmouseleave = hideTip;
+  svg.onclick = e => { const g = e.target.closest(".col"); if (g && rows[g.dataset.i].id) { $("fBlock").value = rows[g.dataset.i].id; $("fLevel").value = ""; renderTable(); $("table").scrollIntoView({behavior:"smooth"}); } };
+}
+drawChart();
+
+// donut
+(function(){
+  const size = 196, sw = 16, r = (size-sw)/2, c = 2*Math.PI*r, avg = A.blocks.reduce((s,b)=>s+b.score,0)/A.blocks.length;
+  const [i, f] = avg.toFixed(2).split(".");
+  $("donut").innerHTML = `<div style="position:relative;width:${size}px;height:${size}px">
+    <svg width="${size}" height="${size}" style="transform:rotate(-90deg)"><defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="var(--blue)"/><stop offset="1" stop-color="var(--purple)"/></linearGradient></defs>
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#fff" stroke-width="${sw}" opacity=".92"/>
+      <circle id="dval" cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="url(#dg)" stroke-width="${sw}" stroke-dasharray="${c}" stroke-dashoffset="${c}" style="transition:stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1)"/></svg>
+    <div style="position:absolute;inset:0;display:grid;place-items:center"><div><div class="big">${i}<sup>${dec}${f}</sup></div><small>${T.avg}</small></div></div></div>
+    <div class="cap">${esc(T.cap(A.blocks.length, sorted[0].name))}</div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>$("dval").style.strokeDashoffset = c*(1-avg/10)));
+})();
+
+// headline card (optional)
+if (A.headline) {
+  $("when").textContent = [A.mode, A.date].filter(Boolean).join(" · ");
+  $("hTitle").textContent = A.headline.title; $("hText").textContent = A.headline.text || "";
+  $("hdot").classList.toggle("ok", !!A.headline.ok);
+  if (A.screenshot) { $("shot").style.backgroundImage = `url("${A.screenshot}")`; $("shot").setAttribute("aria-label", T.screenshot); } else $("shot").classList.add("hidden");
+} else { $("hero").classList.add("hidden"); $("r1").classList.add("solo"); }
+
+// KPI cards (optional)
+if (A.kpis && A.kpis.length) $("kpi").innerHTML = A.kpis.slice(0,4).map(k=>`<div class="panel kpi"><div class="kh">${esc(k.title)}</div>
+  <div class="kv">${k.good===undefined?"":`<span class="arr ${k.good?"good":"bad"}">${k.good?"↑":"↓"}</span>`}${esc(k.value)}${k.unit?`<span class="u">${esc(k.unit)}</span>`:""}</div>
+  <div class="k2">${esc(k.sub||"")}</div><div class="kn">${esc(k.note||"")}</div></div>`).join("");
+else $("kpi").classList.add("hidden");
+
+// findings by severity
+const all = A.blocks.flatMap(b => (b.items||[]).map((it,n)=>({...it, block:b, key:b.id+"-"+n})));
+const todo = all.filter(i=>i.level!=="ok" && i.fix);
+const order = ["broken","important","minor","ok"], FCOL = {broken:"var(--bad)", important:"var(--yellow)", minor:"var(--blue)", ok:"var(--teal)"};
+const counts = order.map(l=>all.filter(i=>i.level===l).length), mx = Math.max(1, ...counts);
+$("funnel").innerHTML = order.map((l,i)=>`<div class="fr"><span class="fl">${T.levels[l]}</span>
+  <div class="ftrack" data-l="${l}" role="button" tabindex="0" aria-label="${T.levels[l]}: ${counts[i]}"><div class="ffill" style="background:${FCOL[l]};${l==="minor"?"color:#fff":""}" data-w="${counts[i] ? Math.max(8, counts[i]/mx*100) : 0}%">${counts[i]||""}</div></div>
+  <span class="fp">${all.length ? Math.round(counts[i]/all.length*100) : 0}%</span></div>`).join("");
+requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll(".ffill").forEach(f=>f.style.width=f.dataset.w)));
+const pickLevel = l => { $("fLevel").value = l; $("fBlock").value = ""; renderTable(); $("table").scrollIntoView({behavior:"smooth"}); };
+$("funnel").addEventListener("click", e => { const t = e.target.closest(".ftrack"); if (t) pickLevel(t.dataset.l); });
+$("funnel").addEventListener("keydown", e => { const t = e.target.closest(".ftrack"); if (t && (e.key==="Enter"||e.key===" ")) { e.preventDefault(); pickLevel(t.dataset.l); } });
+
+// live domain checks (optional)
+if (A.server && A.server.length) {
+  $("srvNote").textContent = T.srv(A.server.filter(s=>s.ok).length, A.server.length);
+  $("checks").innerHTML = [...A.server].sort((a,b)=>a.ok-b.ok).map(s=>`<div class="ck ${s.ok?"y":"n"}"><i aria-hidden="true">${s.ok?"✓":"✕"}</i><span>${esc(s.label)}</span></div>`).join("");
+} else { $("server").classList.add("hidden"); $("navServer").classList.add("hidden"); $("r3").classList.add("solo"); }
+
+// table
+const KEY = "site-audit-done:" + A.site + ":" + A.date;
+let done = {}; try { done = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e) {}
+$("fBlock").innerHTML = `<option value="">${T.allSections}</option>` + A.blocks.map(b=>`<option value="${esc(b.id)}">${esc(b.name)}</option>`).join("");
+$("fLevel").innerHTML = `<option value="">${T.anySeverity}</option>` + order.map(l=>`<option value="${l}">${T.levels[l]}</option>`).join("");
+$("fBlock").setAttribute("aria-label", T.thSection); $("fLevel").setAttribute("aria-label", T.thSeverity);
+let sortK = "score", sortDir = 1;
+function renderTable(){
+  const fb = $("fBlock").value, fl = $("fLevel").value;
+  const key = {block:i=>i.block.name, score:i=>i.block.score*10+LEVELS[i.level], level:i=>LEVELS[i.level], text:i=>i.text, time:i=>i.minutes ?? 1e9}[sortK];
+  const rows = all.filter(i => (!fb || i.block.id===fb) && (!fl || i.level===fl)).sort((a,b)=>{ const x=key(a), y=key(b); return (x>y?1:x<y?-1:0)*sortDir; });
+  $("rows").innerHTML = rows.map(i=>`<tr class="${done[i.key]?"done":""}"><td>${esc(i.block.name)}</td>
+    <td class="sc ${band(i.block.score)}">${i.block.score}</td><td><span class="lv ${i.level}">${T.levels[i.level]}</span></td>
+    <td>${esc(i.text)}${i.fix?`<div class="t2">${T.doPrefix} ${esc(i.fix)}</div>`:""}</td><td>${esc(i.time||"—")}</td>
+    <td>${i.fix&&i.level!=="ok"?`<input type="checkbox" data-k="${esc(i.key)}" ${done[i.key]?"checked":""} aria-label="${T.thDone}">`:""}</td></tr>`).join("");
+  const n = todo.filter(t=>done[t.key]).length;
+  $("foot").textContent = T.foot(rows.length, all.length, n, todo.length);
+  $("badge").textContent = todo.length - n; $("badge").style.display = todo.length - n ? "" : "none";
+}
+document.querySelector("thead").addEventListener("click", e => { const th = e.target.closest("th[data-k]"); if (!th) return;
+  sortDir = sortK === th.dataset.k ? -sortDir : 1; sortK = th.dataset.k;
+  document.querySelectorAll("th[data-k]").forEach(x=>x.setAttribute("aria-sort", x===th ? (sortDir>0?"ascending":"descending") : "none")); renderTable(); });
+$("fBlock").onchange = renderTable; $("fLevel").onchange = renderTable;
+$("reset").onclick = () => { $("fBlock").value = ""; $("fLevel").value = ""; renderTable(); };
+$("rows").addEventListener("change", e => { const k = e.target.dataset.k; if (!k) return; done[k] = e.target.checked;
+  try { localStorage.setItem(KEY, JSON.stringify(done)); } catch(err) {} renderTable(); });
+$("print").onclick = e => { e.preventDefault(); print(); };
+renderTable();
+</script>
+</body>
+</html>
