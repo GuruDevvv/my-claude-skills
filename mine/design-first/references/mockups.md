@@ -27,7 +27,7 @@ python scripts/codex_img.py "<prompt>" prototypes/mockups/m1.png [--ref plate.pn
 It starts Codex bare (no user config, no AGENTS.md, no plugins/hooks, cheap dispatcher model
 `gpt-6-luna`, falls back to `gpt-6.1-sol`), forbids reading files, viewing the result and polling,
 takes the image from that run's own `generated_images/<thread>` folder (no collisions) and copies it
-to the target. At most 2 run at once, the rest queue. Measured 16.10.2026: ~60k tokens per image on
+to the target. At most 4 run at once, the rest queue. Measured 16.10.2026: ~60k tokens per image on
 Luna, vs 150k–1.3M per image with a plain `codex exec` on Sol (it loaded ~43k of instructions, read
 skill docs and memory, then polled "done?" ~10 times, resending everything each time — 28 mockups ate
 a whole Plus window in 28 minutes). **Never use a plain `codex exec` for images.**
