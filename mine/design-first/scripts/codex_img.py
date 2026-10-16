@@ -15,7 +15,7 @@ from pathlib import Path
 
 CODEX_HOME = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex"))
 SLOTS_DIR = CODEX_HOME / "tmp" / "img-slots"
-MAX_SLOTS = 2
+MAX_SLOTS = 4
 DEFAULT_MODEL = "gpt-6-luna"
 FALLBACK_MODEL = "gpt-6.1-sol"
 DISABLE = ["plugins", "apps", "multi_agent", "browser_use", "browser_use_external",
