@@ -20,19 +20,17 @@ Seven blind rounds with the owner (Sept 2026, scores kept in the test protocol):
 Any image tool the environment has — Codex CLI `image_gen` (gpt-image-2), an image MCP. One test call;
 never assume a vendor. **No generator → use the fallback in SKILL.md (HTML first screens).**
 
-Codex CLI recipe (Bash, one call per image, calls may run in parallel):
+Codex CLI recipe — the lean wrapper `scripts/codex_img.py` (one call per image):
 ```bash
-mkdir -p prototypes/mockups/_logs/m1 && cd prototypes/mockups/_logs/m1 && codex exec --skip-git-repo-check -o ../m1.txt \
-  "ИСПОЛЬЗУЙ СВОЙ ВСТРОЕННЫЙ ИНСТРУМЕНТ image_gen (системный скилл imagegen, модель gpt-image-2, через подписку — OPENAI_API_KEY НЕ НУЖЕН). <prompt>. Сохрани как m1.png в текущей папке. В ответе только полный путь к файлу." < /dev/null
+python scripts/codex_img.py "<prompt>" prototypes/mockups/m1.png [--ref plate.png]
 ```
-Then move `m1.png` up into `prototypes/mockups/`. **Each parallel call runs in its own folder** — in a
-shared folder Codex itself sometimes grabs the newest image, and two mockups came out identical
-(round 7). If the file isn't there, take the path Codex printed (`~/.codex/generated_images/...`) —
-that exact path, never "the newest file". Delete any `.agents`/`.git` Codex leaves. After the batch,
-compare checksums: identical files mean a collision.
-Cost: ~20–25k tokens per image on a Plus plan; a full run is ~23 images (6 directions × 3 screens +
-phone + up to 4 plates) — about one whole Plus window. Before the twelve follow-up screens, if the
-window is already partly spent, tell the user and offer first screens only.
+It starts Codex bare (no user config, no AGENTS.md, no plugins/hooks, cheap dispatcher model
+`gpt-6-luna`, falls back to `gpt-6.1-sol`), forbids reading files, viewing the result and polling,
+takes the image from that run's own `generated_images/<thread>` folder (no collisions) and copies it
+to the target. At most 2 run at once, the rest queue. Measured 16.10.2026: ~60k tokens per image on
+Luna, vs 150k–1.3M per image with a plain `codex exec` on Sol (it loaded ~43k of instructions, read
+skill docs and memory, then polled "done?" ~10 times, resending everything each time — 28 mockups ate
+a whole Plus window in 28 minutes). **Never use a plain `codex exec` for images.**
 **Usage limit hit** ("You've hit your usage limit… try again at <time>") → don't fall back silently:
 tell the user the reset time and wait for it, or ask whether to go on with the HTML fallback — it is
 measurably weaker on taste, so it is their call. Three parallel projects × 6 mockups exhausted a Plus
