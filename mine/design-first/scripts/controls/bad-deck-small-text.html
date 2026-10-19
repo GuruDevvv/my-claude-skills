@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Колода</title>
+<!-- Шрифты: ближайшие Google Fonts с кириллицей (typography.md). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* Каркас колоды. Каждый слайд живёт в кадре 1920×1080 px и только масштабируется под окно,
+   поэтому вёрстка внутри слайда пишется в px кадра. Режимы в адресе:
+   ?only=N      один слайд 1:1 без полей — снимок PNG (окно 1920×1080);
+   ?notext=1    весь текст спрятан — фон для переноса в Google Slides (вместе с ?only=N);
+   печать       одна страница = один слайд 1920×1080 — PDF из Chrome. */
+:root{
+  --bg:#f4efe6; --ink:#1d1b18; --accent:#c4472d;   /* палитра выбранного направления */
+  --page:#2a2826;                                  /* фон между слайдами в режиме просмотра */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--page)}
+body{font-family:"Onest",system-ui,sans-serif;color:var(--ink);padding:24px 0}
+.frame{width:min(100%,1920px);aspect-ratio:16/9;margin:0 auto 24px;overflow:hidden;position:relative}
+.slide{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;
+  transform:scale(var(--k,1));background:var(--bg) center/cover no-repeat;overflow:hidden}
+.slide .tx{position:absolute}                      /* каждая надпись — свой блок с координатами */
+
+body.only{padding:0;background:var(--bg)}
+body.only .frame{width:1920px;margin:0;display:none}
+body.only .frame.on{display:block}
+body.notext .tx{visibility:hidden}
+
+@page{size:1920px 1080px;margin:0}
+@media print{
+  body{padding:0;background:none}
+  .frame{width:1920px;margin:0;break-after:page}
+  .slide{transform:none}
+}
+
+/* ---- слайды: стили конкретных слайдов ниже, по одному блоку на слайд ---- */
+/* фон слайда — его подложка: .s1{background-image:url("deck-assets/s01-plate.png")} */
+.s1 .title{left:140px;top:360px;width:1100px;font-size:104px;line-height:1.02;font-weight:800;letter-spacing:-.03em}
+.s1 .sub{left:140px;top:640px;width:900px;font-size:16px;line-height:1.3}
+</style>
+</head>
+<body>
+
+<!-- Один слайд = один .frame. Номер слайда — data-n, по нему работает ?only=N. -->
+<section class="frame" data-n="1"><div class="slide s1">
+  <h1 class="tx title">Заголовок титульного слайда</h1>
+  <p class="tx sub">Подзаголовок · кто выступает · дата</p>
+</div></section>
+
+<script>
+(function(){
+  var q=new URLSearchParams(location.search), only=q.get("only");
+  if(q.get("notext")) document.body.classList.add("notext");
+  if(only){
+    document.body.classList.add("only");
+    [].forEach.call(document.querySelectorAll(".frame"),function(f){f.classList.toggle("on",f.dataset.n===only)});
+  }
+  function fit(){
+    [].forEach.call(document.querySelectorAll(".frame"),function(f){
+      f.querySelector(".slide").style.setProperty("--k", only ? 1 : f.clientWidth/1920);
+    });
+  }
+  fit(); addEventListener("resize",fit);
+})();
+</script>
+</body>
+</html>

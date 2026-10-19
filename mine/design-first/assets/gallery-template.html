@@ -121,7 +121,9 @@ var PAGE={
 /* Экраны, на которых показан каждый вариант, — три разных по задаче (BRIEF.md).
    Оставить один — переключатель режимов исчезнет, шесть картинок встанут одной сеткой. */
 var SCREENS=[{n:1,t:"<первый экран>"},{n:2,t:"<экран со списком>"},{n:3,t:"<экран действия>"}];
-/* shots идут в том же порядке, что SCREENS. Необязательные поля: pal, font, move, feel, note, live, color, round. */
+/* shots идут в том же порядке, что SCREENS. Необязательные поля: pal, font, move, feel, note, live, color, round, labels.
+   Режим «один экран»: после выбора допишите выбранному варианту в shots экраны 2 и 3, а в labels — их названия
+   (["Первый экран","Список","Действие"]); у него появится свой ряд из трёх картинок, остальные останутся по одной. */
 var VARIANTS=[
   {mark:"1",name:"<имя варианта>",shots:["m1.png","m1-2.png","m1-3.png"],
    idea:"<одна-две фразы: на чём держится вариант, что в нём видит человек>",
@@ -131,7 +133,7 @@ var VARIANTS=[
   /* … до шести; отклонённый заход оставить с round:"old" */
 ];
 /* Подписи интерфейса — на языке того, кто будет смотреть. */
-var T={mode:"Режим",byVar:"По вариантам",byScreen:"По экранам",screen:"Экран",how:"Как смотреть.",
+var T={mode:"Режим",byVar:"По вариантам",byScreen:"По экранам",screen:"Экран",
   pal:"Цвет",font:"Шрифты",move:"Движение",feel:"Ощущение",live:"Открыть живьём →",
   same:"Один и тот же экран во всех вариантах, рядом."};
 /* ====== дальше не трогать ====== */
@@ -151,10 +153,12 @@ if(PAGE.status){var st=PAGE.status;
       return '<a class="btn'+(i?" ghost":"")+'" href="'+esc(l.href)+'">'+esc(l.t)+'</a>'}).join("")+'</div></div></div>';
 }
 
+function shotLabel(v,i){return (SCREENS[i]&&SCREENS[i].t)||(v.labels&&v.labels[i])||(T.screen+" "+(i+1))}
 function shot(v,i,label,asMark){
-  var s=SCREENS[i], src=v.shots&&v.shots[i]; if(!src)return "";
-  return '<a class="shot" href="'+esc(src)+'" data-src="'+esc(src)+'" data-cap="'+esc(v.mark+" · "+v.name+(multi?" — "+s.t:""))+'">'+
-    '<img loading="lazy" src="'+esc(src)+'" alt="'+esc(v.name+(multi?", "+s.t:""))+'">'+
+  var s=SCREENS[i]||{n:i+1,t:shotLabel(v,i)}, src=v.shots&&v.shots[i]; if(!src)return "";
+  var many=multi||(v.shots.length>1);
+  return '<a class="shot" href="'+esc(src)+'" data-src="'+esc(src)+'" data-cap="'+esc(v.mark+" · "+v.name+(many?" — "+s.t:""))+'">'+
+    '<img loading="lazy" src="'+esc(src)+'" alt="'+esc(v.name+(many?", "+s.t:""))+'">'+
     '<span class="n'+(asMark?" mark":"")+'"'+(asMark&&v.color?' style="background:'+esc(v.color)+'"':"")+'>'+esc(asMark?v.mark:s.n)+'</span>'+
     '<span class="who">'+esc(label)+'</span></a>';
 }
@@ -163,7 +167,8 @@ function meta(v){
   return m.length?'<div class="vmeta">'+m.map(function(x){return "<span><b>"+x[0]+":</b> "+esc(x[1])+"</span>"}).join("")+"</div>":"";
 }
 function block(v,withShots){
-  var shots=withShots?SCREENS.map(function(s,i){return shot(v,i,s.t,false)}).join(""):"";
+  /* все shots варианта: у выбранного после «одного экрана» их больше, чем SCREENS */
+  var shots=withShots?(v.shots||[]).map(function(src,i){return shot(v,i,shotLabel(v,i),false)}).join(""):"";
   return '<section><div class="vhead">'+
     '<div class="vmark"'+(v.color?' style="background:'+esc(v.color)+'"':"")+'>'+esc(v.mark)+'</div>'+
     '<div class="vtitle"><h2>'+esc(v.name)+'</h2>'+(v.idea?'<div class="idea">'+esc(v.idea)+'</div>':"")+
@@ -178,7 +183,7 @@ function renderCompare(){
     '<div class="grid">'+NOW.map(function(v){return shot(v,i,v.name,true)}).join("")+'</div></section>';
 }
 function renderVariants(){
-  var h=NOW.map(function(v){return block(v,multi)}).join("");
+  var h=NOW.map(function(v){return block(v,multi||(v.shots||[]).length>SCREENS.length)}).join("");
   if(OLD.length)h+='<section style="border-bottom:0;padding-bottom:0"><div class="lead"><h2>'+esc(PAGE.oldTitle)+'</h2>'+
     '<p>'+esc(PAGE.oldText)+'</p></div></section>'+OLD.map(function(v){return block(v,true)}).join("");
   $("byVariant").innerHTML=h;

@@ -8,7 +8,10 @@
 
 Одновременно работают не больше MAX_SLOTS запусков, остальные ждут очереди.
 
-    python codex_img.py "описание" out.png [--ref a.png --ref b.png] [--model gpt-6.1-sol]
+    python codex_img.py "описание" out.png [--ref a.png --ref b.png] [--model gpt-6.1-sol] [--replace]
+
+Файл out уже есть — отказ, чтобы не затереть чужую картинку. Перерисовка той же картинки —
+с --replace: после удачной генерации старый файл переезжает в out.v1.png (v2, v3…).
 """
 import argparse, json, os, shutil, subprocess, sys, tempfile, time
 from pathlib import Path
@@ -101,10 +104,11 @@ def main():
     ap.add_argument("prompt"); ap.add_argument("out")
     ap.add_argument("--ref", action="append", default=[])
     ap.add_argument("--model", default=DEFAULT_MODEL)
+    ap.add_argument("--replace", action="store_true", help="перерисовать: старый файл сохранить как .vN")
     a = ap.parse_args()
     out = Path(a.out).resolve()
-    if out.exists():
-        sys.exit(f"файл уже есть, не перезаписываю: {out}")
+    if out.exists() and not a.replace:
+        sys.exit(f"файл уже есть, не перезаписываю: {out} (перерисовать — ключ --replace)")
     slot = take_slot()
     try:
         workdir = Path(tempfile.mkdtemp(prefix="codex-img-"))
@@ -115,6 +119,11 @@ def main():
                           key=lambda p: p.stat().st_mtime)
             if imgs:
                 out.parent.mkdir(parents=True, exist_ok=True)
+                if out.exists():   # --replace: прежняя версия остаётся рядом, только после удачи
+                    n = 1
+                    while out.with_name(f"{out.stem}.v{n}{out.suffix}").exists():
+                        n += 1
+                    out.rename(out.with_name(f"{out.stem}.v{n}{out.suffix}"))
                 shutil.copy2(imgs[-1], out)
                 u = usage or {}
                 print(f"OK {out} | модель {m} | вход {u.get('input_tokens')} "

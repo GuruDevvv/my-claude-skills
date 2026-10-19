@@ -52,9 +52,12 @@ Needs Node 22+ and Chrome/Edge for the check; an image generator (e.g. Codex CLI
 design-first/
 ├── SKILL.md
 ├── assets/
-│   └── gallery-template.html  ← gallery page, filled through its data block
+│   ├── gallery-template.html  ← gallery page, filled through its data block
+│   └── deck-template.html     ← 16:9 deck: slide frames, one-slide and no-text modes, print to PDF
 ├── scripts/
-│   ├── check.mjs          ← numeric check (Node 22+, Chrome/Edge)
+│   ├── check.mjs          ← numeric check (Node 22+, Chrome/Edge); --deck for slides
+│   ├── codex_img.py       ← lean image calls through Codex (queue of 4, --replace to redraw)
+│   ├── deck_export.py     ← slide shots, PDF, drawn | built sheet
 │   └── controls/          ← pages that must fail / pass, EXPECTED.md
 └── references/
     ├── deck.md            ← presentation mode: test slides, every slide drawn, deck, export
