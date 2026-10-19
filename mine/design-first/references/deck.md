@@ -64,6 +64,10 @@ is built**: an expense, layers, a transformation, a conveyor, a check, a fork, a
 a number, a quote, a pause. This line *is* the future composition. Don't pad the count of points to
 make a grid even; a slide with two points has two.
 
+**Rhythm.** Read the outline as a sequence: dense scene slides must alternate with plain ones (a
+number, a list on a flat colour, a pause with one line). Four rich pictures in a row tire the viewer;
+the plain slides make the scenes land. Mark the plain ones in the outline.
+
 **Three test slides** — the same in all six directions, named in BRIEF.md, exact words written once:
 1. **Title** (emotion): the talk's name, a subtitle, who speaks.
 2. **A number or a list** (how the style carries information): a real slide from the outline with
@@ -73,6 +77,9 @@ make a grid even; a slide with two points has two.
 
 Pick 2 and 3 from the real outline, not made-up ones, and write next to each its number in the
 outline (`тест 2 = слайд 5`) — after the pick these pictures become those slides and are not redrawn.
+For each test slide also write **the thought and the feeling** in one line (title of a therapy webinar:
+«помогать клиенту можно легче» → облегчение). That line is shared by all six directions; *how* it
+is shown is not (Step 4).
 Short words — long copy garbles in generated images. Speaker notes, if the script has them, stay in
 the outline next to each slide; the PPTX export puts them into the slide notes.
 
@@ -90,6 +97,24 @@ palettes. Skeleton hints for slides:
 | 5 | texture: collage, paper, hand-drawn marks, illustration | layered, asymmetric |
 | 6 | a concept from the topic's own objects (`concepts.md`) | the object *is* the layout |
 
+**Before any prompt, fill the direction table in BRIEF.md** — six rows, every cell concrete enough
+to hand to the illustrator as is. A cell that names a technique ("metaphor", "scene", "bold type")
+instead of a picture is not filled.
+
+| Column | What goes in | Example (title, «помогать клиенту можно легче» → облегчение) |
+|---|---|---|
+| How we show it | the image that carries the shared thought and feeling — a scene, a living person, words doing something, matter, a diagram-object, or nothing | психолог распахивает окно, ветер сдувает со стола стопку бумаг «проблемы» · женщина-психолог смеётся вместе с клиенткой, крупный план · «НЕ ЗАСТРЕВАЯ» вырывается из тесной рамки · тугой узел из нитей распускается в свободную ленту · запутанная линия становится прямой стрелкой · только огромное название и воздух |
+| Staging | shot size, direction of movement, where the light comes from, where the words sit | крупный план, движение вправо-вверх, свет из-за спины, текст в нижней трети слева |
+| Type | Cyrillic font pair (`typography.md`), size contrast, where the text sits, the accent device: one word in colour, a small label above the headline, dates in pills, a word crossing the edge | Unbounded 800 + Manrope; заголовок в 5 раз крупнее подписи; «ЛЕГЧЕ» цветом акцента; плашка «ОТКРЫТЫЙ ЭФИР» над заголовком |
+| Volume | quiet / medium / loud | громко |
+
+The six "How we show it" cells are six different worlds: no two rows share the kind of image, at
+least two rows are loud and at least one is quiet. A living person in emotion and movement is one
+or two rows, not all — and it is allowed: invented people are fine, only real people's faces are
+not invented (the speaker comes from a real photo, `mockups.md` face rule, or as a placeholder).
+The type column is Claude's decision, written into the prompt in words; the image model's default
+(caps headline top-left, subtitle under it) is what you get when this column is empty.
+
 Title slide prompt:
 ```
 Сгенерируй изображение 1824x1024 (16:9): ТИТУЛЬНЫЙ СЛАЙД презентации, плоский кадр слайда без
@@ -97,7 +122,9 @@ Title slide prompt:
 Весь текст на слайде — на русском, без ошибок, только строки из задания.
 Тема: <what + for whom>. Кто смотрит: <audience line>. Где: <live talk | Zoom | file>.
 Тексты: «…», «…», «…».
-Настроение и подача: <this row: mood → light, colour temperature, human presence, density; skeleton>.
+Мысль и чувство: <the shared line>. Что на картинке: <"How we show it" cell>.
+Постановка кадра: <"Staging" cell>. Шрифт и текст: <"Type" cell>.
+Настроение и подача: <mood → light, colour temperature, density, volume; skeleton>.
 ```
 Slides 2 and 3 of a direction — one call each with its title slide as the reference (`--ref` is
 mandatory, see mockups.md §0):
@@ -109,10 +136,17 @@ python <skill-dir>/scripts/codex_img.py "<prompt>" prototypes/mockups/m<N>-2.png
 ТОЙ ЖЕ презентации. Тот же стиль в точности: палитра, шрифты, фактуры, свет, манера изображений,
 толщина линий. Композицию строй от содержания этого слайда, а не повторяй титульный.
 Что на слайде и как устроена мысль: <the slide's words and its "how it's built" line from BRIEF.md>.
+Мысль и чувство: <shared line>. Чем показываем в этом стиле: <the image for this slide, same kind as the row>.
 Весь текст на русском, только строки из задания.
 ```
-Title slides first, look at each, regenerate a broken one once (`--replace`); then the twelve
-follow-ups in parallel. Across directions, if all six "structure" slides came out as the same three boxes with
+Title slides first, look at each, regenerate a broken one once (`--replace`).
+
+**Sameness check, before the twelve follow-ups.** Put the six titles on one sheet in greyscale
+(`PIL`: `ImageOps.grayscale`, 3×2) and look: any two with the same skeleton (where the text block
+sits, what fills the frame) or the same kind of image? Redraw one of the pair with its row changed
+— a different "How we show it" and staging, written in the prompt. **One redraw per direction,
+once.** If a pair is still alike, go on and say so in one line when showing the gallery. Then the
+twelve follow-ups in parallel. Across directions, if all six "structure" slides came out as the same three boxes with
 arrows, the hint was lost — say in the prompt how this direction draws a process (a staircase, a
 river, stamps on a line, one long sentence broken into steps).
 
@@ -150,8 +184,15 @@ For every other slide of the outline, one call:
 Приложенные картинки — слайды выбранного стиля. Сгенерируй изображение 1824x1024 (16:9): слайд №<k> той же
 презентации, тот же стиль в точности (палитра, шрифты, фактуры, свет, манера, постоянные элементы:
 <logo / номер слайда / …>). Композицию строй от того, как устроена мысль этого слайда:
-<"how it's built" line>. Тексты: <exact words>. Весь текст на русском, только эти строки.
+<"how it's built" line>. Что на картинке: <the image that tells this slide's thought, in the
+chosen row's kind; for a plain slide from the rhythm mark — "без картинки, только текст и цвет">.
+Постановка кадра: <shot size, movement, light, where the words sit>. Тексты: <exact words>.
+Весь текст на русском, только эти строки.
 ```
+Write the "Что на картинке" line for every slide into the outline before drawing — a concrete image,
+not a technique name. Optional: if the chosen title's main image has a concrete weakness (the gesture
+is limp, the light is flat), draw 2–3 versions that each change one named thing — angle, action,
+scale — and let the user pick; don't draw versions without a named weakness.
 (output path: `prototypes/slides/s<kk>.png`)
 Calls run four at a time (the wrapper queues the rest); a slide to redraw keeps its name with `--replace`. Then look at the whole set as one strip: the
 same hand on every slide; neighbouring slides that came out with the same composition — redraw one
