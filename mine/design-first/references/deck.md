@@ -99,9 +99,13 @@ Title slide prompt:
 Тексты: «…», «…», «…».
 Настроение и подача: <this row: mood → light, colour temperature, human presence, density; skeleton>.
 ```
-Slides 2 and 3 of a direction — one call each with its title slide as the reference:
+Slides 2 and 3 of a direction — one call each with its title slide as the reference (`--ref` is
+mandatory, see mockups.md §0):
+```bash
+python <skill-dir>/scripts/codex_img.py "<prompt>" prototypes/mockups/m<N>-2.png --ref prototypes/mockups/m<N>.png
 ```
-Файл m<N>.png — титульный слайд презентации. Сгенерируй изображение 1824x1024 (16:9): другой слайд
+```
+Приложенная картинка — титульный слайд презентации. Сгенерируй изображение 1824x1024 (16:9): другой слайд
 ТОЙ ЖЕ презентации. Тот же стиль в точности: палитра, шрифты, фактуры, свет, манера изображений,
 толщина линий. Композицию строй от содержания этого слайда, а не повторяй титульный.
 Что на слайде и как устроена мысль: <the slide's words and its "how it's built" line from BRIEF.md>.
@@ -132,21 +136,21 @@ The same `assets/gallery-template.html`, data block only: `PAGE.ratio:"16/9"`, `
 test slides by name (`{n:1,t:"Титул"},{n:2,t:"Цифра"},{n:3,t:"Схема"}`), each direction's `shots`
 in that order, and in `T` say «слайд» instead of «экран» (`byScreen:"По слайдам"`, `screen:"Слайд"`,
 `same:"Один и тот же слайд во всех вариантах, рядом."`). Passports, two modes, numbers not letters, «который ближе и что взять из других?» —
-all as for a site. A mix: one edit call mixes the title slide (both files named), then the mix's
+all as for a site. A mix: one edit call mixes the title slide (both files as `--ref`, the prompt says
+which gives what), then the mix's
 test slides 2 and 3 are drawn from that mixed title as above — saved as `m7*.png`, variant 7.
 
 ## Step 6 — Every slide drawn in the chosen style
 
-The chosen direction's slides are the style references — all of them: `--ref m<N>.png --ref m<N>-2.png
---ref m<N>-3.png`. The test slides already **are** slides of the deck: copy them to their outline numbers
+The chosen direction's slides are the style references — all of them, as files:
+`--ref prototypes/mockups/m<N>.png --ref prototypes/mockups/m<N>-2.png --ref prototypes/mockups/m<N>-3.png`. The test slides already **are** slides of the deck: copy them to their outline numbers
 (`m<N>.png` → `prototypes/slides/s01.png`, `m<N>-2.png` → the number written in BRIEF.md) and don't redraw them.
 For every other slide of the outline, one call:
 ```
-Файлы <refs> — слайды выбранного стиля. Сгенерируй изображение 1824x1024 (16:9): слайд №<k> той же
+Приложенные картинки — слайды выбранного стиля. Сгенерируй изображение 1824x1024 (16:9): слайд №<k> той же
 презентации, тот же стиль в точности (палитра, шрифты, фактуры, свет, манера, постоянные элементы:
 <logo / номер слайда / …>). Композицию строй от того, как устроена мысль этого слайда:
 <"how it's built" line>. Тексты: <exact words>. Весь текст на русском, только эти строки.
-Сохрани как s<kk>.png.
 ```
 (output path: `prototypes/slides/s<kk>.png`)
 Calls run four at a time (the wrapper queues the rest); a slide to redraw keeps its name with `--replace`. Then look at the whole set as one strip: the
@@ -160,7 +164,7 @@ constant element, not a template for content slides.
 
 ## Step 7 — Plates and the deck
 
-1. **Plates** (`mockups.md` §4): every drawn slide with all text removed, composition untouched →
+1. **Plates** (`mockups.md` §4, `--ref prototypes/slides/s<kk>.png`): every drawn slide with all text removed, composition untouched →
    `prototypes/slides/s<kk>-plate.png`, copied to `prototypes/deck-assets/`. Compare each plate with its slide;
    list markers and small icons the edit removed are redrawn as SVG/CSS. A flat type-and-colour slide
    needs no plate — it is built in HTML/CSS.

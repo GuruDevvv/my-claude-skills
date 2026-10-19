@@ -107,6 +107,9 @@ def main():
     ap.add_argument("--replace", action="store_true", help="перерисовать: старый файл сохранить как .vN")
     a = ap.parse_args()
     out = Path(a.out).resolve()
+    missing = [r for r in a.ref if not Path(r).is_file()]
+    if missing:   # иначе Codex молча рисует без образца, и стиль уезжает
+        sys.exit("нет файла-образца: " + ", ".join(missing))
     if out.exists() and not a.replace:
         sys.exit(f"файл уже есть, не перезаписываю: {out} (перерисовать — ключ --replace)")
     slot = take_slot()

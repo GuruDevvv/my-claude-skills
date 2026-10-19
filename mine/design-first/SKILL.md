@@ -1,7 +1,7 @@
 ---
 name: design-first
 description: >-
-  Design before code: the look is read from the topic's vibe and audience, six different directions are drawn by an image model as mockups — three screens each — the user picks one, and it is built as a live page over the mockup — desktop and phone each from their own mockup — measured for readability before the user sees it. Interview → read the vibe → fixed words → 6 directions × 3 screens (or 1, the user's choice) → gallery → pick → phone mockup → plates → build → numeric check. Presentations have their own mode: 6 directions × 3 test slides → pick → every slide drawn from its own content → a 16:9 deck (HTML → PDF, Google Slides on request). Use when: "сделай дизайн", "подготовь макет", "давай займёмся дизайном", "нарисуй страницу", "редизайн", "make a design", "design this", "prepare design", "how should this look", "visual direction", "prototypes", "варианты дизайна", "дизайн презентации", "сделай презентацию", "оформи слайды", "стиль для колоды", "design a deck". Scope: landing pages, dashboards, portfolios, forms, apps, components, presentations — any visual/UI work. Do NOT use for: code review, debugging, backend logic, data processing, or non-visual tasks.
+  Design before code: an image model draws six different visual directions as mockups, the user picks one with their eyes, and it is built as a live page (desktop and phone) or a 16:9 presentation, measured for readability before it is shown. Use when: "сделай дизайн", "подготовь макет", "давай займёмся дизайном", "нарисуй страницу", "редизайн", "варианты дизайна", "дизайн презентации", "сделай презентацию", "оформи слайды", "make a design", "design this", "how should this look", "visual direction", "design a deck". Scope: landings, dashboards, portfolios, forms, app screens, components, presentations. Do NOT use for: editing an existing .pptx/.docx file, a small CSS fix on a finished page, code review, debugging, backend or non-visual tasks.
 ---
 
 # Design First
@@ -131,7 +131,7 @@ each image opening large, a short passport per direction (name, idea, palette, f
 feeling — described, never ranked); served over `http://127.0.0.1:<free port>`, confirmed with curl,
 link given. Ask: **"which one is closest, and what
 would you take from the others?"** — not "which is best". A mix is not a new round: one edit call
-mixes the first screen (both images named), then the mix's other screens are drawn from that mixed
+mixes the first screen (both images passed as `--ref`, mockups.md §0), then the mix's other screens are drawn from that mixed
 first screen as in mockups.md §1a; give the link in one line and go on unless they object. If none is close, decode the
 verdict words with vibe.md and draw a new six — don't start building a "least bad" one.
 **Autonomous / headless:** stop here and report the gallery — picking is the user's; if the task
