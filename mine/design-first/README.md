@@ -1,6 +1,6 @@
 # design-first
 
-**Design before code.** The look is read from the topic, six different directions are drawn by an image model as mockups, three screens each, you pick one, and it is built as a live page over the mockup — desktop and phone each from their own mockup — measured for readability before you see it.
+**Design before code.** The look is read from the topic, six different directions are drawn by an image model as mockups, three screens each, you pick one, and it is built as a live page over the mockup — desktop and phone each from their own mockup — measured for readability before you see it. It first asks two things: a site or a presentation, and for a site, one screen per direction or three. A presentation has its own mode: six directions × three test slides (title, a number, a structure), then every slide drawn from its own content and built into a 16:9 deck (PDF, Google Slides on request).
 
 ## The Problem
 
@@ -57,6 +57,7 @@ design-first/
 │   ├── check.mjs          ← numeric check (Node 22+, Chrome/Edge)
 │   └── controls/          ← pages that must fail / pass, EXPECTED.md
 └── references/
+    ├── deck.md            ← presentation mode: test slides, every slide drawn, deck, export
     ├── mockups.md         ← six directions × three screens, gallery, phone mockup, plates
     ├── vibe.md            ← reading the look from the topic
     ├── concepts.md        ← concept from the topic's own objects
