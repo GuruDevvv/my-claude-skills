@@ -105,7 +105,8 @@ client's content taken out. What it carries and why:
   the person sees, not design terms), palette in words, font pair, the feeling in three words. Taken
   from the mockup's row and the vibe card. It describes; it never ranks or recommends — no "the
   strongest", no order by your taste (the critic test: your ranking doesn't predict the user's).
-- **"How to look" in the header** — one or two sentences, and the question to answer.
+- **No header.** The page opens straight on the variants (and the mode switch); the owner found a
+  big title with a "how to look" box ugly and useless (19.10.2026). The question goes into the chat.
 - **"Open live" button** only on a variant that already has a live page (the HTML fallback path, or a
   built page after the pick). A drawn mockup has none — leave `live` out.
 - **A rejected round stays on the page** (`round:"old"`), under a heading with the user's own reason —

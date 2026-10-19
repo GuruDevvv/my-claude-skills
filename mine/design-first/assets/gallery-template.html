@@ -19,15 +19,6 @@ body{background:var(--bg);color:var(--tx);font-family:'Golos Text',system-ui,san
   font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1360px;margin:0 auto;padding:0 24px}
 
-header{padding-block:72px 40px;border-bottom:1px solid var(--line);
-  background:radial-gradient(90% 140% at 12% 0%,rgba(224,160,74,.13),transparent 62%)}
-.eyebrow{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--ac);margin-bottom:22px}
-h1{font-family:'Prata',serif;font-weight:400;font-size:clamp(32px,5.4vw,58px);line-height:1.12;letter-spacing:-.015em;max-width:20ch}
-.sub{margin-top:24px;max-width:62ch;color:var(--tx2);font-size:clamp(16px,2.1vw,19px)}
-.how{margin-top:30px;padding:20px 24px;border-left:2px solid var(--ac);background:rgba(224,160,74,.07);
-  max-width:70ch;font-size:15px;color:var(--tx2);border-radius:0 8px 8px 0}
-.how b{color:var(--tx);font-weight:500}
-
 .status{background:var(--bg2);border-bottom:1px solid var(--line);padding-block:34px 36px}
 .status .lab{font-size:13px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--ac)}
 .status p{color:var(--tx2);font-size:17px;max-width:70ch;margin-top:14px}
@@ -86,7 +77,6 @@ footer p{max-width:74ch;margin-bottom:12px}
 
 @media (max-width:900px){
   .grid{grid-template-columns:repeat(2,1fr)}
-  header{padding-block:44px 30px}
   section{padding-block:40px}
 }
 @media (max-width:560px){
@@ -98,13 +88,6 @@ footer p{max-width:74ch;margin-bottom:12px}
 </style>
 </head>
 <body>
-
-<header><div class="wrap">
-  <div class="eyebrow" id="eyebrow"></div>
-  <h1 id="title"></h1>
-  <div class="sub" id="sub"></div>
-  <div class="how" id="how"></div>
-</div></header>
 
 <div id="status"></div>
 
@@ -128,10 +111,7 @@ footer p{max-width:74ch;margin-bottom:12px}
 <script>
 /* ====== ДАННЫЕ: меняется только этот блок ====== */
 var PAGE={
-  eyebrow:"<чей проект>",
-  title:"<что выбираем>",
-  sub:"Шесть вариантов оформления. В каждом одни и те же три экрана с одними и теми же словами, чтобы сравнивать оформление, а не текст.",
-  how:"Наверху два режима. «По вариантам» показывает каждый вариант целиком. «По экранам» ставит один и тот же экран в шести видах рядом, так выбирать удобнее. Любую картинку можно нажать и увеличить. Скажите, какой вариант ближе и что взять из остальных.",
+  title:"<что выбираем>",   // только название вкладки браузера; шапки на странице нет — сразу варианты
   ratio:"3/2",              // пропорция картинок: макет 3/2, скриншот 1440×900 — 16/10, слайд — 16/9
   status:null,              // после выбора: {label:"Статус на 14 сентября", text:["…","…"], links:[{t:"Открыть страницу",href:"../landing.html"}]}
   oldTitle:"Первый заход",  // показывается, только если есть варианты с round:"old"
@@ -162,8 +142,6 @@ var multi=SCREENS.length>1, cur=SCREENS[0].n;
 var NOW=VARIANTS.filter(function(v){return v.round!=="old"}), OLD=VARIANTS.filter(function(v){return v.round==="old"});
 document.documentElement.style.setProperty("--ratio",PAGE.ratio||"3/2");
 document.title=PAGE.title;
-$("eyebrow").textContent=PAGE.eyebrow||""; $("title").textContent=PAGE.title; $("sub").textContent=PAGE.sub||"";
-$("how").innerHTML="<b>"+esc(T.how)+"</b> "+esc(PAGE.how||"");
 $("modeLab").textContent=T.mode; $("mVar").textContent=T.byVar; $("mScreen").textContent=T.byScreen; $("screenLab").textContent=T.screen;
 $("foot").innerHTML=(PAGE.foot||[]).map(function(p){return "<p>"+esc(p)+"</p>"}).join("");
 if(PAGE.status){var st=PAGE.status;
