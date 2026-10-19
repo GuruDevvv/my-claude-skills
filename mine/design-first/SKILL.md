@@ -31,7 +31,9 @@ Usually the request already says it («сделай лендинг», «нужн
 ask. Only when it is unclear, ask this one question alone, before anything else: **«Сайт или
 презентация?»** A site is anything people open in a browser — landing, dashboard, form, app screen.
 **A presentation switches the whole skill to `references/deck.md`**: the same vibe reading and six
-directions, but slides 16:9, no phone mockup, a deck at the end. Read deck.md now and follow it;
+directions, but slides 16:9, no phone mockup, a deck at the end. The six directions differ by what
+the picture shows (a direction table filled with concrete images before any drawing) and pass a
+greyscale sameness check before the gallery. Read deck.md now and follow it;
 Steps 1–10 below apply only where it says so. **Autonomous / headless:** site, written into BRIEF.md
 as an assumption.
 
