@@ -21,7 +21,9 @@ const opt = (name, def) => { const i = argv.indexOf(name); if (i < 0) return def
 const widths = opt('--widths', '390,1440,1920').split(',').map(Number);
 const shotsDir = opt('--shots', null);
 const jsonOut = opt('--json', null);
-if (!argv.length) { console.error('usage: node check.mjs <file|dir|url>... [--widths 390,1440,1920] [--shots dir] [--json file]'); process.exit(2); }
+// --deck: slides of a 1920×1080 frame — text under 22px of the frame FAILs at any width (references/deck.md)
+const deckMode = argv.includes('--deck'); if (deckMode) argv.splice(argv.indexOf('--deck'), 1);
+if (!argv.length) { console.error('usage: node check.mjs <file|dir|url>... [--widths 390,1440,1920] [--shots dir] [--json file] [--deck]'); process.exit(2); }
 
 const targets = argv.flatMap((a) => {
   if (/^https?:\/\//.test(a)) return [a];
@@ -54,6 +56,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const MEASURE = String.raw`(async () => {
   await document.fonts.ready;
   const de = document.documentElement;
+  const DECK = __DECK__;
   const out = { innerW: innerWidth, scrollW: de.scrollWidth, clientW: de.clientWidth };
   const sel = (el) => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') +
     (typeof el.className === 'string' && el.className.trim() ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : '');
@@ -74,7 +77,8 @@ const MEASURE = String.raw`(async () => {
   // text elements = elements with their own non-empty text node
   const texts = [...document.body.querySelectorAll('*')].filter((el) =>
     !/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE|SVG|TITLE)$/i.test(el.tagName) &&
-    [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim().length > 1));
+    // one-character text is skipped (icons, arrows) — except in --deck, where a lone big digit is content
+    [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim().length > (DECK ? 0 : 1)));
 
   // any CSS colour (rgb, hsl, oklch, lab, color(), named) → [r,g,b,a] in sRGB, via a 1×1 canvas
   const cc = document.createElement('canvas'); cc.width = cc.height = 1;
@@ -95,7 +99,7 @@ const MEASURE = String.raw`(async () => {
   const effOpacity = (el) => { let o = 1; for (let n = el; n && n.nodeType === 1; n = n.parentElement) o *= +getComputedStyle(n).opacity; return o; };
 
   // 2. contrast, 3. stuck-invisible, 4. tiny text
-  const lowContrast = [], invisible = [], tiny = [], overImage = [], onGradient = [], seams = [];
+  const lowContrast = [], invisible = [], tiny = [], deckTiny = [], overImage = [], onGradient = [], seams = [];
   let waitBudget = 15000;   // ms of total waiting for running reveals per page
   for (const el of texts) {
     const r = el.getBoundingClientRect();
@@ -124,6 +128,7 @@ const MEASURE = String.raw`(async () => {
     }
     const fs = parseFloat(cs.fontSize);
     if (innerWidth < 768 && fs < 12) tiny.push(sel(el) + ' ' + fs + 'px «' + sample + '»');
+    if (DECK && fs < 22) deckTiny.push(sel(el) + ' ' + fs + 'px «' + sample + '»');
     // SVG <text> is painted with fill, HTML text with color / -webkit-text-fill-color
     const fill = el instanceof SVGElement ? rgba(cs.fill) : (rgba(cs.webkitTextFillColor) || rgba(cs.color));
     if (!fill || fill[3] === 0) continue;                    // gradient/clip text — eye only
@@ -208,6 +213,7 @@ const MEASURE = String.raw`(async () => {
   out.invisible = dedup(still.filter((x) => !x.overlay).map((x) => x.label));
   out.hiddenOverlay = dedup(still.filter((x) => x.overlay).map((x) => x.label));
   out.tiny = dedup(tiny);
+  out.deckTiny = dedup(deckTiny);
   out.overImage = dedup(overImage).length;
   out.onGradient = dedup(onGradient);
   out.seams = dedup(seams);
@@ -304,7 +310,8 @@ async function main() {
       jsErrors = []; failedReqs = [];
       const height = width < 768 ? 844 : 900;
       await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 768 });
-      const isWeb = /^https?:/i.test(url);
+      // a page we serve ourselves (localhost) is measured like a file; only someone else's site is look-only
+      const isWeb = /^https?:/i.test(url) && !/^https?:\/\/(localhost|127\.0\.0\.1)([:/]|$)/i.test(url);
       docStatus = null;
       const loaded = once('Page.loadEventFired', isWeb ? 20000 : 15000);
       const nav = await Promise.race([send('Page.navigate', { url }), sleep(20000).then(() => ({ errorText: 'no answer in 20 s' }))]);
@@ -327,7 +334,7 @@ async function main() {
       }
       let m;
       // smooth scrolling would make our own scrollTo animate — shots and probes would catch the page mid-scroll
-      try { await evaluate(NO_SMOOTH); await evaluate(SCROLL_THROUGH); m = await evaluate(MEASURE); }
+      try { await evaluate(NO_SMOOTH); await evaluate(SCROLL_THROUGH); m = await evaluate(MEASURE.replace('__DECK__', String(deckMode))); }
       catch (e) {
         fails++; console.log(`✗ ${decodeURIComponent(basename(url))} @${width}\n   FAIL check could not finish on this page: ${e.message}`);
         report.push({ url, width, failed: true, problems: ['check could not finish: ' + e.message] }); continue;
@@ -361,6 +368,7 @@ async function main() {
       for (const s of m.pendingImages) problems.push(`WARN image still not loaded after scroll: ${s}`);
       for (const e of [...new Set(jsErrors)].slice(0, 3)) problems.push(`FAIL JS error: ${e}`);
       for (const s of m.tiny.slice(0, 3)) problems.push(`WARN text under 12px on phone: ${s}`);
+      for (const s of (m.deckTiny || []).slice(0, 5)) problems.push(`FAIL slide text under 22px of the 1920 frame (unreadable in a call): ${s}`);
       if (m.overImage) problems.push(`NOTE ${m.overImage} text blocks sit on photos/video — contrast not computable, check those by eye`);
       if (m.seams.length) problems.push(`NOTE ${m.seams.length} text lines run partly over a photo — check that edge by eye (first: ${m.seams[0]})`);
       if (m.onGradient.length) problems.push(`NOTE ${m.onGradient.length} texts on a gradient pass on some stops and fail on others — check by eye (first: ${m.onGradient[0]})`);

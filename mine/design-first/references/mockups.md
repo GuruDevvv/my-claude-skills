@@ -20,9 +20,10 @@ Seven blind rounds with the owner (Sept 2026, scores kept in the test protocol):
 Any image tool the environment has — Codex CLI `image_gen` (gpt-image-2), an image MCP. One test call;
 never assume a vendor. **No generator → use the fallback in SKILL.md (HTML first screens).**
 
-Codex CLI recipe — the lean wrapper `scripts/codex_img.py` (one call per image):
+Codex CLI recipe — the lean wrapper `<skill-dir>/scripts/codex_img.py` (one call per image), run from
+the project folder so relative output paths land in the project:
 ```bash
-python scripts/codex_img.py "<prompt>" prototypes/mockups/m1.png [--ref plate.png]
+python <skill-dir>/scripts/codex_img.py "<prompt>" prototypes/mockups/m1.png [--ref plate.png] [--replace]
 ```
 It starts Codex bare (no user config, no AGENTS.md, no plugins/hooks, cheap dispatcher model
 `gpt-6-luna`, falls back to `gpt-6.1-sol`), forbids reading files, viewing the result and polling,
@@ -30,7 +31,10 @@ takes the image from that run's own `generated_images/<thread>` folder (no colli
 to the target. At most 4 run at once, the rest queue. Measured 16.10.2026: ~60k tokens per image on
 Luna, vs 150k–1.3M per image with a plain `codex exec` on Sol (it loaded ~43k of instructions, read
 skill docs and memory, then polled "done?" ~10 times, resending everything each time — 28 mockups ate
-a whole Plus window in 28 minutes). **Never use a plain `codex exec` for images.**
+a whole Plus window in 28 minutes). An existing target file is refused (no silent overwrite); to **redraw** a picture pass `--replace` —
+after a successful run the old file is kept as `m1.v1.png` (`v2`, …). A new round goes into a new
+folder (`mockups/round2/`), not over the first one.
+**Never use a plain `codex exec` for images.**
 **Usage limit hit** ("You've hit your usage limit… try again at <time>") → don't fall back silently:
 tell the user the reset time and wait for it, or ask whether to go on with the HTML fallback — it is
 measurably weaker on taste, so it is their call. Three parallel projects × 6 mockups exhausted a Plus
@@ -124,7 +128,10 @@ page's own look (dark, quiet, one amber accent) stays as it is — it frames the
 compete with them; don't restyle it per project.
 Serve it locally (`python -m http.server <free port> --bind 127.0.0.1`), confirm with curl, give the
 link. Ask: "which one is closest, and what would you take from the others?" A mix ("as №3 but the
-palette of №5") is **one more edit call per screen** with both files named in the prompt — not a new round.
+palette of №5") is not a new round: **one edit call mixes the first screen** with both files named in
+the prompt, then the mix's other screens (if the round has three) are drawn from that mixed first
+screen exactly as in §1a — so all screens of the mix share one hand. Save the mix as `m7.png`,
+`m7-2.png`… and add it to the gallery as variant 7.
 
 ## 3. Phone mockup (always — never shrink the desktop one)
 

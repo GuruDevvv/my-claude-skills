@@ -10,5 +10,6 @@
 | bad-overflow.html | FAIL horizontal scroll |
 | bad-stuck-reveal.html | FAIL invisible after full scroll |
 | good-clean.html | чисто |
+| bad-deck-small-text.html | с ключом `--deck` и `--widths 1920`: FAIL slide text under 22px; без ключа — чисто |
 
 Правишь check.mjs — прогони этот набор: все bad-* обязаны упасть, все good-* пройти.
