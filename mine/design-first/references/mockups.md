@@ -35,6 +35,12 @@ a whole Plus window in 28 minutes). An existing target file is refused (no silen
 after a successful run the old file is kept as `m1.v1.png` (`v2`, …). A new round goes into a new
 folder (`mockups/round2/`), not over the first one.
 **Never use a plain `codex exec` for images.**
+
+**A picture drawn from another picture gets that file through `--ref`, always.** The wrapper forbids
+Codex to open files, so a file only *named* in the prompt text is never seen — the follow-up comes out
+in a new style with nothing to say so. Every recipe below that starts from an existing image shows its
+`--ref`; the prompt calls it «приложенная картинка», not by file name. Paths are from the project
+folder (`prototypes/mockups/m3.png`), and the wrapper stops if a `--ref` file does not exist.
 **Usage limit hit** ("You've hit your usage limit… try again at <time>") → don't fall back silently:
 tell the user the reset time and wait for it, or ask whether to go on with the HTML fallback — it is
 measurably weaker on taste, so it is their call. Three parallel projects × 6 mockups exhausted a Plus
@@ -84,12 +90,14 @@ confirmed (Oct 2026) that choosing is easier from several screens than from one.
 set that still tests different things; it has not been measured in a blind round yet.
 
 Each follow-up is one call with the direction's first screen as the reference:
+```bash
+python <skill-dir>/scripts/codex_img.py "<prompt>" prototypes/mockups/m<N>-2.png --ref prototypes/mockups/m<N>.png
 ```
-Файл m<N>.png — первый экран страницы. Сгенерируй изображение 1536x1024: <второй | третий> экран ТОЙ ЖЕ
-страницы, чистый скриншот без рамки браузера. Тот же стиль в точности: палитра, шрифты, фактуры, свет,
-манера изображений, толщина линий, скругления. Весь текст на русском, только строки из задания.
+```
+Приложенная картинка — первый экран страницы. Сгенерируй изображение 1536x1024: <второй | третий> экран
+ТОЙ ЖЕ страницы, чистый скриншот без рамки браузера. Тот же стиль в точности: палитра, шрифты, фактуры,
+свет, манера изображений, толщина линий, скругления. Весь текст на русском, только строки из задания.
 Что на экране: <the screen's content from BRIEF.md, word for word>.
-Сохрани как m<N>-2.png | m<N>-3.png.
 ```
 Look at each next to its first screen: the same hand, not a new direction; a follow-up that drifted is
 regenerated once. The diversity rule holds across directions on every screen — if the six content
@@ -128,16 +136,20 @@ page's own look (dark, quiet, one amber accent) stays as it is — it frames the
 compete with them; don't restyle it per project.
 Serve it locally (`python -m http.server <free port> --bind 127.0.0.1`), confirm with curl, give the
 link. Ask: "which one is closest, and what would you take from the others?" A mix ("as №3 but the
-palette of №5") is not a new round: **one edit call mixes the first screen** with both files named in
-the prompt, then the mix's other screens (if the round has three) are drawn from that mixed first
-screen exactly as in §1a — so all screens of the mix share one hand. Save the mix as `m7.png`,
+palette of №5") is not a new round: **one edit call mixes the first screen** with both files as
+references (`--ref prototypes/mockups/m3.png --ref prototypes/mockups/m5.png`; the prompt says which
+picture gives what — «первая — композиция и фото, вторая — палитра»), then the mix's other screens
+(if the round has three) are drawn from that mixed first screen exactly as in §1a — so all screens of the mix share one hand. Save the mix as `m7.png`,
 `m7-2.png`… and add it to the gallery as variant 7.
 
 ## 3. Phone mockup (always — never shrink the desktop one)
 
 From the chosen desktop file as reference:
+```bash
+python <skill-dir>/scripts/codex_img.py "<prompt>" prototypes/mockups/phone.png --ref prototypes/mockups/<chosen>.png
 ```
-Файл <chosen>.png — макет десктопной версии. Сгенерируй по нему вертикальный макет 1024x1536 той же
+```
+Приложенная картинка — макет десктопной версии. Сгенерируй по нему вертикальный макет 1024x1536 той же
 страницы для ТЕЛЕФОНА (экран 390px, чистый скриншот без рамки телефона): тот же стиль, палитра, шрифты,
 фактуры, те же тексты. Размеры для телефона: основной текст не мельче 36 px, подписи не мельче 30 px,
 кнопка не ниже 115 px в этой картинке шириной 1024 (это 14 px, 11 px и 44 px на экране 390).
@@ -157,11 +169,13 @@ image model still drew below the floor and the builder enlarged, the owner still
 
 For each chosen mockup (desktop and phone) that has raster art — photo, paper or stamp texture,
 illustration:
+```bash
+python <skill-dir>/scripts/codex_img.py "<prompt>" prototypes/mockups/<m>-plate.png --ref prototypes/mockups/<m>.png
 ```
-Возьми файл <m>.png и отредактируй: убери ВЕСЬ текст, заголовки, подписи, кнопки, строку поиска и
+```
+Отредактируй приложенную картинку: убери ВЕСЬ текст, заголовки, подписи, кнопки, строку поиска и
 штрихи под заголовком — на их месте чистый фон той же фактуры и цвета. Всё остальное (фото, люди,
 бумага, пятна, растения, фигуры, свет, кадрирование, размер) оставь в точности как было.
-Сохрани как <m>-plate.png.
 ```
 Copy the plates into `prototypes/<scope>-assets/` for the build.
 Open the plate and compare with the mockup: composition must be unchanged. Small decorations the edit
