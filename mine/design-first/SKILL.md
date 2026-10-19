@@ -1,7 +1,7 @@
 ---
 name: design-first
 description: >-
-  Design before code: the look is read from the topic's vibe and audience, six different directions are drawn by an image model as mockups — three screens each — the user picks one, and it is built as a live page over the mockup — desktop and phone each from their own mockup — measured for readability before the user sees it. Interview → read the vibe → fixed words → 6 directions × 3 screens → gallery → pick → phone mockup → plates → build → numeric check. Use when: "сделай дизайн", "подготовь макет", "давай займёмся дизайном", "нарисуй страницу", "редизайн", "make a design", "design this", "prepare design", "how should this look", "visual direction", "prototypes", "варианты дизайна". Scope: landing pages, dashboards, portfolios, forms, apps, components — any visual/UI work. Do NOT use for: code review, debugging, backend logic, data processing, or non-visual tasks.
+  Design before code: the look is read from the topic's vibe and audience, six different directions are drawn by an image model as mockups — three screens each — the user picks one, and it is built as a live page over the mockup — desktop and phone each from their own mockup — measured for readability before the user sees it. Interview → read the vibe → fixed words → 6 directions × 3 screens (or 1, the user's choice) → gallery → pick → phone mockup → plates → build → numeric check. Presentations have their own mode: 6 directions × 3 test slides → pick → every slide drawn from its own content → a 16:9 deck (HTML → PDF, Google Slides on request). Use when: "сделай дизайн", "подготовь макет", "давай займёмся дизайном", "нарисуй страницу", "редизайн", "make a design", "design this", "prepare design", "how should this look", "visual direction", "prototypes", "варианты дизайна", "дизайн презентации", "сделай презентацию", "оформи слайды", "стиль для колоды", "design a deck". Scope: landing pages, dashboards, portfolios, forms, apps, components, presentations — any visual/UI work. Do NOT use for: code review, debugging, backend logic, data processing, or non-visual tasks.
 ---
 
 # Design First
@@ -24,13 +24,36 @@ Three ideas; the first two measured in blind rounds with the owner (`references/
 Context → Vibe → Words → 6 directions × 3 screens → Gallery → Pick/mix → Phone mockup → Plates → Build → Check → Show
 ```
 
+## Step 0 — Two questions before anything else
+
+Ask both in the first message (one block, plain words), then go on to Step 1 with the answers:
+
+1. **«Сайт или презентация?»** A site is anything people open in a browser — landing, dashboard,
+   form, app screen. **A presentation switches the whole skill to `references/deck.md`**: the same
+   vibe reading and the same six directions, but slides 16:9 instead of screens, no phone mockup, a
+   deck built at the end. Read deck.md now and follow it; Steps 1–10 below apply only where it says so.
+2. **Site only — «Сколько экранов рисовать на каждое направление: один или три?»** Give the trade in
+   one line each:
+   - **один** — six first screens, about three times cheaper and faster; screens 2 and 3 are drawn
+     after the pick, only for the chosen direction (Step 5);
+   - **три** — 18 pictures before the pick; the user sees how each style carries a list and a form,
+     a direction that wins on the first screen can fall apart on those.
+
+   Write the answer into BRIEF.md as `Экранов на направление: 1 | 3`. No answer, or «на твоё
+   усмотрение» → three (the measured default, mockups.md §1a). The image generator near its limit →
+   recommend one and say why.
+
+The answer is already in the request («сделай лендинг», «нужна презентация к эфиру», «покажи по
+одному») → don't ask it again. **Autonomous / headless:** site, three screens, written into BRIEF.md
+as assumptions.
+
 **Files:** `prototypes/BRIEF.md`; `prototypes/mockups/` — `m1.png … m6.png` (first screens), `m1-2.png`, `m1-3.png` … (screens 2 and 3), `gallery.html`,
 `phone.png`, `*-plate.png`, `_logs/` (create the folders); `prototypes/<scope>.html` +
 `prototypes/<scope>-assets/` (plates copied here); `prototypes/_check/` for screenshots.
 Gallery template: `assets/gallery-template.html` in the skill folder.
 
 **References** (read the one a step names, when it names it):
-`vibe.md` (reading the topic) · `concepts.md` (mockup 6) · `mockups.md` (generation, gallery, phone,
+`deck.md` (presentation mode, the whole path) · `vibe.md` (reading the topic) · `concepts.md` (mockup 6) · `mockups.md` (generation, gallery, phone,
 plates) · `typography.md` (matching fonts, Cyrillic gate) · `ui-verify.md` (the check, manual probes) ·
 `motion.md`, `interaction-patterns.md` (next sections, optional) · `feel-polish.md` (production code) ·
 `frontend-aesthetics.md` (fallback only).
@@ -90,9 +113,10 @@ concept from the topic's objects — `concepts.md`); for a tool, six organising 
 parallel. Look at each: mood matches its row, nothing broken; regenerate a broken one once. Don't
 drop a mockup for taste — your taste doesn't predict the user's.
 
-Then screens 2 and 3 of every direction, each drawn **from that direction's first screen as the style
-reference** (mockups.md §1a) — twelve more calls, in parallel. First screens first: a broken first
-screen is fixed before two more are drawn in its style.
+**Three screens per direction:** then screens 2 and 3 of every direction, each drawn **from that
+direction's first screen as the style reference** (mockups.md §1a) — twelve more calls, in parallel.
+First screens first: a broken first screen is fixed before two more are drawn in its style.
+**One screen per direction:** stop after the six first screens; the gallery shows them in one grid.
 
 **Generator hit its usage limit** → say when it resets and wait, or ask before using the fallback.
 **No image generator available** → fallback: six standalone HTML first screens along the same six
@@ -112,6 +136,11 @@ not a new round; give its link in one line and go on unless they object. If none
 verdict words with vibe.md and draw a new six — don't start building a "least bad" one.
 **Autonomous / headless:** stop here and report the gallery — picking is the user's; if the task
 explicitly demands a finished page, take direction 1 and write that choice into BRIEF.md as an assumption.
+
+**One screen per direction → after the pick** draw screens 2 and 3 of the chosen direction only
+(mockups.md §1a, two calls), add them to its `shots` in the gallery and show them in one line with the
+link. They are part of the chosen direction, not a new vote; a screen that drifted from the first one
+is redrawn once.
 
 ## Step 6 — Phone mockup and plates → `references/mockups.md`
 
@@ -184,7 +213,8 @@ before you start, and check each one exists after.
 
 | Situation | What to do |
 |---|---|
-| "make it look good", no brief | Step 1 — ask only the gaps |
+| "make it look good", no brief | Step 0, then Step 1 — ask only the gaps |
+| Presentation, slides, deck, «преза» | `references/deck.md` — the whole path is there |
 | No references, no time | Normal case — read the vibe yourself, never send them hunting |
 | Russian UI | Cyrillic gate on every font (typography.md) — non-negotiable |
 | Buyer ≠ user (parents buy a kids' camp) | Tone follows who the page is *about*; buyer's trust goes into content |
@@ -194,4 +224,4 @@ before you start, and check each one exists after.
 | Wants to skip the gallery | Say once that six pictures cost minutes and save rework; then draw one mockup of the best reading and build it |
 | Page fine on desktop, weak on phone | The phone needs its own mockup (Step 6), not a squeezed layout |
 | "Looks broken / pale / shifted" | Measure first (ui-verify.md) — the screenshot may lie |
-| Time pressure, or the image generator is near its limit | Say it once and show one screen per direction (first screens only); the gallery template then drops its mode switch by itself. Never skip the phone mockup or Step 8 |
+| Time pressure, or the image generator is near its limit | Recommend «один» in Step 0 and say why; the gallery template then drops its mode switch by itself. Never skip the phone mockup or Step 8 |
