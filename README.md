@@ -33,6 +33,7 @@ Two folders, and the distinction is not cosmetic:
 | [human-text](mine/human-text/) | Russian copy that reads as human-written — rhythm, honest hedging, no AI clichés | Anything a person will read: posts, articles, landing copy, letters |
 | [reels-console](mine/reels-console/) | A vertical reel cut from one static take: pauses gone, crop levels anchored to the face, word-timed captions, music ducked | You filmed yourself talking to camera and need it edited without opening CapCut |
 | [site-audit](mine/site-audit/) | Read-only outside audit of a site: speed, security headers, exposed files, indexing, Telegram previews, accessibility, Russian law basics — numbers from scripts, result as an interactive dashboard with a 1–10 score per section | A site is about to launch, or it is live and you want to know what a visitor, a crawler and a lawyer would see |
+| [video-by-code](mine/video-by-code/) | A short vertical video made in code: SaaS-style canvas animation or a dramatic cut-down from footage, music and sound synthesised in code, checked frame by frame | You need an explainer, promo or cut-down for Reels/Shorts and do not want an editing app |
 
 *🇷🇺 У каждого скилла внутри есть описание на русском.*
 
