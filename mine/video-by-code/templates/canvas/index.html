@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!-- Шрифты. Нужен интернет при рендере; без него браузер возьмёт системный sans-serif. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=block">
+<style>
+  html, body { margin: 0; background: #07080d; }
+  canvas { display: block; width: 360px; height: 640px; } /* в окне — уменьшено, кадр рисуется в полном размере */
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script src="scenes.js"></script>
+<script src="audio.js"></script>
+<script>
+  // Живой просмотр: откройте index.html в браузере — ролик проигрывается в окне.
+  // При рендере render.mjs сам вызывает window.renderFrame(t) кадр за кадром.
+  if (!navigator.webdriver) {
+    const t0 = performance.now();
+    const loop = () => {
+      const t = ((performance.now() - t0) / 1000) % TIMELINE.duration;
+      renderFrame(t);
+      requestAnimationFrame(loop);
+    };
+    window.fontsReady.then(loop);
+  }
+</script>
+</body>
+</html>
