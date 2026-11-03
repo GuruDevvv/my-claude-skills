@@ -126,7 +126,7 @@ Visual projects get a "design screens (design-first)" task before layout; AI pro
 - **Need / Nice / Later prioritization.** v1 scope isn't a flat list — each feature is tagged so you know what to cut first if scope needs trimming.
 - **Visible assumptions.** Everything Claude decided without asking lands in an "assumptions" section of both docs.
 
-- **Concept page (optional).** At the end Claude offers to open the concept as a styled local page: `docs/concept.html`, built from a fixed template (`assets/concept.html`, light and dark theme, phone-friendly) with links to `vision.md` and `blueprint.md`. Say no, and everything stays in the chat.
+- **Concept page (optional).** At the end Claude offers to open the concept as a styled local page: `docs/concept.html`, built from a fixed template (`assets/concept.html`, light theme, full-width responsive grid) with links to `vision.md` and `blueprint.md`. Say no, and everything stays in the chat.
 
 ## Works with
 

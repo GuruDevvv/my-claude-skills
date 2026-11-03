@@ -26,23 +26,8 @@
     --pad: clamp(16px, 4vw, 64px);
     --gap: clamp(14px, 1.6vw, 24px);
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #141514;
-      --card: #1d1f1e;
-      --ink: #ecebe5;
-      --muted: #a09f98;
-      --line: #2f322f;
-      --accent: #8fd0b8;
-      --accent-soft: #21332c;
-      --warn: #ecc46e;
-      --warn-soft: #33291a;
-      --no: #ec9f98;
-      --no-soft: #372322;
-    }
-  }
   * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; color-scheme: light; }
   body {
     margin: 0;
     background: var(--bg);
