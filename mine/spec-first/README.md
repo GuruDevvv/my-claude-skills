@@ -2,11 +2,13 @@
 
 A Claude Code skill that turns a vague project idea into a structured build plan — before writing any code.
 
-Without a spec, Claude starts coding blindly, picks the wrong stack, and you lose all context when the session ends. With spec-first, you answer 10 simple questions, get two documents (`vision.md` + `blueprint.md`), and Claude in any future session knows exactly what to build and where you left off. Takes about **20 minutes**.
+Without a spec, Claude starts coding blindly, picks the wrong stack, and you lose all context when the session ends. With spec-first, you answer **5 simple questions**, Claude proposes everything else as a short list of assumptions you can correct, and you get two documents (`vision.md` + `blueprint.md`). Claude in any future session knows exactly what to build and where you left off. Takes about **10 minutes**.
 
 ```
-Idea → 10 questions → docs/vision.md → 8 interactive steps → docs/blueprint.md → CLAUDE.md updated → build
+Idea → 5 questions → "decided for you" list → docs/vision.md → stack choice → whole plan in one block → docs/blueprint.md → CLAUDE.md updated → build
 ```
+
+**Design principle:** you answer only what you alone know (what, why, for whom, the main scenario, what's out of scope). Data, platform, services, analogues, acceptance checks and stack details are Claude's job — it proposes them and shows its assumptions, so nothing is decided silently.
 
 > **Language note:** The skill conducts the interview in Russian. English localization is planned.
 
@@ -23,25 +25,27 @@ Idea → 10 questions → docs/vision.md → 8 interactive steps → docs/bluepr
 ## One-liner
 Telegram bot that sends a daily digest of group chat activity.
 
-## Problem
+## Why
 Group chats accumulate 200+ messages/day. Most people stop reading and miss important things.
 
-## User Stories
+## Scenarios
 - User adds bot to a group chat → bot starts listening silently
 - At 21:00 bot sends a summary to the user's DM → user reads it in 30 seconds
 
-## Analogies & Differentiators
+## Analogues & differences
 - Similar to Summarize Bot, but sends proactively on a schedule instead of on-demand
-- Unlike ChatGPT group features — works in any Telegram group, no subscription
 
-## MVP Scope
-- [MUST] Listen to group messages and store them
-- [MUST] Generate daily summary via LLM
-- [NICE] Configurable summary time
-- [LATER] Multi-language support
+## v1 scope
+- [need] Listen to group messages and store them
+- [need] Generate daily summary via LLM
+- [nice] Configurable summary time
+- [later] Multi-language support
 
 ## NOT building in v1
 - Web dashboard, analytics, paid plans
+
+## Assumptions and risks
+- Decided by Claude: runs on the user's VPS, summary at 21:00 local time
 ```
 
 </details>
@@ -72,25 +76,19 @@ Group chats accumulate 200+ messages/day. Most people stop reading and miss impo
 
 **Phase 1 — Vision (what and why)**
 
-The skill asks 10 questions one at a time, in a specific order: dream first, context second, constraints third, verification last.
+The skill asks 5 questions one at a time:
 
 | # | Question | Purpose |
 |---|----------|---------|
-| Q1 | What do you want to build? | Core idea |
-| Q1.5 | Why? What changes when it works? | Motivation — determines scope |
-| Q2 | Who is it for? | Audience — you, friends, public |
-| Q3 | Describe the main scenario step by step | Concrete user flow |
-| Q4 | What should persist between sessions? | Data model seed |
-| Q5 | How should the AI behave? *(only if AI is involved)* | Tone, boundaries |
-| Q6 | Anything similar out there? How is yours different? | Competitive context |
-| Q7 | Where does it run? Phone, desktop, Telegram? | Platform |
-| Q7.5 | External services? Budget constraints? | Dependencies, budget |
-| Q8 | What are we NOT building in v1? | Anti-scope |
-| Q9 | How will you verify it works? | Acceptance tests |
+| Q1 | What are we building? | Core idea |
+| Q2 | Why? What changes when it works? | Motivation — determines scope |
+| Q3 | Who is it for? | Audience — you, friends, public |
+| Q4 | Describe the main scenario step by step | Concrete user flow |
+| Q5 | What are we NOT building in v1? (with suggested extensions to postpone) | Anti-scope |
 
-If you struggle with any question, the skill offers smart defaults, analogies, and examples — it won't leave blanks.
+Then Claude shows one **"decided for you"** message: what persists between sessions, where it runs, external services and budget, 2–3 analogues, AI tone (if any), and 3 acceptance checks. You fix what's wrong; "ok" confirms.
 
-**Output:** `docs/vision.md` with sections: problem, audience, user stories, competitive context, MVP scope (with Must/Nice/Later priorities), anti-scope, acceptance checks, data, risks.
+**Output:** `docs/vision.md` with sections: why, audience, scenarios, analogues, v1 scope (need / nice / later), anti-scope, acceptance checks, data, AI behavior, assumptions and risks.
 
 **Gate:** Won't proceed to Blueprint until vision has at least 2 scenarios, 1 concrete check, and 1 anti-scope item. You can skip the gate, but it gets recorded as a risk.
 
@@ -98,18 +96,16 @@ If you struggle with any question, the skill offers smart defaults, analogies, a
 
 **Phase 2 — Blueprint (how and in what order)**
 
-Eight interactive steps, each shown and approved before moving on:
+At most two stops instead of eight:
 
 | Step | What happens |
 |------|-------------|
-| 1. Tech stack | Two options compared in plain language. Recommendation included |
-| 2. Data model | Entities and fields as a table, based on Q4 answers |
-| 3. Project structure | File/folder tree |
-| 4. Deploy | Where will it live? Vercel, VPS, local? Based on Q7/Q7.5 answers |
-| 5. Build plan | 3–15 tasks with files and "done when" criteria |
-| 6. Acceptance checklist | 5+ checks in "Do X, see Y" format |
-| 7. AI config | *(only if AI is involved)* Provider, system prompt, behavior checks |
-| 8. Fresh eyes review | Re-reads vision + all steps, checks for gaps, order, and specificity |
+| 1. Tech stack | Only if there are two genuinely different paths (bot vs site, free vs fast): both in plain language, with a recommendation — **you choose**. Otherwise Claude picks and lists it as an assumption |
+| 2. Whole plan, one block | Data tables, file tree, where it lives (your own VPS by default, local if no server is needed; cloud hosts only on request), 3–15 tasks with "done when", 5+ acceptance checks, assumptions |
+| — Fresh eyes | Claude re-reads vision + plan itself *before* showing it (coverage, order, checkability, phases, no contradictions) and fixes gaps silently |
+| 3. Approval | **You approve** or ask for changes |
+
+Visual projects get a "design screens (design-first)" task before layout; AI projects get a system-prompt task and AI behavior checks; Telegram projects on a server where Telegram is blocked get a bridge/proxy task.
 
 **Output:** `docs/blueprint.md` with tech stack, structure, data model, deploy plan, task checklist, and acceptance criteria.
 
@@ -125,7 +121,14 @@ Eight interactive steps, each shown and approved before moving on:
 - **Anti-pattern detection.** Watches for scope creep ("one more feature"), vague requirements ("make it work"), and deferred decisions ("we'll figure it out later") — and responds immediately.
 - **Gate skip mechanism.** If you insist on skipping a gate, the skill records it as a risk with `[GATE SKIP]` — doesn't block you, but doesn't let you forget.
 - **Session continuity.** The generated docs + CLAUDE.md update mean Claude in a new session can pick up exactly where you left off.
-- **Must / Nice / Later prioritization.** MVP scope isn't a flat list — each feature is tagged so you know what to cut first if scope needs trimming.
+- **Need / Nice / Later prioritization.** v1 scope isn't a flat list — each feature is tagged so you know what to cut first if scope needs trimming.
+- **Visible assumptions.** Everything Claude decided without asking lands in an "assumptions" section of both docs.
+
+## Works with
+
+- Not sure the idea is worth building? Run `product-check` first.
+- No idea yet, just an itch? Brainstorm first (`idea-storm`).
+- Screens to design? The plan hands off to `design-first` before layout.
 
 ---
 
