@@ -126,6 +126,8 @@ Visual projects get a "design screens (design-first)" task before layout; AI pro
 - **Need / Nice / Later prioritization.** v1 scope isn't a flat list — each feature is tagged so you know what to cut first if scope needs trimming.
 - **Visible assumptions.** Everything Claude decided without asking lands in an "assumptions" section of both docs.
 
+- **Concept page (optional).** At the end Claude offers to open the concept as a styled local page: `docs/concept.html`, built from a fixed template (`assets/concept.html`, light and dark theme, phone-friendly) with links to `vision.md` and `blueprint.md`. Say no, and everything stays in the chat.
+
 ## Works with
 
 - Not sure the idea is worth building? Run `product-check` first.
@@ -153,34 +155,24 @@ Visual projects get a "design screens (design-first)" task before layout; AI pro
 
 Check [what you're installing](SKILL.md) before running the command.
 
-**As a slash command (recommended):**
+Install as a skill (it auto-triggers on project ideas and also works as `/spec-first`). Two files: the instructions and the concept page template.
 
 macOS / Linux:
 ```bash
-curl --fail -o ~/.claude/commands/spec-first.md \
-  https://raw.githubusercontent.com/GuruDevvv/my-claude-skills/main/spec-first/SKILL.md
-```
-
-Windows (Git Bash or WSL):
-```bash
-curl --fail -o "$USERPROFILE/.claude/commands/spec-first.md" \
-  https://raw.githubusercontent.com/GuruDevvv/my-claude-skills/main/spec-first/SKILL.md
-```
-
-**As a skill (auto-triggers on project ideas):**
-
-macOS / Linux:
-```bash
-mkdir -p ~/.claude/skills/spec-first
+mkdir -p ~/.claude/skills/spec-first/assets
 curl --fail -o ~/.claude/skills/spec-first/SKILL.md \
-  https://raw.githubusercontent.com/GuruDevvv/my-claude-skills/main/spec-first/SKILL.md
+  https://raw.githubusercontent.com/GuruDevvv/my-claude-skills/main/mine/spec-first/SKILL.md
+curl --fail -o ~/.claude/skills/spec-first/assets/concept.html \
+  https://raw.githubusercontent.com/GuruDevvv/my-claude-skills/main/mine/spec-first/assets/concept.html
 ```
 
 Windows (Git Bash or WSL):
 ```bash
-mkdir -p "$USERPROFILE/.claude/skills/spec-first"
+mkdir -p "$USERPROFILE/.claude/skills/spec-first/assets"
 curl --fail -o "$USERPROFILE/.claude/skills/spec-first/SKILL.md" \
-  https://raw.githubusercontent.com/GuruDevvv/my-claude-skills/main/spec-first/SKILL.md
+  https://raw.githubusercontent.com/GuruDevvv/my-claude-skills/main/mine/spec-first/SKILL.md
+curl --fail -o "$USERPROFILE/.claude/skills/spec-first/assets/concept.html" \
+  https://raw.githubusercontent.com/GuruDevvv/my-claude-skills/main/mine/spec-first/assets/concept.html
 ```
 
 Restart your Claude Code session — the terminal running `claude`, or reload the VS Code window.
