@@ -23,8 +23,8 @@
     --warn-soft: #fbefd6;
     --no: #9a3d3a;
     --no-soft: #f7e5e3;
-    --pad: clamp(16px, 4vw, 64px);
-    --gap: clamp(14px, 1.6vw, 24px);
+    --pad: clamp(16px, 3vw, 48px);
+    --gap: clamp(10px, 1vw, 16px);
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; color-scheme: light; }
@@ -32,10 +32,10 @@
     margin: 0;
     background: var(--bg);
     color: var(--ink);
-    font: 17px/1.55 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font: 15px/1.5 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
   main {
-    padding: clamp(28px, 4vw, 56px) var(--pad) clamp(40px, 5vw, 72px);
+    padding: clamp(18px, 2.2vw, 32px) var(--pad) clamp(24px, 3vw, 40px);
     display: grid;
     gap: var(--gap);
     grid-template-columns: 1fr;
@@ -70,45 +70,44 @@
   /* Шапка */
   header {
     grid-area: head;
-    padding-bottom: clamp(18px, 2.4vw, 32px);
-    margin-bottom: clamp(4px, 1vw, 12px);
+    padding-bottom: 14px;
     border-bottom: 2px solid var(--ink);
   }
   .kicker {
-    margin: 0 0 12px; color: var(--accent);
-    font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    margin: 0 0 6px; color: var(--accent);
+    font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
   }
   h1 {
-    margin: 0 0 14px; font-size: clamp(34px, 5.4vw, 76px); line-height: 1.02; letter-spacing: -.02em;
+    margin: 0 0 6px; font-size: clamp(26px, 2.8vw, 40px); line-height: 1.08; letter-spacing: -.015em;
   }
   .oneliner {
-    margin: 0; max-width: 44em; color: var(--ink);
-    font-size: clamp(19px, 1.9vw, 26px); line-height: 1.38;
+    margin: 0; max-width: 60em; color: var(--ink);
+    font-size: clamp(16px, 1.2vw, 18px); line-height: 1.4;
   }
 
   /* Общие блоки */
   section {
-    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-    padding: clamp(18px, 1.8vw, 28px);
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: clamp(12px, 1.1vw, 18px) clamp(14px, 1.2vw, 20px);
     min-width: 0;
   }
   h2 {
-    margin: 0 0 14px; color: var(--muted);
-    font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    margin: 0 0 8px; color: var(--muted);
+    font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
   }
-  p { margin: 0 0 10px; }
+  p { margin: 0 0 6px; }
   p:last-child { margin-bottom: 0; }
   ul { margin: 0; padding-left: 1.2em; }
-  li { margin: 0 0 8px; }
+  li { margin: 0 0 4px; }
   li:last-child { margin-bottom: 0; }
 
   .why { grid-area: why; }
   .who { grid-area: who; }
-  .why p, .who p { font-size: clamp(18px, 1.5vw, 21px); line-height: 1.45; }
-  .why { border-left: 6px solid var(--accent); }
+  .why p, .who p { font-size: 16px; line-height: 1.45; }
+  .why { border-left: 4px solid var(--accent); }
 
-  /* Сценарий: шаги в ряд с крупными цифрами */
-  .flow { grid-area: flow; background: transparent; border: 0; padding: clamp(6px, 1vw, 12px) 0; }
+  /* Сценарий: шаги в ряд, номер слева от текста */
+  .flow { grid-area: flow; background: transparent; border: 0; padding: 2px 0; }
   .flow ol {
     list-style: none; margin: 0; padding: 0; counter-reset: step;
     display: grid; gap: var(--gap);
@@ -116,13 +115,13 @@
   }
   .flow li {
     counter-increment: step; margin: 0;
-    padding-top: 14px; border-top: 3px solid var(--accent);
-    font-size: 18px; line-height: 1.45;
+    display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start;
+    padding-top: 8px; border-top: 2px solid var(--accent);
+    font-size: 15px; line-height: 1.4;
   }
   .flow li::before {
     content: counter(step, decimal-leading-zero);
-    display: block; margin-bottom: 6px;
-    color: var(--accent); font-size: clamp(40px, 4vw, 56px); font-weight: 800; line-height: 1;
+    color: var(--accent); font-size: 26px; font-weight: 800; line-height: 1;
     letter-spacing: -.03em; font-variant-numeric: tabular-nums;
   }
 
@@ -144,9 +143,9 @@
   .checks { grid-area: checks; background: var(--accent-soft); border-color: transparent; }
   .checks h2 { color: var(--accent); }
   .checks ul { list-style: none; padding: 0; }
-  .checks li { position: relative; padding-left: 30px; }
+  .checks li { position: relative; padding-left: 26px; }
   .checks li::before {
-    content: ""; position: absolute; left: 0; top: 4px; width: 17px; height: 17px;
+    content: ""; position: absolute; left: 0; top: 3px; width: 15px; height: 15px;
     border: 2px solid var(--accent); border-radius: 5px; background: var(--card);
   }
 
@@ -157,13 +156,12 @@
   /* Открытые вопросы */
   .open { grid-area: open; background: var(--warn-soft); border-color: transparent; }
   .open h2 { color: var(--warn); }
-  .open li { font-size: 18px; }
 
   footer {
     grid-area: foot;
-    margin-top: clamp(4px, 1vw, 12px); padding-top: 18px; border-top: 1px solid var(--line);
-    display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline;
-    color: var(--muted); font-size: 15px;
+    padding-top: 10px; border-top: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; gap: 6px 20px; align-items: baseline;
+    color: var(--muted); font-size: 13px;
   }
   footer a { color: var(--accent); font-weight: 700; text-decoration: none; border-bottom: 1px solid currentColor; }
   footer .date { margin-left: auto; }
