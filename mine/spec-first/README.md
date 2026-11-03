@@ -86,7 +86,9 @@ The skill asks 5 questions one at a time:
 | Q4 | Describe the main scenario step by step | Concrete user flow |
 | Q5 | What are we NOT building in v1? (with suggested extensions to postpone) | Anti-scope |
 
-Then Claude shows one **"decided for you"** message: what persists between sessions, where it runs, external services and budget, 2–3 analogues, AI tone (if any), and 3 acceptance checks. You fix what's wrong; "ok" confirms.
+Along the way Claude flags contradictions between your answers right away instead of silently picking one.
+
+Then Claude shows a **one-screen concept**: one-liner, why and for whom, the main flow, what's in and out of v1, open questions, and a **"decided for you"** list (what persists between sessions, where it runs, external services and budget, 2–3 analogues, AI tone if any, 3 acceptance checks). You fix what's wrong; "ok" confirms, and the concept becomes `docs/vision.md`.
 
 **Output:** `docs/vision.md` with sections: why, audience, scenarios, analogues, v1 scope (need / nice / later), anti-scope, acceptance checks, data, AI behavior, assumptions and risks.
 
