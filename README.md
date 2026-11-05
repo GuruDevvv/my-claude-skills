@@ -34,6 +34,7 @@ Two folders, and the distinction is not cosmetic:
 | [reels-console](mine/reels-console/) | A vertical reel cut from one static take: pauses gone, crop levels anchored to the face, word-timed captions, music ducked | You filmed yourself talking to camera and need it edited without opening CapCut |
 | [site-audit](mine/site-audit/) | Read-only outside audit of a site: speed, security headers, exposed files, indexing, Telegram previews, accessibility, Russian law basics — numbers from scripts, result as an interactive dashboard with a 1–10 score per section | A site is about to launch, or it is live and you want to know what a visitor, a crawler and a lawyer would see |
 | [video-by-code](mine/video-by-code/) | A short vertical video made in code: SaaS-style canvas animation or a dramatic cut-down from footage, music and sound synthesised in code, checked frame by frame | You need an explainer, promo or cut-down for Reels/Shorts and do not want an editing app |
+| [zoom-dragon](mine/zoom-dragon/) | Docs, not a skill: an AI agent joins Zoom under its own account, records and transcribes the call, sends a summary; in active mode it sits in frame as a mascot, speaks and answers when called by name, checking the files you marked. Playbook first, then techspec (Russian) | You want your own agent to attend calls and you are ready to build it step by step |
 
 *🇷🇺 У каждого скилла внутри есть описание на русском.*
 
