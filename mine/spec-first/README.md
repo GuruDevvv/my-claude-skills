@@ -2,10 +2,10 @@
 
 A Claude Code skill that turns a vague project idea into a structured build plan — before writing any code.
 
-Without a spec, Claude starts coding blindly, picks the wrong stack, and you lose all context when the session ends. With spec-first, you answer **5 simple questions**, Claude proposes everything else as a short list of assumptions you can correct, and you get two documents (`vision.md` + `blueprint.md`). Claude in any future session knows exactly what to build and where you left off. Takes about **10 minutes**.
+Without a spec, Claude starts coding blindly, picks the wrong stack, and you lose all context when the session ends. With spec-first, you answer **5 simple questions**, Claude proposes everything else as a short list of assumptions you can correct, and you get two documents (`vision.md` + `blueprint.md`), plus a short "how it's built" map in `CLAUDE.md`. Claude in any future session knows exactly what to build and where you left off. Takes about **10 minutes**.
 
 ```
-Idea → 5 questions → "decided for you" list → docs/vision.md → stack choice → whole plan in one block → docs/blueprint.md → CLAUDE.md updated → build
+Idea → 5 questions → "decided for you" list → docs/vision.md → stack choice → whole plan in one block → docs/blueprint.md → CLAUDE.md map → build → docs/architecture.md
 ```
 
 **Design principle:** you answer only what you alone know (what, why, for whom, the main scenario, what's out of scope). Data, platform, services, analogues, acceptance checks and stack details are Claude's job — it proposes them and shows its assumptions, so nothing is decided silently.
@@ -113,7 +113,9 @@ Visual projects get a "design screens (design-first)" task before layout; AI pro
 
 **Gate:** Stack approved, 3–15 tasks, 5+ checks, data described, no contradictions with vision.
 
-**After gate:** Updates the project's `CLAUDE.md` with description, stack, boundaries (Always / Ask First / Never), and a rule to always check `docs/blueprint.md` before starting work — so Claude in any future session knows the plan.
+**After gate:** Updates the project's `CLAUDE.md` with description, a 5–15 line **"How it's built" map** (parts, where data lives, external services; wrapped in `<!-- arch:begin -->` / `<!-- arch:end -->` markers so a staleness check can find it), boundaries (Always / Ask First / Never), and a rule to always check `docs/blueprint.md` before starting work — so Claude in any future session knows the plan.
+
+**After the first working version:** Claude writes `docs/architecture.md` — a description of what was actually built, checked against the code (parts, how they connect, data, where it runs, external services by variable name only, non-obvious spots). The blueprint stays a build plan and is not rewritten. Three parts or fewer and no server — the map is enough and no separate file is made.
 
 ---
 
@@ -124,6 +126,7 @@ Visual projects get a "design screens (design-first)" task before layout; AI pro
 - **Gate skip mechanism.** If you insist on skipping a gate, the skill records it as a risk with `[GATE SKIP]` — doesn't block you, but doesn't let you forget.
 - **Session continuity.** The generated docs + CLAUDE.md update mean Claude in a new session can pick up exactly where you left off.
 - **Need / Nice / Later prioritization.** v1 scope isn't a flat list — each feature is tagged so you know what to cut first if scope needs trimming.
+- **Plan vs reality kept apart.** `blueprint.md` is the plan, `architecture.md` and the `CLAUDE.md` map describe what exists — so a later session doesn't mistake an old plan for the current code.
 - **Visible assumptions.** Everything Claude decided without asking lands in an "assumptions" section of both docs.
 
 - **Concept page (optional).** At the end Claude offers to open the concept as a styled local page: `docs/concept.html`, built from a fixed template (`assets/concept.html`, light theme, full-width responsive grid) with links to `vision.md` and `blueprint.md`. Say no, and everything stays in the chat.
