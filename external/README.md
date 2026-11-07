@@ -25,9 +25,9 @@ is maintained, this copy is a snapshot.
 | [youtube-downloader](youtube-downloader/) | daymade | [daymade/claude-code-skills](https://github.com/daymade/claude-code-skills) → `youtube-downloader/` | MIT |
 | [ui-ux-pro-max](ui-ux-pro-max/) | nextlevelbuilder | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | MIT |
 | [skill-conductor](skill-conductor/) | smixs | [smixs/skill-conductor](https://github.com/smixs/skill-conductor) | MIT |
+| [ru-text](ru-text/) | Arseniy Kamyshev | [talkstream/ru-text](https://github.com/talkstream/ru-text/tree/main/skills/ru-text) | [MIT](licenses/LICENSE-talkstream-ru-text.txt) |
 
-Every upstream repo and license above was verified against the GitHub API on 2026-07-27, not guessed
-from filenames.
+Upstream repositories and licenses were verified on GitHub. `ru-text` was checked on 2026-11-07.
 
 ---
 
@@ -42,8 +42,7 @@ folder. Install it from the source.
 
 ## Local modifications
 
-Two skills are **not byte-identical to upstream** — both were broken on Windows and I patched them.
-Each patch is documented at the top of that skill's `README.md`:
+The Windows patches are documented in each skill's `README.md`:
 
 - **`doc-to-markdown`** — changed the pandoc output flavour so tables survive. Upstream asks pandoc
   for "simple" dash-drawn tables, and the skill's own post-processing then mangles them into a
@@ -52,7 +51,8 @@ Each patch is documented at the top of that skill's `README.md`:
   path) and exits if it is missing. Now it falls back to the browser bundled with `mermaid-cli`,
   which is what makes it run on Windows at all.
 
-Both patches were sent nowhere upstream (yet). If you pull these, know you are getting my fork.
+The `ru-text` snapshot adds guidance for using it alongside [human-text](../mine/human-text/).
+It also describes how to request a score with the standalone skill in ordinary language.
 
 ---
 

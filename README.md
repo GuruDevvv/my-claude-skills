@@ -60,6 +60,7 @@ Vendored third-party skills, all MIT, each with author and source in
 | [youtube-downloader](external/youtube-downloader/) | yt-dlp plus the bot-check, 403 and locked-platform handling | daymade |
 | [ui-ux-pro-max](external/ui-ux-pro-max/) | Design reference as queryable data: styles, palettes, type, UX rules, 13 stacks | nextlevelbuilder |
 | [skill-conductor](external/skill-conductor/) | Skill lifecycle: create, improve, validate, review, optimise, package | smixs |
+| [ru-text](external/ru-text/) | Russian proofreading and editing for business and interface copy, plus typography | Arseniy Kamyshev |
 
 † **Patched, not byte-identical to upstream** — both were broken on Windows. Each patch and the reason
 for it is documented at the top of that skill's README.
