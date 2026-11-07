@@ -1071,8 +1071,7 @@ have made anyway. Cannot trigger non-compensatory caps alone.
 
 **Acknowledged:** raised by the director, 29.07.2026, on reading a junction in this project's own
 README: normative, and still a tell — «люди так не пишут в живой жизни, даже профессионалы
-языка». The research behind it, including what the named sources do **not** say, is recorded in
-`~/.claude/plans/ru-text-v2/comma-dash-research.md`.
+языка».
 
 ---
 
@@ -1157,7 +1156,5 @@ for.
 
 **Acknowledged:** ruled by the director, 09.08.2026, on two fragments of his own: `СРОЧНО: сервер
 лежит` — «намеренная эмоциональность, а не слоп или ошибка, живость языка так поддерживается».
-The measurement behind the threshold is recorded in
-`~/Projects/_scratch/ru-text-flattening/inventory-15-registers.md`: the longest uppercase run in
-the live corpora is two words, and every one of the sixteen conversions the check performed was
-one or two words long.
+In the author's measurement, the longest uppercase run in the live corpora was two words,
+and all sixteen conversions performed by the check were one or two words long.

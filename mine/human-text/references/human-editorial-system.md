@@ -102,7 +102,7 @@
 
 Проверить текст вручную или скриптом.
 
-Скрипт:
+Запусти из папки `human-text`, подставив путь к своему черновику.
 
 ```bash
 python scripts/neurotext_check.py draft.md
